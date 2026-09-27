@@ -722,7 +722,12 @@ function briefCard(c) {
   if (!td || S.briefDone[c.today] || c.ctx.now >= parkTime(c.today, '12:00')) return '';
   const park = c.tp.park;
   const hours = park && c.snap?.parks?.[park]?.close ? `Open until ${fmtTime(c.snap.parks[park].close)}.` : '';
-  const closed = (c.res?.excluded ?? []).filter((x) => ['refurb', 'closed'].includes(x.why) && !/^opens/.test(x.detail ?? '')).map((x) => x.ride.name);
+  // Before the park opens (or with no hours yet) every ride reads CLOSED: only refurbishments count then.
+  const parkOpen = park ? c.snap?.parks?.[park]?.open : null;
+  const opened = parkOpen != null && c.ctx.now >= parkOpen;
+  const closed = (c.res?.excluded ?? [])
+    .filter((x) => x.why === 'refurb' || (opened && x.why === 'closed' && !/^opens/.test(x.detail ?? '')))
+    .map((x) => x.ride.name);
   const majors = (c.shows ?? []).filter((x) => x.major).map((x) => `${x.name} ${x.times.map((t) => fmtTime(t)).join(' and ')}`);
   const lp = park ? lanePlan(c.today, park, c.snap) : null;
   const ll = c.llOn === 'on' ? 'You have Multi Pass today.' : c.llOn === 'off' ? 'No Multi Pass today.' : lp ? `Multi Pass today: ${VERDICT[lp.verdict]}${lp.rides.length ? `, saves about ${hmin(lp.saved)} for $${lp.cost}` : ''}.` : '';
