@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Next Ride: ready to try</title>
+<style>
+  :root { --ink:#1c1c1e; --muted:#66666b; --line:#e2dfd8; --bg:#fbfaf7; --card:#fff; --accent:#0b5cad; --soft:#f2efe8; --good:#1f7a3a; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#ececec; --muted:#a2a5ab; --line:#2d3036; --bg:#121316; --card:#1b1d21; --accent:#78adff; --soft:#23262b; --good:#72d08f; } }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:820px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:28px; margin:0 0 4px; } h2 { font-size:20px; margin:32px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line); }
+  .meta { color:var(--muted); font-size:14px; margin-top:0; }
+  .url { display:block; background:var(--card); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:10px; padding:14px 16px; margin:16px 0; font-size:19px; font-weight:600; word-break:break-all; }
+  code, pre { font-family:ui-monospace,Consolas,monospace; font-size:14px; background:var(--soft); border-radius:6px; }
+  code { padding:1px 5px; } pre { padding:10px 12px; overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; margin:8px 0 16px; font-size:15px; }
+  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; }
+  li { margin:4px 0; }
+  .ok { color:var(--good); font-weight:600; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+<h1>Next Ride is ready to try</h1>
+<p class="meta">Built 2026-09-26. Phone web app that says which Disneyland Resort ride to do next, from live waits, your location and your list.</p>
+
+<a class="url" href="https://justinwi.github.io/disneyland-next-ride/">https://justinwi.github.io/disneyland-next-ride/</a>
+
+<h2>Put it on your phone</h2>
+<ul>
+<li><strong>iPhone:</strong> open the link in Safari, tap Share, then "Add to Home Screen". It opens full screen like an app.</li>
+<li><strong>Android:</strong> open it in Chrome, tap the menu, then "Install app" or "Add to Home screen".</li>
+<li>Allow location when it asks. Without it, walks are measured from the Disneyland gate and the top of the screen says so.</li>
+</ul>
+
+<h2>Using it in the park</h2>
+<ol>
+<li><strong>Rides tab:</strong> tick the rides you want today, grouped by park and land. Each row shows the current wait. "Shows too" adds shows and walk-throughs.</li>
+<li><strong>Next tab:</strong> the top card is the ride to do next, with its wait, the walk, and a line saying why. Two alternatives sit under it, then the rest of your list in order.</li>
+<li>Tap <strong>We rode it</strong> when you're done and the list re-ranks. <strong>Not now</strong> hides a ride for 45 minutes. <strong>Walk there</strong> opens Google Maps walking directions.</li>
+<li>The two chips at the top show how old the waits are and where it thinks you are. Tap the first to refresh and the second to re-find your location.</li>
+<li><strong>More tab:</strong> walking pace (use Stroller with little kids), park-hop time, and which gate to measure from when location is off.</li>
+</ol>
+<p>Your list stays on the phone. Done marks clear themselves each morning. Each phone keeps its own list.</p>
+
+<h2>How it picks</h2>
+<p>For each ride left on your list, it adds the walk to the wait you'll likely find when you get there, adding 20 minutes if the ride is in the other park. It then looks at the day's forecast for that ride. A ride whose line will be much longer later moves up, and one that will be shorter later moves down. A ride that closes before you could come back moves up. Rides that are down, closed, or that you can't reach before closing are listed separately with the reason.</p>
+<p>Before the parks open, it shows which rides to hit first when the gates open, using each ride's usual wait at opening.</p>
+
+<h2>Update, 2026-09-26 evening: trip file and Lightning Lane</h2>
+<ul>
+<li><strong>Trip file.</strong> Load a trip file in More, or open a private trip link. The list, priorities, avoid list, "unlock after" ladders stay on the phone and are never uploaded. Must-dos get a head start, avoided rides are never suggested, and locked rides wait for a thumbs up on the ride before them.</li>
+<li><strong>Trip days.</strong> Each trip day has a park, so the other park is never suggested. On a "decide" day it asks which park and suggests the one with more of your list left. Done marks carry across trip days.</li>
+<li><strong>Lightning tab.</strong> It says what to book with Multi Pass and when you're next allowed to book, which is after you scan in, then on tap-in or 2 hours after booking. It logs your bookings and shows a "use it now" card during each window. If a booked ride breaks down, it shows where to use the Multiple Experience pass. Standby picks that would make you miss a window are held back.</li>
+<li><strong>Ratings.</strong> After each ride, rate it 1 to 5 stars. Anything rated 4 or 5 shows under "Loved it? Ride again" with the current wait. One tap puts it back on today's list, and the same works on a later day.</li>
+<li><strong>Buy or skip, per day.</strong> A simulated day per park, from a week of real Lightning Lane history, gives a verdict, the minutes saved for the price, and a booking plan. Lightning Lane can be switched on or off per day, and on days without it the booking advice stays out of the way.</li>
+</ul>
+<p>The full rules and the scoring are in <a href="design.html">design.html</a>, section 10. A second adversarial review of this update reproduced 12 problems, 4 High and 8 Medium. All are fixed, re-tested and deployed. The two Low findings are recorded with their reasons in the design document.</p>
+<p>With no signal, it keeps working from the last waits it saw. The age chip turns amber after 10 minutes and red after 30. There is never a spinner.</p>
+
+<h2>Update, 2026-09-27: the features you picked</h2>
+<ul>
+<li><strong>Looks two or three rides ahead.</strong> Each pick has a "Then:" line naming the next one or two rides that make a sensible loop from it, with the walk and the wait you'll likely find. It re-plans after every ride, so the loop can change.</li>
+<li><strong>We're on our way.</strong> Outside the park, a button on the Next tab builds an arrival plan: which area to start in, the first three rides, and what to book with Lightning Lane as you walk in. Pick your travel time, 10 to 45 minutes. The plan clears itself once your phone is inside the park, or when you tap "We're here".</li>
+<li><strong>Reminders.</strong> They appear as a banner at the top of the screen, with a buzz on Android. iPhones don't let web apps vibrate. Each one fires once a day, and only while the app is open. They cover:
+  <ul>
+  <li>a Lightning Lane window opening in 15 minutes, or ending in 15;</li>
+  <li>"book your next Lightning Lane" the moment you're allowed;</li>
+  <li>a must-do closing within 45 minutes;</li>
+  <li>a ride on your list going down while you're heading to it, with the next best ride;</li>
+  <li>a down ride coming back up;</li>
+  <li>shows you've turned the bell on for, early enough to get a spot.</li>
+  </ul></li>
+<li><strong>Morning briefing.</strong> Before noon on a trip day, a card gives the park and its closing time, anything on your list that's closed, the day's major shows, the Lightning Lane advice, and the "on our way" button.</li>
+<li><strong>Shows today.</strong> A fold-out list on the Next tab gives times and when to leave for a fireworks or parade spot. It also names which rides on your list usually get shorter during the show. The bell turns a show's reminder on or off.</li>
+<li><strong>Substitutes.</strong> When a must-do or high-priority ride is down or closed, it suggests up to two similar rides running in the same park.</li>
+<li><strong>Height check.</strong> In More, enter the shortest rider's height. Rides with a taller minimum drop out of the picks and the Lightning Lane advice, and are listed with the reason.</li>
+<li><strong>What to expect.</strong> Each pick has a one-line description, its height minimum, and a link to a preview video search.</li>
+<li><strong>Single Pass advice.</strong> For Radiator Springs Racers, the Lightning tab says whether to ride standby now, wait for its usual low point, or buy the Single Pass, with the minutes it saves.</li>
+<li><strong>Friday park chooser.</strong> On a "decide" day it compares the two parks: usual midday waits on that weekday, closing times, tonight's major shows, and how much of your list is left in each.</li>
+<li><strong>Battery saver.</strong> In More. Location gets coarser and waits refresh every 3 minutes instead of every minute.</li>
+<li><strong>No fixed midday break.</strong> The planner no longer assumes a 1 pm break. Take breaks whenever you like, and it re-plans from wherever you are afterwards.</li>
+</ul>
+
+<h2>Third adversarial review, 2026-09-27</h2>
+<p>Three reviewers attacked the deployed build, each from a different angle: plans and routes, reminders, and facts, privacy and offline use. They replayed real days of wait and status history onto the trip dates. They reproduced 27 problems: 1 Critical, 7 High, 9 Medium and 10 Low. The Critical, every High, every Medium and 9 of the 10 Lows are fixed, tested and deployed.</p>
+<table>
+<tr><th>Severity</th><th>Problem</th><th>Now</th></tr>
+<tr><td>Critical</td><td>The earlier history cleanup hadn't removed old commits from GitHub. They were still reachable by their commit IDs.</td><td class="ok">Fixed. The public repository was recreated with one clean commit, and the old one is private.</td></tr>
+<tr><td>High</td><td>A test file still held a real ride list with shifted dates.</td><td class="ok">Fixed. It is a made-up list now.</td></tr>
+<tr><td>High</td><td>"Back up" alerts repeated all day: 28 banners and 32 buzzes in one replayed day.</td><td class="ok">Fixed. Each ride once a day, several at once become one banner, they don't buzz, and rides restarting after fireworks stay quiet.</td></tr>
+<tr><td>High</td><td>A burst of alerts could push a Lightning Lane reminder off the screen for good.</td><td class="ok">Fixed. The least urgent banners go first.</td></tr>
+<tr><td>High</td><td>The arrival plan ignored a Lightning Lane you already hold, and suggested booking before you were allowed.</td><td class="ok">Fixed</td></tr>
+<tr><td>High</td><td>Before opening, the arrival plan said nothing was open.</td><td class="ok">Fixed. It plans from opening time, or gives the rope-drop order.</td></tr>
+<tr><td>High</td><td>Multiple Experience options, the Multi Pass verdict and its day plan counted rides that are locked or too tall for the shortest rider.</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>Yesterday's ride statuses caused "back up" alerts the next morning.</td><td class="ok">Fixed. Statuses reset each park day.</td></tr>
+<tr><td>Medium</td><td>"Back up" alerts for rides set aside by the plan.</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>"Just went down" couldn't fire after the phone reloaded the app.</td><td class="ok">Fixed. The ride you're heading to survives a reload.</td></tr>
+<tr><td>Medium</td><td>Routes and arrival plans could land on a ride during its fireworks pause.</td><td class="ok">Fixed. Route steps landing on a closed ride went from 16 of 138 to none. The 5 steps left in that replay hit rides that broke down, which nobody can predict.</td></tr>
+<tr><td>Medium</td><td>Single Pass advice said to buy a pass that had sold out.</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>The Halloween version of an avoided ride wasn't avoided, because the feed lists it separately.</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>Height limits didn't reach the Single Pass list, the fireworks note, or the Friday chooser.</td><td class="ok">Fixed</td></tr>
+<tr><td>Low</td><td>Nine smaller problems: leave-by times in the past, all-day meet areas listed as shows, reminder wording for an open window, waits at arrival not moved along the forecast, an Unlock button on height-limited rides, weak substitute matches, the chooser's wording, missing height notes, and a stale version stamp on the daily stats deploy.</td><td class="ok">Fixed</td></tr>
+<tr><td>Low</td><td>If the main wait source is down all day, the backup data shows down rides as closed, so the ride alerts stay silent.</td><td>Not fixed. It needs a full-day outage of the main source to matter, and the Next screen still shows the ride as unavailable.</td></tr>
+</table>
+<p>Suspected but not reproduced, so not acted on:</p>
+<ul>
+<li>A lagging status when the app switches to the backup source mid-day could fire one extra "back up".</li>
+<li>With battery saver on, a rough GPS fix may never place you inside the park, so the arrival card stays until you tap "We're here".</li>
+<li>A booking entered in the app late starts its 2-hour timer late.</li>
+<li>A banner that fires while the phone is locked is lost if the phone discards the page.</li>
+<li>Park-hop time may be counted twice on hopper days.</li>
+</ul>
+
+<h2>Try it from home</h2>
+<p>Away from the resort, it measures walks from the Disneyland gate. To pretend you're standing somewhere, add your coordinates to the link. For Space Mountain:</p>
+<pre>https://justinwi.github.io/disneyland-next-ride/?at=33.8115,-117.9171</pre>
+<p>To see what it does with no signal:</p>
+<pre>https://justinwi.github.io/disneyland-next-ride/?at=33.8115,-117.9171&amp;offline</pre>
+
+<h2>What was checked</h2>
+<table>
+<tr><th>Check</th><th>Result</th></tr>
+<tr><td>Automated tests (engine, data parsing, fallbacks), on real payloads captured 2026-09-26</td><td class="ok">130 of 130 pass (2026-09-27)</td></tr>
+<tr><td>Scoring replayed on the real 7:20 pm snapshot, all 44 open rides from Space Mountain</td><td class="ok">Sane picks, 3 ms</td></tr>
+<tr><td>Deployed site at phone width (375–390 px): Next, Rides, More</td><td class="ok">No sideways scroll</td></tr>
+<tr><td>2026-09-27 build at 390 px with a trip loaded: route lines, arrival plan, shows, height check, reminders</td><td class="ok">Render on all four tabs, no sideways scroll</td></tr>
+<tr><td>Rode it, Not now and undo re-rank the list; settings persist</td><td class="ok">Pass</td></tr>
+<tr><td>No signal: stored waits shown with age, amber at 14 min, red at 45 min</td><td class="ok">Pass</td></tr>
+<tr><td>Away from the resort, on the esplanade, and standing in DCA</td><td class="ok">Pass</td></tr>
+<tr><td>Yesterday's waits with no signal: not ranked, says so</td><td class="ok">Pass</td></tr>
+<tr><td>Corrupt stored data: discarded, app recovers on next open</td><td class="ok">Pass</td></tr>
+<tr><td>Backup wait cache on GitHub (used if the main source is unreachable)</td><td class="ok">Published, readable from the app</td></tr>
+</table>
+
+<h2>Adversarial review</h2>
+<p>A separate reviewer attacked the deployed app and the engine with the real payloads, looking for ways it sends you to the wrong place, gets time wrong, fails silently, or loses your list. It reproduced 8 problems. All 8 are fixed, re-tested and deployed.</p>
+<table>
+<tr><th>Severity</th><th>Problem</th><th>Now</th></tr>
+<tr><td>Critical</td><td>Every evening, in the last 100 minutes or so before a park closed, the longest lines floated to the top labelled "last chance". A longer wait could make a ride score better.</td><td class="ok">Fixed. A test checks that more wait, walk or hop never helps a ride's score.</td></tr>
+<tr><td>High</td><td>On the esplanade, one step north or south changed which park it thought you were in, adding or removing 20 minutes.</td><td class="ok">Fixed. Outside both parks, walks to either park go through its gate.</td></tr>
+<tr><td>High</td><td>Rides that open early, which is common at rope drop, were hidden as "reopens 8 am".</td><td class="ok">Fixed. A ride reported as running is ranked.</td></tr>
+<tr><td>Medium</td><td>Opening the app in the morning with no signal ranked last night's waits as if they were live.</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>Late-evening claims like "Rise of the Resistance drops to 5".</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>With backup data, down or refurb rides said "closed for today".</td><td class="ok">Fixed</td></tr>
+<tr><td>Medium</td><td>One bad stored payload could freeze the app on "Loading" for good.</td><td class="ok">Fixed</td></tr>
+<tr><td>Low</td><td>Done marks cleared at midnight even when the park was open until 1 am.</td><td class="ok">Fixed. The day now turns over at 4 am.</td></tr>
+</table>
+<p>The reviewer suspected these but couldn't reproduce them tonight. None is fixed yet, for the reason given.</p>
+<ul>
+<li><strong>Oogie Boogie Bash nights.</strong> After 6 pm on party nights, California Adventure is ticketed. If the feed lists those rides as operating, the app could send you there without a party ticket. Watch for this on a party night. It needs data from one to fix.</li>
+<li><strong>Morning feed rollover.</strong> If the feed still carries yesterday's hours before opening, the rope-drop preview won't appear. It needs a capture from before 8 am.</li>
+<li><strong>A frozen feed.</strong> If ThemeParks.wiki itself stops updating, the chip still says "just now", because it shows when the phone last fetched. This is rare, and the fix needs a baseline of normal update gaps first.</li>
+<li><strong>A ride closed for fireworks without a listed pause</strong> would say "closed for today" until it reopens. Not seen in the data yet.</li>
+<li><strong>Backup cache timing.</strong> Its files can be up to 5 minutes apart. The effect is small, and it only matters when the main source is down.</li>
+<li><strong>A rough first GPS fix</strong> used to pick the park. It's now guarded: a fix rougher than 250 m doesn't pick one.</li>
+</ul>
+
+<h2>Not in this version</h2>
+<ul>
+<li>One list shared live across two phones. A private trip link sets both phones up once, but done marks and bookings stay per phone.</li>
+<li>Actual ride lengths. Every ride counts as a flat few minutes on top of its wait.</li>
+<li>The backup cache is refreshed by a GitHub schedule roughly every 5 minutes, sometimes later. GitHub pauses it after 60 days without a commit to the repo.</li>
+</ul>
+
+<h2>Where things are</h2>
+<ul>
+<li>Code: <a href="https://github.com/JustinWi/disneyland-next-ride">github.com/JustinWi/disneyland-next-ride</a>, local copy at <code>E:\src\disneyland-next-ride</code>.</li>
+<li>Design and every change made during the build: <a href="design.html">design.html</a>.</li>
+<li>Every push to <code>main</code> runs the tests and redeploys. A phone that opens the app just after a deploy reloads itself onto the new version within a few seconds. If the app was already open, a banner offers a Reload button.</li>
+</ul>
+</main>
+</body>
+</html>

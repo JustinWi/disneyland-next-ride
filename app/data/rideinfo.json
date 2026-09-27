@@ -1,0 +1,1219 @@
+{
+ "builtAt": "2026-09-27T15:49:02.022Z",
+ "sources": [
+  "https://disneyland.disney.go.com/attractions/",
+  "https://disneyland.disney.go.com/attractions/disneyland/indiana-jones-adventure/",
+  "https://disneyland.disney.go.com/attractions/disneyland/autopia/",
+  "https://disneyland.disney.go.com/attractions/disneyland/mad-tea-party/",
+  "https://disneyland.disney.go.com/attractions/disney-california-adventure/silly-symphony-swings/",
+  "https://disneyland.disney.go.com/attractions/disney-california-adventure/redwood-creek-challenge-trail/",
+  "https://disneyland.disney.go.com/attractions/disney-california-adventure/luigis-honkin-haul-o-ween/",
+  "https://disneyland.disney.go.com/attractions/maters-graveyard-jam-boo-ree/",
+  "https://disneyland.disney.go.com/attractions/disney-california-adventure/guardians-galaxy-mission-breakout-after-dark/",
+  "https://disneyland.disney.go.com/attractions/disney-california-adventure/soarin-across-america/",
+  "https://disneyland.disney.go.com/entertainment/disneyland/blueys-best-day-ever/",
+  "https://deeparrival.com/theme-parks/disneyland-resort/disneyland-park/height-requirements/",
+  "https://deeparrival.com/theme-parks/disneyland-resort/disney-california-adventure-park/california-adventure-height-requirements/",
+  "https://travelingears.com/disneyland-rides-height-requirements/"
+ ],
+ "rides": {
+  "e27b1db8-9ec9-4f8b-9ca6-fd6377de66ee": {
+   "name": "Adventureland Treehouse inspired by Walt Disney’s Swiss Family Robinson",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor walk-through treehouse, lots of stairs up and down, no ride vehicle, a little high up.",
+   "tags": [
+    "walkthrough",
+    "outdoor",
+    "gentle",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Adventureland+Treehouse+inspired+by+Walt+Disney%E2%80%99s+Swiss+Family+Robinson+POV+Disneyland"
+  },
+  "a07f3110-013e-43bb-a182-e66bb8b5e28d": {
+   "name": "Alice in Wonderland",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow caterpillar cars through dark scenes, then outside on a raised winding track, a few pop-ups.",
+   "tags": [
+    "dark",
+    "vehicle",
+    "indoor",
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Alice+in+Wonderland+POV+Disneyland"
+  },
+  "6c225598-91c9-44a3-95e2-7c423475db61": {
+   "name": "Astro Orbitor",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor rocket spinner, you control the height, circles fast and fairly high, can feel dizzy.",
+   "tags": [
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Astro+Orbitor+POV+Disneyland"
+  },
+  "1da85181-bf0f-4ccc-b98e-243142f7347b": {
+   "name": "Autopia",
+   "heightIn": 32,
+   "heightNote": "54 in. to drive alone; under 54 in. rides with someone 54 in. or taller",
+   "expect": "Outdoor gas cars on a guided track at low speed, loud engines, light bumps from the car behind.",
+   "tags": [
+    "drive",
+    "vehicle",
+    "outdoor",
+    "loud",
+    "slow"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Autopia+POV+Disneyland"
+  },
+  "0de1413a-73ee-46cf-af2e-c491cc7c7d3b": {
+   "name": "Big Thunder Mountain Railroad",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Outdoor mine-train coaster, fast turns and small dips, short dark tunnels, rattly, no big drops.",
+   "tags": [
+    "coaster",
+    "outdoor",
+    "loud"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Big+Thunder+Mountain+Railroad+POV+Disneyland"
+  },
+  "888525b0-5a6f-4b8e-9f07-b6a32812b04d": {
+   "name": "Bluey’s Best Day Ever! at Fantasyland Theatre",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Live stage show in an open-air covered theater, Bluey and Bingo with a live band, sing and dance along.",
+   "tags": [
+    "show",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Bluey%E2%80%99s+Best+Day+Ever!+at+Fantasyland+Theatre+POV+Disneyland"
+  },
+  "88197808-3c56-4198-a5a4-6066541251cf": {
+   "name": "Buzz Lightyear Astro Blasters",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor dark ride, shoot laser blasters at targets, you can spin your own car, bright and noisy.",
+   "tags": [
+    "dark",
+    "shooter",
+    "spin",
+    "indoor",
+    "vehicle",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Buzz+Lightyear+Astro+Blasters+POV+Disneyland"
+  },
+  "8e686e4c-f3db-4d9c-a185-2d54b1fa8899": {
+   "name": "Casey Jr. Circus Train",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor little circus train, slow, gentle hills and curves around Storybook Land.",
+   "tags": [
+    "train",
+    "outdoor",
+    "gentle",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Casey+Jr.+Circus+Train+POV+Disneyland"
+  },
+  "59647168-d239-4161-8b24-92eb128e96fb": {
+   "name": "Chip 'n' Dale's GADGETcoaster",
+   "heightIn": 35,
+   "heightNote": null,
+   "expect": "Short outdoor kid coaster, under a minute, quick tight turns and small dips, a bit jerky.",
+   "tags": [
+    "coaster",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Chip+'n'+Dale's+GADGETcoaster+POV+Disneyland"
+  },
+  "5bd95ae8-181d-449c-8f04-a621e2448961": {
+   "name": "Davy Crockett's Explorer Canoes",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor canoe on the river, everyone paddles with guides, slow, splashes from paddles possible.",
+   "tags": [
+    "boat",
+    "water",
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Davy+Crockett's+Explorer+Canoes+POV+Disneyland"
+  },
+  "37858b2a-9c11-4ac6-9f8d-db7fa9088703": {
+   "name": "The Disney Gallery",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Quiet indoor art gallery on Main Street, concept art and models, walk through at your own pace.",
+   "tags": [
+    "walkthrough",
+    "indoor",
+    "gentle",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=The+Disney+Gallery+POV+Disneyland"
+  },
+  "56d0bd6d-5106-4420-8f60-0005475c04c3": {
+   "name": "Disneyland Monorail",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Elevated monorail, seated, smooth ride with views, loops out to Downtown Disney and back.",
+   "tags": [
+    "train",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Disneyland+Monorail+POV+Disneyland"
+  },
+  "e2d460e9-2bef-4613-b126-092ab7cb37e5": {
+   "name": "Disneyland Railroad",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Steam train circling the park, open-air cars, loud whistle, a dim tunnel with dinosaur scenes.",
+   "tags": [
+    "train",
+    "outdoor",
+    "loud",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Disneyland+Railroad+POV+Disneyland"
+  },
+  "ca32ef8a-ae0d-4c24-bf4f-e59192122e01": {
+   "name": "Donald's Duck Pond",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor play area around Donald's boat, spinning water lilies and rocking toys, a splash zone.",
+   "tags": [
+    "play",
+    "outdoor",
+    "water",
+    "wet",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Donald's+Duck+Pond+POV+Disneyland"
+  },
+  "cc980e8e-192f-48b6-848c-27784084e54b": {
+   "name": "Dumbo the Flying Elephant",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor flying elephants circle slowly, you control how high, open-air and gentle.",
+   "tags": [
+    "spin",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Dumbo+the+Flying+Elephant+POV+Disneyland"
+  },
+  "64d44aaa-6857-4693-b24b-bcff6c6dcfa1": {
+   "name": "Finding Nemo Submarine Voyage",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Seated in a narrow submarine looking out portholes, slow, cramped, a dark part with a loud rumble.",
+   "tags": [
+    "boat",
+    "water",
+    "dark",
+    "slow",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Finding+Nemo+Submarine+Voyage+POV+Disneyland"
+  },
+  "c2997e65-6db0-413f-a2db-ee995711d931": {
+   "name": "Fortune Tellers",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Coin-operated fortune teller machines with moving figures, stand and watch, a short spoken fortune.",
+   "tags": [
+    "show",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Fortune+Tellers+POV+Disneyland"
+  },
+  "835deb74-de54-4d7f-9dc4-dacab90fcb60": {
+   "name": "Frontierland Shootin' Exposition",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Shooting gallery with light rifles, targets move and make sounds, some loud bangs and effects.",
+   "tags": [
+    "shooter",
+    "loud",
+    "play"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Frontierland+Shootin'+Exposition+POV+Disneyland"
+  },
+  "b0eca3d3-a519-47f9-a5a7-9911126da2df": {
+   "name": "Goofy's How-to-Play Yard",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor play yard, climb up to a raised clubhouse, a noise-making sound garden, hands-on toys.",
+   "tags": [
+    "play",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Goofy's+How-to-Play+Yard+POV+Disneyland"
+  },
+  "1b23667a-d8fb-436d-8952-c3e3f2e56d13": {
+   "name": "Great Moments with Mr. Lincoln",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Seated indoor theater, a lifelike Abraham Lincoln figure gives a speech, dim and quiet, lobby exhibits.",
+   "tags": [
+    "show",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Great+Moments+with+Mr.+Lincoln+POV+Disneyland"
+  },
+  "ff52cb64-c1d5-4feb-9d43-5dbd429bac81": {
+   "name": "Haunted Mansion Holiday",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow dark ride in moving chairs, spooky holiday scenes, a stretching room in the dark, some startles.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "startle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Haunted+Mansion+Holiday+POV+Disneyland"
+  },
+  "2aedc657-1ee2-4545-a1ce-14753f28cc66": {
+   "name": "Indiana Jones™ Adventure",
+   "heightIn": 46,
+   "heightNote": null,
+   "expect": "Jerky jeep ride in the dark, loud bangs, fire, snakes, bugs and a giant rolling boulder, many startles.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "loud",
+    "startle"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Indiana+Jones+Adventure+POV+Disneyland"
+  },
+  "3638ac09-9fce-4a43-8c79-8ebbe17afce2": {
+   "name": "\"it's a small world\"",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow boat through bright singing doll scenes, indoor and cheerful, very gentle, a catchy song.",
+   "tags": [
+    "boat",
+    "water",
+    "indoor",
+    "gentle",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=it's+a+small+world+POV+Disneyland"
+  },
+  "1b83fda8-d60e-48e4-9a3d-90ddcbcd1001": {
+   "name": "Jungle Cruise",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor boat with a joking skipper, animal figures, a short dim temple part, rarely a light spray.",
+   "tags": [
+    "boat",
+    "water",
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Jungle+Cruise+POV+Disneyland"
+  },
+  "11209961-2ac2-4f76-a11b-ed793939f796": {
+   "name": "Key to Disneyland",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Self-paced hunt for lock stations around the park with a purchased light-up key, lights and music.",
+   "tags": [
+    "play",
+    "walkthrough",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Key+to+Disneyland+POV+Disneyland"
+  },
+  "f7904912-3f08-4563-b99e-fd59f43cc9f2": {
+   "name": "King Arthur Carrousel",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Classic outdoor carousel, horses go gently up and down, organ music, slow and steady.",
+   "tags": [
+    "spin",
+    "outdoor",
+    "gentle",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=King+Arthur+Carrousel+POV+Disneyland"
+  },
+  "e0cfed11-96d7-40f3-907f-5cfed172592a": {
+   "name": "Mad Tea Party",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor spinning teacups, you turn the center wheel to spin faster or slower, can get very dizzy.",
+   "tags": [
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Mad+Tea+Party+POV+Disneyland"
+  },
+  "f5bb0d14-7eee-4ede-9230-eb256ce3664c": {
+   "name": "Main Street Cinema",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Small dim room showing classic black-and-white Mickey cartoons on several screens, standing.",
+   "tags": [
+    "show",
+    "screen",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Main+Street+Cinema+POV+Disneyland"
+  },
+  "4e239b89-a794-4bb2-a32f-736e04416695": {
+   "name": "Main Street Pumpkin Festival",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor seasonal display of carved pumpkins on Main Street, look and take photos, nothing moves.",
+   "tags": [
+    "walkthrough",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Main+Street+Pumpkin+Festival+POV+Disneyland"
+  },
+  "bcfd1e17-3eab-4203-b597-6257a257d427": {
+   "name": "Main Street Vehicles",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "One-way trip down Main Street on a vintage vehicle such as a horse-drawn streetcar, slow, open-air.",
+   "tags": [
+    "vehicle",
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Main+Street+Vehicles+POV+Disneyland"
+  },
+  "52a8ef64-d54c-4974-883f-027c3026e3f1": {
+   "name": "The Many Adventures of Winnie the Pooh",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow beehive cars through dim storybook scenes, a bouncy Tigger part, a trippy dream room.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=The+Many+Adventures+of+Winnie+the+Pooh+POV+Disneyland"
+  },
+  "6c30d5b0-8c0a-406f-9258-0b6c55d4a5e4": {
+   "name": "Mark Twain Riverboat",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Large outdoor steamboat on the river, stand or sit, slow and smooth, a loud steam whistle.",
+   "tags": [
+    "boat",
+    "water",
+    "outdoor",
+    "slow",
+    "gentle",
+    "loud"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Mark+Twain+Riverboat+POV+Disneyland"
+  },
+  "faaa8be9-cc1e-4535-ac20-04a535654bd0": {
+   "name": "Matterhorn Bobsleds",
+   "heightIn": 42,
+   "heightNote": null,
+   "expect": "Rough bobsled coaster in and out of a mountain, sharp jerky turns, dark parts, a roaring snow monster.",
+   "tags": [
+    "coaster",
+    "dark",
+    "indoor",
+    "outdoor",
+    "startle",
+    "loud"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Matterhorn+Bobsleds+POV+Disneyland"
+  },
+  "cd670bff-81d1-4f34-8676-7bafdf49220a": {
+   "name": "Mickey & Minnie's Runaway Railway",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor trackless cartoon ride, cars dance and twirl past big projection screens, loud but not scary.",
+   "tags": [
+    "dark",
+    "screen",
+    "indoor",
+    "vehicle",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Mickey+%26+Minnie's+Runaway+Railway+POV+Disneyland"
+  },
+  "b2c2549c-e9da-4fdd-98ea-1dcff596fed7": {
+   "name": "Millennium Falcon: Smugglers Run",
+   "heightIn": 38,
+   "heightNote": null,
+   "expect": "Simulator cockpit facing a big screen, you pilot or shoot, jolts and lurches, can cause motion sickness.",
+   "tags": [
+    "sim",
+    "screen",
+    "shooter",
+    "indoor",
+    "loud"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Millennium+Falcon%3A+Smugglers+Run+POV+Disneyland"
+  },
+  "c02fb82d-0860-4e95-8c61-899fa594d20e": {
+   "name": "Minnie's House",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Walk-through of Minnie's cartoon house, touchable gadgets and props, indoor and calm.",
+   "tags": [
+    "walkthrough",
+    "play",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Minnie's+House+POV+Disneyland"
+  },
+  "9d401ad3-49b2-469f-ac73-93eb429428fb": {
+   "name": "Mr. Toad's Wild Ride",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Jerky car through dark crash scenes, loud, a train headlight rushes at you, ends in a fiery hell scene.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "loud",
+    "startle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Mr.+Toad's+Wild+Ride+POV+Disneyland"
+  },
+  "6e2af074-3a67-4f38-9bcf-2f5a572c87df": {
+   "name": "Opera House - Walt Disney - A Magical Life",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor theater and lobby exhibits, a short film and a lifelike Walt Disney figure, calm and seated.",
+   "tags": [
+    "show",
+    "screen",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Opera+House+-+Walt+Disney+-+A+Magical+Life+POV+Disneyland"
+  },
+  "c23af6ba-8515-406a-8a48-d0818ba0bfc9": {
+   "name": "Peter Pan's Flight",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Pirate ships hang from an overhead track and glide through dark scenes, feels high over London, gentle.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Peter+Pan's+Flight+POV+Disneyland"
+  },
+  "90ee50d4-7cc9-4824-b29d-2aac801acc29": {
+   "name": "Pinocchio's Daring Journey",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow dark ride with some creepy parts, boys turning into donkeys, a whale that lunges out.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "startle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Pinocchio's+Daring+Journey+POV+Disneyland"
+  },
+  "07952343-3498-404b-8337-734de9a185c1": {
+   "name": "Pirate's Lair on Tom Sawyer Island",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Raft over to an island to explore caves, wobbly bridges and forts on foot, some dark tunnels.",
+   "tags": [
+    "play",
+    "walkthrough",
+    "outdoor",
+    "boat"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Pirate's+Lair+on+Tom+Sawyer+Island+POV+Disneyland"
+  },
+  "82aeb29b-504a-416f-b13f-f41fa5b766aa": {
+   "name": "Pirates of the Caribbean",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow boat through dark pirate scenes, two short drops in the dark, loud cannon fire, a little splash.",
+   "tags": [
+    "boat",
+    "water",
+    "dark",
+    "drop",
+    "indoor",
+    "loud",
+    "slow"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Pirates+of+the+Caribbean+POV+Disneyland"
+  },
+  "526ada11-4688-442b-96d4-4077eac4f988": {
+   "name": "Pixar Short Film Spotlight",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Seated indoor theater showing three Pixar short films, about 20 minutes, calm.",
+   "tags": [
+    "show",
+    "screen",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Pixar+Short+Film+Spotlight+POV+Disneyland"
+  },
+  "6ce9cdd1-0a43-459e-83cd-f4cace9cfa7b": {
+   "name": "Roger Rabbit's Car Toon Spin",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor dark ride in cabs you can spin with a wheel, loud busy cartoon scenes, a few surprises.",
+   "tags": [
+    "dark",
+    "spin",
+    "indoor",
+    "vehicle",
+    "loud",
+    "startle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Roger+Rabbit's+Car+Toon+Spin+POV+Disneyland"
+  },
+  "c9e39189-7e99-4e0a-97e0-4a0d5654d257": {
+   "name": "Sailing Ship Columbia",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Full-size sailing ship on the river, stand on deck, slow and smooth, a small museum below deck.",
+   "tags": [
+    "boat",
+    "water",
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Sailing+Ship+Columbia+POV+Disneyland"
+  },
+  "90d5a091-478c-4df1-adfe-c605b4005013": {
+   "name": "Sleeping Beauty Castle Walkthrough",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Walk through the castle up and down narrow stairs, dim storybook dioramas, a Maleficent scene.",
+   "tags": [
+    "walkthrough",
+    "indoor",
+    "dark",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Sleeping+Beauty+Castle+Walkthrough+POV+Disneyland"
+  },
+  "4f0053e7-b8db-4833-b02f-35e1c91b4523": {
+   "name": "Snow White's Enchanted Wish",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow mine cart through dark scenes, the witch appears a few times, happy ending, gentle motion.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "startle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Snow+White's+Enchanted+Wish+POV+Disneyland"
+  },
+  "9167db1d-e5e7-46da-a07f-ae30a87bc4c4": {
+   "name": "Space Mountain",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Fast indoor coaster almost entirely in the dark, sudden turns and dips, loud music, no big drops.",
+   "tags": [
+    "coaster",
+    "dark",
+    "indoor",
+    "loud"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Space+Mountain+POV+Disneyland"
+  },
+  "cc718d11-fa15-44ee-87d0-ded989ad61bc": {
+   "name": "Star Tours - The Adventures Continue",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Motion simulator theater with 3D glasses and a big screen, bumpy jolts and swoops, can cause motion sickness.",
+   "tags": [
+    "sim",
+    "screen",
+    "3d",
+    "indoor",
+    "loud"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Star+Tours+-+The+Adventures+Continue+POV+Disneyland"
+  },
+  "34b1d70f-11c4-42df-935e-d5582c9f1a8e": {
+   "name": "Star Wars: Rise of the Resistance",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Long walk-through story, then trackless cars, loud blasters, huge AT-ATs, a short sudden drop at the end.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "drop",
+    "loud",
+    "startle"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Star+Wars%3A+Rise+of+the+Resistance+POV+Disneyland"
+  },
+  "cb929138-d77a-4dd2-983c-f651bbd1bd92": {
+   "name": "Storybook Land Canal Boats",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor boat past tiny storybook villages, very slow, starts through a dim whale's mouth.",
+   "tags": [
+    "boat",
+    "water",
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Storybook+Land+Canal+Boats+POV+Disneyland"
+  },
+  "a9076acd-7630-4bad-a8da-e6bd689ddcac": {
+   "name": "Tiana's Bayou Adventure",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Log boat through dark scenes and small dips, then a steep 50-foot drop outdoors, you will get wet.",
+   "tags": [
+    "boat",
+    "water",
+    "wet",
+    "drop",
+    "dark",
+    "indoor",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Tiana's+Bayou+Adventure+POV+Disneyland"
+  },
+  "05b17c11-fd4c-4b85-ab45-3e269dc56559": {
+   "name": "Walt Disney - A Magical Life",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Seated indoor theater, a short film then a lifelike Walt Disney figure speaks, calm and quiet.",
+   "tags": [
+    "show",
+    "screen",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Walt+Disney+-+A+Magical+Life+POV+Disneyland"
+  },
+  "106c1e5a-a5e7-42d7-96ab-bc100d8faf71": {
+   "name": "Walt Disney's Enchanted Tiki Room",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Seated indoor show of singing animated birds and flowers, a dark thunderstorm part with loud thunder.",
+   "tags": [
+    "show",
+    "indoor",
+    "loud",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Walt+Disney's+Enchanted+Tiki+Room+POV+Disneyland"
+  },
+  "d2aa0987-49a2-45dc-a635-3a8bf7401230": {
+   "name": "Animation Academy",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Sit at an easel and follow a Disney artist step by step to draw a character, indoor, calm.",
+   "tags": [
+    "show",
+    "play",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Animation+Academy+POV+California+Adventure"
+  },
+  "eb77ee1f-3207-44fd-acfc-d7bc18602007": {
+   "name": "The Bakery Tour",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Short indoor walk past a working bakery with video hosts, a free bread sample, calm.",
+   "tags": [
+    "walkthrough",
+    "screen",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=The+Bakery+Tour+POV+California+Adventure"
+  },
+  "1d24dd7a-372b-4195-8ad0-ba9679d72b08": {
+   "name": "Games of Pixar Pier",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor carnival games along the pier, pay to play, tossing and aiming games for prizes.",
+   "tags": [
+    "play",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Games+of+Pixar+Pier+POV+California+Adventure"
+  },
+  "10a5fc6f-5ad3-414b-9bdd-e6bae097b6ad": {
+   "name": "Golden Zephyr",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor rocket cars hang from a tower and swing out in slow wide circles over the bay, smooth.",
+   "tags": [
+    "spin",
+    "swing",
+    "tower",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Golden+Zephyr+POV+California+Adventure"
+  },
+  "f44a5072-3cda-4c7c-8574-33ad09d16cca": {
+   "name": "Goofy's Sky School",
+   "heightIn": 42,
+   "heightNote": null,
+   "expect": "Outdoor wild-mouse coaster, sharp hairpin turns that feel like going over the edge, small drops.",
+   "tags": [
+    "coaster",
+    "outdoor",
+    "drop"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Goofy's+Sky+School+POV+California+Adventure"
+  },
+  "b1d285a7-2444-4a7c-b7bb-d2d4d6428a85": {
+   "name": "Grizzly River Run",
+   "heightIn": 42,
+   "heightNote": null,
+   "expect": "Round raft spins down outdoor rapids with two drops, one fairly big, you will likely get soaked.",
+   "tags": [
+    "boat",
+    "water",
+    "wet",
+    "drop",
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Grizzly+River+Run+POV+California+Adventure"
+  },
+  "b7678dab-5544-48d5-8fdc-c1a0127cfbcd": {
+   "name": "Guardians of the Galaxy - Mission: BREAKOUT!",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Indoor drop tower, launched up and dropped again and again, floating airtime, loud music, brief views.",
+   "tags": [
+    "tower",
+    "drop",
+    "launch",
+    "dark",
+    "indoor",
+    "loud"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Guardians+of+the+Galaxy+-+Mission%3A+BREAKOUT!+POV+California+Adventure"
+  },
+  "2108cc58-80df-4fff-9b91-735e89873ffd": {
+   "name": "Guardians of the Galaxy - Monsters After Dark",
+   "heightIn": 40,
+   "heightNote": "Halloween overlay of Guardians Mission BREAKOUT, same requirement",
+   "expect": "Same drop tower as BREAKOUT with a spooky monster story, repeated big drops in the dark, loud.",
+   "tags": [
+    "tower",
+    "drop",
+    "launch",
+    "dark",
+    "indoor",
+    "loud",
+    "startle"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Guardians+of+the+Galaxy+-+Monsters+After+Dark+POV+California+Adventure"
+  },
+  "5d07a2b1-49ca-4de7-9d32-6d08edf69b08": {
+   "name": "Incredicoaster",
+   "heightIn": 48,
+   "heightNote": null,
+   "expect": "Big outdoor coaster, a fast launch, a vertical loop, tall drops, high speed over the water.",
+   "tags": [
+    "coaster",
+    "launch",
+    "drop",
+    "outdoor",
+    "loud"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Incredicoaster+POV+California+Adventure"
+  },
+  "6d876f4c-c3ff-4ae3-a2d8-d4b831e1039b": {
+   "name": "Inside Out Emotional Whirlwind",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Gentle open-air spinner, round cars circle and turn a little, short and mild.",
+   "tags": [
+    "spin",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Inside+Out+Emotional+Whirlwind+POV+California+Adventure"
+  },
+  "388ad3f1-5cf5-4a9d-8d0e-6dfb817d7822": {
+   "name": "Jessie's Critter Carousel",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Outdoor carousel of Toy Story critter figures that bob up and down, slow and gentle.",
+   "tags": [
+    "spin",
+    "outdoor",
+    "gentle",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Jessie's+Critter+Carousel+POV+California+Adventure"
+  },
+  "c8a4b7b1-c1b2-4dfe-b73c-4e834b4a73db": {
+   "name": "Jumpin' Jellyfish",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Outdoor kid tower, seats rise about 40 feet and bounce gently down a few times, a feel of height.",
+   "tags": [
+    "tower",
+    "drop",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Jumpin'+Jellyfish+POV+California+Adventure"
+  },
+  "e1fbc7a1-2cd1-4282-b373-ac11d9d9d38a": {
+   "name": "The Little Mermaid - Ariel's Undersea Adventure",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow clamshell cars through bright and dim scenes, a tilt back to go under the sea, an Ursula scene.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=The+Little+Mermaid+-+Ariel's+Undersea+Adventure+POV+California+Adventure"
+  },
+  "7a09a2f0-e226-4f3e-86f8-2598ab67ec44": {
+   "name": "Luigi's Honkin' Haul-O-Ween",
+   "heightIn": 32,
+   "heightNote": "Seasonal overlay of Luigi's Rollickin' Roadsters, same requirement",
+   "expect": "Open-air cars with no track glide and twirl around a floor to Halloween music, mild spinning.",
+   "tags": [
+    "spin",
+    "vehicle",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Luigi's+Honkin'+Haul-O-Ween+POV+California+Adventure"
+  },
+  "46097afe-a1ea-4807-93d3-14d14f36e55f": {
+   "name": "Mater's Graveyard JamBOOree",
+   "heightIn": 32,
+   "heightNote": "Seasonal overlay of Mater's Junkyard Jamboree, same requirement",
+   "expect": "Outdoor whip ride, small tractor carts swing around sharp turns and nearly collide, Halloween music.",
+   "tags": [
+    "spin",
+    "vehicle",
+    "outdoor",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Mater's+Graveyard+JamBOOree+POV+California+Adventure"
+  },
+  "8f586a2f-cef5-46d3-b822-fd622c4e9e33": {
+   "name": "Mickey's PhilharMagic",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Seated 3D movie with glasses, loud music, air puffs, light water sprays and scents, about 12 minutes.",
+   "tags": [
+    "show",
+    "screen",
+    "3d",
+    "indoor",
+    "loud"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Mickey's+PhilharMagic+POV+California+Adventure"
+  },
+  "40524fba-5d84-49e7-9204-f493dbe2d5a4": {
+   "name": "Monsters, Inc. Mike & Sulley to the Rescue!",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Slow taxi cars through dark cartoon scenes, a few loud alarms and a lurking Randall, gentle.",
+   "tags": [
+    "dark",
+    "indoor",
+    "vehicle",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Monsters%2C+Inc.+Mike+%26+Sulley+to+the+Rescue!+POV+California+Adventure"
+  },
+  "4ca6cdbf-4c5f-45bf-b0dc-db83393ec208": {
+   "name": "Pixar Pal-A-Round – Non-Swinging",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Tall outdoor Ferris wheel in fixed gondolas, slow and steady, high views over the park.",
+   "tags": [
+    "outdoor",
+    "slow",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Pixar+Pal-A-Round+%E2%80%93+Non-Swinging+POV+California+Adventure"
+  },
+  "528016ef-db24-47fa-a0f2-b6d26d61e29f": {
+   "name": "Pixar Pal-A-Round - Swinging",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Tall Ferris wheel with gondolas that slide and swing hard on inner rails, high up, stomach drops.",
+   "tags": [
+    "swing",
+    "drop",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Pixar+Pal-A-Round+-+Swinging+POV+California+Adventure"
+  },
+  "c60c768b-3461-465c-8f4f-b44b087506fc": {
+   "name": "Radiator Springs Racers",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Slow scenic drive and indoor scenes, then a fast side-by-side outdoor race with dips and banked turns.",
+   "tags": [
+    "vehicle",
+    "dark",
+    "indoor",
+    "outdoor",
+    "loud"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Radiator+Springs+Racers+POV+California+Adventure"
+  },
+  "c9803366-6f37-4406-82af-7692357e3ca9": {
+   "name": "Redwood Creek Challenge Trail",
+   "heightIn": null,
+   "heightNote": "Some parts: rock climb 42 in., log slides 32 in., training tower 42 to 63 in. and age 12 or under",
+   "expect": "Outdoor play trail with rope bridges, slides, climbing walls and lookout towers, on foot.",
+   "tags": [
+    "play",
+    "walkthrough",
+    "outdoor"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Redwood+Creek+Challenge+Trail+POV+California+Adventure"
+  },
+  "4f5b28d0-b78e-482b-8e2e-1f90756d6220": {
+   "name": "Silly Symphony Swings",
+   "heightIn": 40,
+   "heightNote": "48 in. to ride a single swing alone; 40 to 48 in. rides a tandem swing with a responsible person",
+   "expect": "Outdoor swing ride, chairs fly out in wide fast circles and tilt, a feel of height.",
+   "tags": [
+    "swing",
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Silly+Symphony+Swings+POV+California+Adventure"
+  },
+  "77f205a4-d482-4d91-a5ff-71e54a086ad2": {
+   "name": "Soarin’ Across America",
+   "heightIn": 40,
+   "heightNote": null,
+   "expect": "Seats lift you up in front of a giant dome screen, gentle gliding motion, scents, feet dangle high.",
+   "tags": [
+    "sim",
+    "screen",
+    "indoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Soarin%E2%80%99+Across+America+POV+California+Adventure"
+  },
+  "44c1f655-25d3-440c-b1a8-db736a12b105": {
+   "name": "Sorcerer's Workshop",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor hands-on rooms with screens, animate a drawing and take a character quiz, calm.",
+   "tags": [
+    "play",
+    "screen",
+    "indoor",
+    "walkthrough",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Sorcerer's+Workshop+POV+California+Adventure"
+  },
+  "86ab3069-110d-49c5-a7e7-29ddf28695a6": {
+   "name": "Toy Story Midway Mania!",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor 3D shooting game with glasses, cars turn between big screens, air puffs and light spritzes.",
+   "tags": [
+    "shooter",
+    "screen",
+    "3d",
+    "indoor",
+    "vehicle",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Toy+Story+Midway+Mania!+POV+California+Adventure"
+  },
+  "75dfd5ed-4bfb-4727-b24a-bf5fb2284950": {
+   "name": "Treat Trails at Oogie Boogie Bash",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Nighttime outdoor walking trails with candy stations, only during the separate-ticket Halloween party.",
+   "tags": [
+    "walkthrough",
+    "outdoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Treat+Trails+at+Oogie+Boogie+Bash+POV+California+Adventure"
+  },
+  "7561bcd8-18ea-4e3f-89d5-c905b7ba3d42": {
+   "name": "Turtle Talk with Crush",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor show where an animated Crush on a big screen chats live with kids, sit on the floor.",
+   "tags": [
+    "show",
+    "screen",
+    "indoor",
+    "gentle"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Turtle+Talk+with+Crush+POV+California+Adventure"
+  },
+  "24066306-d364-4048-b4c9-a0e81980c5b4": {
+   "name": "Villains Grove at Oogie Boogie Bash",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Nighttime outdoor walk-through with villain lighting, projections and music, spooky mood, party only.",
+   "tags": [
+    "walkthrough",
+    "outdoor",
+    "dark",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Villains+Grove+at+Oogie+Boogie+Bash+POV+California+Adventure"
+  },
+  "2295351d-ce6b-4c04-92d5-5b416372c5b5": {
+   "name": "WEB SLINGERS: A Spider-Man Adventure",
+   "heightIn": null,
+   "heightNote": null,
+   "expect": "Indoor 3D screen game with glasses, fling webs with hand motions, cars turn but move gently.",
+   "tags": [
+    "shooter",
+    "screen",
+    "3d",
+    "indoor",
+    "vehicle",
+    "loud"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=WEB+SLINGERS%3A+A+Spider-Man+Adventure+POV+California+Adventure"
+  }
+ },
+ "uncertain": [
+  "11209961-2ac2-4f76-a11b-ed793939f796: Key to Disneyland was a 70th-anniversary experience billed to run until summer 2026 (final lock station by Aug 9, 2026); it may no longer operate. No height facet on its official page; null is a best judgment.",
+  "6e2af074-3a67-4f38-9bcf-2f5a572c87df: The official Main Street Opera House page shows no height facet; null given because it is exhibits and a theater show.",
+  "75dfd5ed-4bfb-4727-b24a-bf5fb2284950: Treat Trails (Oogie Boogie Bash, separate ticket) official page shows no height facet; null given because it is a walking trail.",
+  "24066306-d364-4048-b4c9-a0e81980c5b4: Villains Grove (Oogie Boogie Bash, separate ticket) official page shows no height facet; null given because it is a walk-through."
+ ]
+}

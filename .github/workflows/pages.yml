@@ -1,0 +1,39 @@
+name: deploy-pages
+on:
+  push:
+    branches: [main]
+    paths: ['app/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+  workflow_call: # the daily stats refresh calls this after committing new stats
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main # latest main, also when called right after the stats commit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+      # New service-worker version per deploy, so phones fetch the new shell on next open. Stamped
+      # from the commit actually checked out: when the stats refresh calls this, GITHUB_SHA is the
+      # commit from before its stats commit, which would reuse the previous version.
+      - run: sed -i "s/const VERSION = 'nr-v1'/const VERSION = 'nr-$(git rev-parse --short=8 HEAD)'/" app/sw.js && grep -n 'const VERSION' app/sw.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app
+      - id: deployment
+        uses: actions/deploy-pages@v4

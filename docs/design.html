@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Next Ride — design</title>
+<style>
+  :root { --ink:#1c1c1e; --muted:#6b6b70; --line:#e3e3e6; --bg:#fff; --accent:#0a5fd6; --soft:#f4f6fa; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#eaeaea; --muted:#9a9aa2; --line:#333; --bg:#121214; --accent:#6aa7ff; --soft:#1c1c20; } }
+  body { margin:0; padding:24px 16px 80px; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width:880px; margin-inline:auto; }
+  h1 { font-size:28px; margin:0 0 4px; } h2 { font-size:20px; margin:36px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  h3 { font-size:16px; margin:20px 0 6px; }
+  p, li { max-width:72ch; } code, pre { font-family: ui-monospace, Consolas, monospace; font-size:14px; }
+  pre { background:var(--soft); padding:12px; border-radius:8px; overflow:auto; }
+  code { background:var(--soft); padding:1px 5px; border-radius:4px; }
+  table { border-collapse:collapse; width:100%; margin:8px 0 16px; font-size:15px; }
+  th, td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .meta { color:var(--muted); font-size:14px; }
+  .decision { border-left:3px solid var(--accent); padding:4px 12px; background:var(--soft); margin:10px 0; }
+  .decision b { color:var(--accent); }
+</style>
+</head>
+<body>
+<h1>Next Ride — design spec</h1>
+<p class="meta">Disneyland Resort "what should we ride next" app. Written 2026-09-26 (Fable, design pass with no prior pack). Implemented from this document; decisions below were made without approval gates per Justin's standing instructions.<br>
+Updated the same day by the Opus 5.5 session that built it: the rules below match what shipped, and section 9 lists every change from the first draft.</p>
+
+<h2>1. What it is for</h2>
+<p>Standing in Disneyland or California Adventure with a phone, one-handed, on cellular: given the rides we still want today, where we are, and live waits, answer one question, <b>"what should we ride next?"</b>, with a top pick, two alternatives, and a one-line reason for each. Mark rides done as we go. Never show a spinner; show the last-known waits with their age.</p>
+<p>Success looks like: the pick is one a savvy local would agree with (short wait now, close by, and it would only get worse later), and the app is usable in ten seconds of attention.</p>
+
+<h2>2. Data (verified live 2026-09-26)</h2>
+<table>
+<tr><th>Need</th><th>Source</th><th>Notes</th></tr>
+<tr><td>Live waits, status, Lightning Lane, forecast</td><td><code>GET https://api.themeparks.wiki/v1/entity/disneylandresort/live</code></td><td>CORS <code>*</code>, 300 req/min, 60 s cache. 79 attractions. Fields per attraction: <code>queue.STANDBY.waitTime</code>, <code>queue.RETURN_TIME</code> (LL Multi Pass window), <code>queue.PAID_RETURN_TIME</code> (LL Single Pass window + price), <code>queue.SINGLE_RIDER</code>, <code>status</code> ∈ OPERATING / DOWN / CLOSED / REFURBISHMENT, <code>forecast[]</code> hourly {time, waitTime} for 48 of 79, <code>operatingHours[]</code>, <code>lastUpdated</code>.</td></tr>
+<tr><td>Attraction catalog: name, park, lat/long, type</td><td><code>/v1/entity/disneylandresort/children</code> + <code>/v1/entity/{id}</code> for <code>attractionType</code></td><td>All 83 attractions have coordinates. Built offline into <code>app/data/catalog.json</code> by a script; the app also accepts live entities missing from the catalog (no walk time, flagged).</td></tr>
+<tr><td>Park hours</td><td><code>/v1/entity/{parkId}/schedule</code></td><td>openingTime / closingTime per date. Park IDs: Disneyland <code>7340550b-c14d-4def-80bb-acdb51d49a66</code>, DCA <code>832fcd51-ea19-4e77-85c7-75d5843b127c</code>.</td></tr>
+<tr><td>Fallback waits</td><td>Queue-Times parks 16 (DL) and 17 (DCA)</td><td><b>No CORS headers.</b> Served to the app through a GitHub Actions cache (section 6). Terms require a visible "Powered by Queue-Times.com" credit whenever their data is shown.</td></tr>
+</table>
+
+<h2>3. Decisions</h2>
+<div class="decision"><b>Hosting: GitHub Pages</b>, public repo <code>JustinWi/disneyland-next-ride</code>, URL <code>https://justinwi.github.io/disneyland-next-ride/</code>. Free, HTTPS (required for geolocation), no accounts to create, and the same repo runs the fallback cache via Actions. Nothing secret is in the app.</div>
+<div class="decision"><b>No framework, no bundler.</b> Vanilla ES modules served as-is; the scoring engine is pure functions shared with Node's built-in test runner. Small enough to hold in one head, and nothing to break on the day.</div>
+<div class="decision"><b>Trend signal = ThemeParks.wiki's hourly forecast</b>, anchored to the current posted wait (we apply the forecast's <i>delta</i> from now to later, not its absolute value). No historical-average scraping.</div>
+<div class="decision"><b>Fallback = GitHub Actions cache branch.</b> A workflow every 5 minutes fetches both ThemeParks.wiki live and Queue-Times, and force-pushes one commit to an orphan <code>data</code> branch; the app reads it from <code>raw.githubusercontent.com</code> (CORS <code>*</code>) only when the primary fetch fails. Known limits: 5–30 min staleness (always shown as age), and GitHub pauses schedules after 60 days of repo inactivity.</div>
+<div class="decision"><b>Lightning Lane is surfaced, not planned around.</b> Each card shows the LL Multi Pass window and the LL Single Pass window + price when present. Planning around LL is a follow-up.</div>
+<div class="decision"><b>Ride duration is ignored</b> in scoring (roughly constant across rides relative to waits). Walking time uses straight-line distance × 1.3 path factor.</div>
+
+<h2>4. Scoring model</h2>
+<p>For each ride <i>r</i> on the list that is not done, not snoozed, and currently OPERATING. This is the shipped version, after the adversarial review; the first draft is in section 9.</p>
+<pre>walk(r)        inside a park:   dist(P, r) × 1.3 / speed, + hop (20 min) if r is in the other park
+               outside both:    (dist(P, gate) + dist(gate, r)) × 1.3 / speed + 5 min entry, no hop
+               speed: slow 55, normal 72, fast 85 m/min
+arrive(r)      = now + walk(r)
+waitNow(r)     = posted STANDBY wait (fallback: forecast(now); else 10, flagged "wait unknown")
+W(r, t)        = max(0, waitNow + (forecast(t) − forecast(now)) × k),  k = clamp(waitNow / forecast(now), 0.5, 1.5)
+waitArr(r)     = W(r, arrive)
+nowCost(r)     = walk(r) + waitArr(r)
+detour(r)      = clamp(median nowCost of the OTHER candidates, 20, 60)   (alone on the list: 30)
+laterWait(r)   = min over 15-min slots t in [now + detour, close − 5 min], in any window today, of max(5, W(r, t))
+                 (no forecast ⇒ waitNow)
+urgency(r)     = clamp((walk without hop − 8) + (waitArr − laterWait), −45, +45)
+                 (no later slot ⇒ −45, "last chance")
+score(r)       = nowCost(r) + 1.0 × urgency(r)              lower is better</pre>
+<p>Why this shape: <code>nowCost</code> is what it costs to go now. <code>urgency</code> is how much worse (negative) or better (positive) coming back later would be, so a ride whose wait doubles by mid-afternoon is pulled forward even when a flat 10-minute ride is nearer. Because the later window starts after the <em>other</em> rides' typical cost, never this ride's own, a longer wait, walk or hop can never make a ride score better; a property test pins that. The weight of 1.0 means a later slot must save twice the extra cost now before it pulls a ride ahead, which keeps a rough forecast from overriding a real short wait. Pure greedy one step; no global tour optimisation.</p>
+<p><b>Which park you're in</b>: inside the convex hull of a park's rides, plus 60 m. Anywhere else near the resort (esplanade, Downtown Disney, hotels, parking) is outside both, so neither park carries a hop. A GPS fix rougher than 250 m doesn't pick a park. More than 2.5 km away, the plan starts from the esplanade. With location blocked, it starts just inside the gate chosen in More.</p>
+<h3>Exclusions and flags</h3>
+<ul>
+<li><b>DOWN</b>: excluded from ranking, shown in the list with "down, check back". <b>CLOSED</b> before open or after close: excluded; "opens at 10:00" when known. <b>REFURBISHMENT</b>: excluded with a hint to remove it.</li>
+<li><b>Can't make it</b>: if you'd <em>arrive</em> after the ride's current operating window closes, exclude with "closes before you get there", plus "reopens 10:15 pm" when it has a later window today. Disney lets you ride if you're in the queue at closing time, so the wait doesn't count against closing.</li>
+<li><b>Split windows</b>: a ride can pause (for fireworks) and reopen. All of today's operating windows are kept, and the "later" slot can fall in any of them, so a pause is not a "last chance". Windows dated other days, which the feed sometimes keeps for months, are dropped.</li>
+<li><b>No per-ride stale flag</b>: the feed's <code>lastUpdated</code> is when the wait last <em>changed</em>. On 2026-09-26 the Railroad read six hours old while running normally. The whole-snapshot age is always shown in the header instead.</li>
+<li><b>Far from the resort</b> (&gt; 2.5 km from the Disneyland gate) or no GPS: plan from a user-chosen start point, default Disneyland gate; header says so.</li>
+<li><b>No coordinates</b> (entity not in catalog): walk = 10 min, flagged.</li>
+</ul>
+<h3>Reason line</h3>
+<p>Templates, chosen by the dominant term: "15 min wait, 4 min walk, forecast 60+ by 2 pm" / "shortest wait near you" / "last chance: closes 8 pm" / "10 min now, drops to 5 after 9 pm, could wait" / "other park (+20 min hop), but 5 min wait". Always includes wait and walk.</p>
+
+<h2>5. App structure</h2>
+<pre>app/                     deploy root (GitHub Pages)
+  index.html             single page, three tabs: Next · Rides · More
+  app.css                phone-first, 44 px targets, light/dark
+  app.js                 UI, state, timers, geolocation, storage
+  sw.js                  service worker: cache-first app shell only
+  manifest.webmanifest   installable to home screen
+  data/catalog.json      built: [{id, name, park:'DL'|'DCA', lat, lng, type, qtId}]
+  js/
+    geo.js               haversine, walkMinutes, nearestPark, atResort
+    forecast.js          forecastAt(t) interpolation, peakAfter, minFuture
+    normalize.js         TPW live + QT + catalog ⇒ uniform Ride[]; snapshot age
+    score.js             scoreRides(rides, ctx) ⇒ ranked with reasons + exclusions
+    sources.js           fetch primary, fallback raw cache; localStorage last-known
+scripts/
+  build-catalog.mjs      TPW children + entity types + QT name match ⇒ catalog.json
+  fetch-cache.mjs        Actions job: write live.json + qt.json for the data branch
+test/                    node --test; fixtures are real captured payloads
+.github/workflows/cache.yml   */5 * * * *  force-push orphan branch data</pre>
+<h3>Uniform ride shape (after normalize)</h3>
+<pre>{ id, name, park, lat, lng, type,
+  status: 'OPERATING'|'DOWN'|'CLOSED'|'REFURBISHMENT'|'UNKNOWN',
+  wait: number|null, waitUpdated: ms|null,
+  forecast: [{t: ms, wait}]|null,
+  open: ms|null, close: ms|null,
+  ll: { multi: {start, end}|null, single: {start, end, price}|null, singleRider: number|null },
+  source: 'tpw'|'qt' }</pre>
+<h3>State (localStorage)</h3>
+<pre>nr.wanted   = { [rideId]: true }           persists across days
+nr.done     = { date: 'YYYY-MM-DD', ids: {...} }   auto-resets on a new park day
+nr.snoozed  = { [rideId]: untilMs }
+nr.settings = { speed:'normal', hop:20, start:'DL'|'DCA'|{lat,lng}, showAll:false }
+nr.tpw      = { at: ms, data: {liveData} }    last ThemeParks.wiki payload, trimmed (~80 KB)
+nr.qt       = { at: ms, data: [qt16, qt17] }  last Queue-Times payload (backup cache only)
+nr.tab      = 'next'|'rides'|'more'
+Raw payloads are stored and re-normalized on every render, so "opens at" and closing logic use the current clock.</pre>
+<h3>Screens</h3>
+<ul>
+<li><b>Next</b>: header chips (waits age, GPS status, current park). Top-pick card: name, reason, wait / walk / LL lines, buttons Done, Not now (snooze 45 min), Walk (opens maps walking directions). Two alternative cards, smaller. "Also on your list" compact rows with score order, each with a Done tick. "Done today" collapsed. "Unavailable" rows (down / closed / can't make it) with the flag.</li>
+<li><b>Rides</b>: search box; Disneyland then DCA; rows show name, current wait, checkbox. Grouped by land (land names from Queue-Times). Default shows <code>attractionType = RIDE</code>; toggle to show everything. The feed labels Toy Story Midway Mania, the Monorail and the Explorer Canoes UNKNOWN, so <code>scripts/build-catalog.mjs</code> overrides those three to RIDE. Counts (picked, still to do) above the list.</li>
+<li><b>More</b>: walking speed, park-hop minutes, start point when GPS is off, "New day" reset, credits (ThemeParks.wiki; "Powered by Queue-Times.com" when fallback data shown).</li>
+</ul>
+<h3>Refresh and offline</h3>
+<p>ThemeParks.wiki needs no key: 300 requests a minute per IP, live data refreshed about every minute. Its docs ask clients to honour Cache-Control and ETag, so fetches use <code>cache: 'no-cache'</code> and get a 304 when nothing changed.</p>
+<ul>
+<li>Fetch live on load, every 60 s while visible, on <code>visibilitychange</code> to visible, and on pull/tap of the age chip. Timeout 8 s.</li>
+<li>Primary fails ⇒ fallback raw cache (TPW snapshot first, then QT). All fail ⇒ keep rendering the last snapshot from localStorage with its age; the age chip turns amber past 10 min and red past 30.</li>
+<li>Geolocation: <code>watchPosition</code> high accuracy; accuracy shown; denied/unavailable ⇒ start point from settings.</li>
+<li>Service worker caches the shell so the page opens with no signal.</li>
+</ul>
+
+<h2>6. Fallback cache workflow</h2>
+<p><code>.github/workflows/cache.yml</code> runs <code>scripts/fetch-cache.mjs</code> every 5 minutes: fetch TPW live and QT 16/17 with 10 s timeouts, write <code>live.json</code>, <code>qt.json</code>, <code>meta.json</code> {fetchedAt, ok flags}, then create an orphan commit on branch <code>data</code> and force-push it (history stays one commit). App URLs: <code>https://raw.githubusercontent.com/JustinWi/disneyland-next-ride/data/&lt;file&gt;</code>. Permissions: <code>contents: write</code> with the built-in token.</p>
+
+<h2>7. Testing</h2>
+<ul>
+<li><b>Unit</b> (node --test, real fixtures captured 2026-09-26): normalize both payloads; forecast interpolation and delta anchoring; scoring cases: rising ride outranks nearer flat ride; DOWN excluded; closes-before-boarding excluded; other-park hop penalty applied; missing forecast ⇒ urgency 0; last-chance boost; stale flag; reasons contain wait and walk.</li>
+<li><b>Browser</b> at 390 px width: Rides selection persists on reload; Next renders with manual start point when GPS is denied; offline (network blocked) still renders last snapshot with age; Done moves a ride out and re-ranks.</li>
+<li><b>Review</b>: one adversarial correctness pass (opus, high) on the engine and data handling before deploy; findings fixed or recorded.</li>
+</ul>
+
+<h2>8. Out of scope (follow-ups)</h2>
+<ul>
+<li>Multi-ride tour optimisation; meal/show scheduling; ride durations; sharing a list live between phones (a one-time private link exists, see 10).</li>
+</ul>
+
+<h2>10. Trip file and Lightning Lane (added 2026-09-26, evening)</h2>
+<h3>Trip file</h3>
+<ul>
+<li><b>Loaded on the phone only</b>, from a JSON file or a private link whose data sits in the URL fragment (<code>#trip=</code>, gzip + base64url). The fragment is never sent to a server, and the app removes it from the address bar after reading it. Notes about people in the file are dropped at import; only a head count is kept.</li>
+<li><b>Rides are matched</b> to the live feed by name within their park: exact, then alias table (renames and seasonal overlays), then without "(…)", then fuzzy. <code>app/js/names.js</code> is shared with the catalog build.</li>
+<li><b>Used by the planner:</b> priorities give a head start (must −15 min, high −6, low +8); the avoid list is never suggested; every ladder is enforced: a ride waits on its own "after" ride and on the rung before it in each ladder (drop test, coaster ladder), opens once that ride is done and you tap thumbs up (one question per ladder ride), and a thumbs down skips every rung above it; a weekday named in a ride's note ("Friday, last ride") keeps it for that day, in live advice and in plans. There is no fixed midday break: the family takes breaks as the day goes (removed 2026-09-27 at Justin's request).</li>
+<li><b>Ratings.</b> After a ride, a 1–5 star card. Rides rated 4 or 5 stars show under "Loved it? Ride again" for today's park with the current wait; "Ride again" puts one back on today's list with a head start (5 stars −10 min, 4 stars −5). The Friday park chooser counts favorites.</li>
+<li><b>Trip days</b> set today's park, so the other park is never suggested; an undecided day asks which park, suggesting the one with more of your list left. Done marks carry across trip days, so Friday knows Monday.</li>
+</ul>
+<h3>Lightning Lane Multi Pass engine (<code>app/js/lightning.js</code>)</h3>
+<p>Rules encoded (2026 guides, checked 2026-09-26): first booking after you scan into the park; one at a time, the next opens on tap-in or 2 hours after booking, whichever first; each ride once a day; a ride down during your window turns the booking into a Multiple Experience pass for any other Multi Pass ride in that park. Which rides have Multi Pass or Single Pass comes from the live feed, not the trip file.</p>
+<p><b>What to book now</b> ranks the Multi Pass rides on today's list that you can still book, by:</p>
+<ol>
+<li>standby minutes you'd skip, predicted for the middle of the return window from the live wait and the day's forecast, minus about 10 minutes in the lane;</li>
+<li>× priority (must 1.5, high 1.2, medium 1, low 0.7);</li>
+<li>+ scarcity learned from history: +15 if that lane is usually sold out within the next 3 hours ("usually gone by 3 pm"), and a small bonus when the return is already far out (it books up fast);</li>
+<li>+5 when the return is within 45 minutes, because tapping in sooner lets you book again sooner;</li>
+<li>never: sold out, used today, other park, locked, avoided, returns after the ride closes.</li>
+</ol>
+<p><b>Is it worth buying today?</b> A simulated day per park, from learned patterns (<code>scripts/build-llstats.mjs</code>, one ThemeParks.wiki history call per park-day, refreshed daily by a workflow): for each hour, how far out returns run, whether the lane is still sold, and the standby line. From scan-in it books the best lane that is still usually available, saving each ride's once-a-day lane for when it skips at least 70% of that ride's usual line (unless it usually sells out within two hours), never past close, a ladder ride only after the ride it waits on has come back, and the next booking at tap-in (when you've finished the last lane ride and walked over: lane 10 + ride 7 + walk 8 minutes) or 2 hours later. A booking's saving is the smaller of the line at the return time and the ride's usual line, minus the lane, × 0.85 because without Lightning Lane the app would still steer you to shorter standby times. Verdict by price per minute of family standby saved: <b>Worth it</b> at $1 or less (and an hour or more saved), <b>Your call</b> up to $2, <b>Skip it</b> above that; shown with the cost for your party and a booking plan. On the day itself, the live forecast replaces last week's standby and only the rest of the day counts.</p>
+<p>Lightning Lane can be switched on or off per day; with it off, no booking advice or banners show. On a day whose park isn't chosen yet, the Lightning tab asks for the park first.</p>
+<p><b>Second adversarial review (2026-09-26, late evening)</b>, reproduced on the real trip file and replayed history: 4 High and 8 Medium, all fixed and covered by <code>test/review2.test.mjs</code>. Highs: ladders beyond "after X" weren't enforced; the day plan booked a ladder ride before its gate; "ride next" showed during the midday break (the break was later removed entirely); background redraws reset an open booking form. Two Lows are recorded, not fixed: removing the trip mid-trip forgets ladder locks and earlier days' done marks (that's what removing it means), and loading the trip again resets unlocks and list edits (it replaces the trip by design).</p>
+<h2>11. Picked features (2026-09-27)</h2>
+<p>Built from the family's picks on the decisions page, plus two ideas from their note.</p>
+<h3>Look two or three rides ahead (<code>app/js/route.js</code>)</h3>
+<p>Each candidate first ride gets its best continuation of up to two more rides from the top ten, walking ride to ride and predicting each wait at its arrival time. A step costs what the scorer charges for one ride (walk, wait, the same urgency and priority terms); later steps count 0.7 and 0.5. Candidates are ranked by their best route, so the pick leads into an area instead of zigzagging, and the card shows "Then: …". A route may not make you miss a held Lightning Lane window or reach a ride after it closes. It only commits to the first step: after each ride it re-plans. About 7 ms for 19 candidates.</p>
+<h3>"We're on our way" (arrival plan)</h3>
+<p>A button in the morning briefing and on Next when you're not inside today's park. It plans from the park's gate at your arrival time (now plus a travel time you pick): which area to start in, the first three rides, and what to book with Lightning Lane as you walk in. It clears itself when the phone is inside the park, or with "We're here" (which also counts as scanning in for Lightning Lane).</p>
+<h3>Reminders (<code>app/js/alerts.js</code>), delivered in the app</h3>
+<p>A banner, plus vibration where the phone supports it (not iPhone), while the app is open; each shows once per park day. Lightning Lane window opening in 15 minutes and ending in 15; "book your next one" the moment the rules allow; last chance for a must-do closing within 45 minutes (a ride that pauses and reopens doesn't count); show reminders in time to get a spot (fireworks 40 minutes, Fantasmic 50, parades 25); a ride on your list coming back up; the ride you were heading to going down, with the next best pick. A morning briefing card on trip days (park hours, closures on your list, shows, the Multi Pass call) until noon or dismissed.</p>
+<h3>Shows (<code>app/js/shows.js</code>)</h3>
+<p>Today's performances from the live feed (ticketed-event and all-day entries left out), major ones first, with where to stand, when to leave, a reminder bell, and the rides on your list whose lines usually drop while fireworks or a nighttime show run (at least 10 minutes and 20% below the hour before, from learned history).</p>
+<h3>Ride facts (<code>app/data/rideinfo.json</code>)</h3>
+<p>Per attraction: height minimum (verified against published sources), a one-line "what to expect", similarity tags and intensity, and a preview-video search link. Used for the height check (rides with a minimum above the entered height are left out of picks and Lightning Lane advice; the height stays on the phone), "What to expect" on cards, and substitutes: when a must-do or high-priority ride is closed or down, the closest running rides in the same park by shared tags and intensity.</p>
+<h3>Single Pass advice</h3>
+<p>For paid Single Pass rides on the list: ride standby now if it's 30 minutes or less; wait if today's forecast (or learned history) says it usually drops 20 or more minutes later, with when; otherwise buy, with the minutes it saves.</p>
+<h3>Friday park chooser, deluxe</h3>
+<p>Adds, per park: the usual midday wait on this weekday for the rides left, tonight's major shows and closing time. The suggestion weighs what's left (must-dos most), favorites, those usual lines and how late each park is open.</p>
+<h3>Battery saver</h3>
+<p>Less precise location (cached up to two minutes) and wait refreshes every three minutes instead of every minute.</p>
+
+<h2>9. Changes during the build (Opus 5.5 session, 2026-09-26)</h2>
+<p>Each change was found by replaying the scorer on the real 7:20 pm snapshot, or by testing the deployed site at 390 px. Each is covered by a test.</p>
+<table>
+<tr><th>Change</th><th>Why</th></tr>
+<tr><td>Exclude only when you can't reach the queue before close</td><td>The first rule, "arrive + wait &gt; close", would have hidden a 40-minute headliner half an hour before close. That's exactly when locals join the line.</td></tr>
+<tr><td>Keep every operating window today</td><td>Toontown and Fantasyland rides run 8 am to 8 pm, pause for fireworks, and reopen 10:15 to 11 pm. With one window they all read "last chance: closes 8 pm".</td></tr>
+<tr><td>Drop windows from other days</td><td>A window dated April made Disneyland's opening time April.</td></tr>
+<tr><td>Remove the per-ride stale flag</td><td>It fired on 6 of 42 operating rides, including the Railroad at 376 minutes.</td></tr>
+<tr><td>Ride-type overrides and land grouping in the catalog</td><td>"Rides only" hid Toy Story Midway Mania. Grouping by land makes a list of 56 rides scannable one-handed.</td></tr>
+<tr><td>Top pick stays unless beaten by 3 minutes (<code>app/js/plan.js</code>)</td><td>Walking toward a ride moves every walk estimate. Without this, a refresh could swap the pick under you.</td></tr>
+<tr><td>Rope-drop preview</td><td>Before opening, nothing is OPERATING, so the Next screen was empty. Now it ranks the rides that open soon, using each ride's forecast for opening time.</td></tr>
+<tr><td>Cards show only the "why"</td><td>The big numbers already show wait and walk. The line under them now says why this ride, for example "Other park (+20 min hop), last chance: closes 9 pm".</td></tr>
+<tr><td>Service worker bypasses the HTTP cache on install</td><td>Pages serves files with a 10-minute cache, so a new version precached the previous deploy's CSS.</td></tr>
+<tr><td><b>Adversarial review, 8 findings, all fixed</b> (opus, one pass, reproduced on real data)</td><td>R1 Critical: the later window started after the ride's own cost, so a longer wait could flip a ride into "last chance" and a better score, every evening. R2 High: on the esplanade a 33 m step flipped the park and added a 20 min hop. R3 High: rides running before their listed opening were excluded at rope drop. R4: yesterday's waits were ranked as live. R5: the unscaled forecast change claimed Rise of the Resistance would "drop to 5". R6: the Queue-Times backup turned down and refurb rides into "closed for today". R7: one bad stored payload froze the app for good. R8: done marks reset at midnight while the park was open.</td></tr>
+<tr><td>Test switches <code>?at=LAT,LNG</code> and <code>?offline</code></td><td>Fake your location, or open with no signal to see last-known waits and their age.</td></tr>
+</table>
+</body>
+</html>

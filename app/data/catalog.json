@@ -1,0 +1,849 @@
+{
+ "builtAt": "2026-09-27T02:37:12.804Z",
+ "parks": {
+  "DL": {
+   "id": "7340550b-c14d-4def-80bb-acdb51d49a66",
+   "name": "Disneyland Park",
+   "lat": 33.8095545068,
+   "lng": -117.9189529669
+  },
+  "DCA": {
+   "id": "832fcd51-ea19-4e77-85c7-75d5843b127c",
+   "name": "Disney California Adventure Park",
+   "lat": 33.8087804896,
+   "lng": -117.9189353206
+  }
+ },
+ "rides": [
+  {
+   "id": "e27b1db8-9ec9-4f8b-9ca6-fd6377de66ee",
+   "name": "Adventureland Treehouse inspired by Walt Disney’s Swiss Family Robinson",
+   "park": "DL",
+   "lat": 33.811325,
+   "lng": -117.920585,
+   "type": "UNKNOWN",
+   "qtId": 12428,
+   "land": "Adventureland"
+  },
+  {
+   "id": "a07f3110-013e-43bb-a182-e66bb8b5e28d",
+   "name": "Alice in Wonderland",
+   "park": "DL",
+   "lat": 33.8133130163,
+   "lng": -117.9182459414,
+   "type": "RIDE",
+   "qtId": 285,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "6c225598-91c9-44a3-95e2-7c423475db61",
+   "name": "Astro Orbitor",
+   "park": "DL",
+   "lat": 33.812108371,
+   "lng": -117.9181900145,
+   "type": "RIDE",
+   "qtId": 287,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "1da85181-bf0f-4ccc-b98e-243142f7347b",
+   "name": "Autopia",
+   "park": "DL",
+   "lat": 33.8124087477,
+   "lng": -117.9165033178,
+   "type": "RIDE",
+   "qtId": 317,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "0de1413a-73ee-46cf-af2e-c491cc7c7d3b",
+   "name": "Big Thunder Mountain Railroad",
+   "park": "DL",
+   "lat": 33.8124773145,
+   "lng": -117.9203568914,
+   "type": "RIDE",
+   "qtId": 323,
+   "land": "Frontierland"
+  },
+  {
+   "id": "888525b0-5a6f-4b8e-9f07-b6a32812b04d",
+   "name": "Bluey’s Best Day Ever! at Fantasyland Theatre",
+   "park": "DL",
+   "lat": 33.814615,
+   "lng": -117.918825,
+   "type": "UNKNOWN",
+   "qtId": 16254,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "88197808-3c56-4198-a5a4-6066541251cf",
+   "name": "Buzz Lightyear Astro Blasters",
+   "park": "DL",
+   "lat": 33.812204,
+   "lng": -117.917806,
+   "type": "RIDE",
+   "qtId": 273,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "8e686e4c-f3db-4d9c-a185-2d54b1fa8899",
+   "name": "Casey Jr. Circus Train",
+   "park": "DL",
+   "lat": 33.8137301217,
+   "lng": -117.9191704019,
+   "type": "RIDE",
+   "qtId": 303,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "59647168-d239-4161-8b24-92eb128e96fb",
+   "name": "Chip 'n' Dale's GADGETcoaster",
+   "park": "DL",
+   "lat": 33.815296,
+   "lng": -117.919157,
+   "type": "RIDE",
+   "qtId": 324,
+   "land": "Mickey's Toontown"
+  },
+  {
+   "id": "5bd95ae8-181d-449c-8f04-a621e2448961",
+   "name": "Davy Crockett's Explorer Canoes",
+   "park": "DL",
+   "lat": 33.8125062856,
+   "lng": -117.9221264816,
+   "type": "RIDE",
+   "qtId": 304,
+   "land": "Bayou Country"
+  },
+  {
+   "id": "37858b2a-9c11-4ac6-9f8d-db7fa9088703",
+   "name": "The Disney Gallery",
+   "park": "DL",
+   "lat": 33.810265,
+   "lng": -117.918559,
+   "type": "UNKNOWN",
+   "qtId": 695,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "56d0bd6d-5106-4420-8f60-0005475c04c3",
+   "name": "Disneyland Monorail",
+   "park": "DL",
+   "lat": 33.812618,
+   "lng": -117.91679,
+   "type": "RIDE",
+   "qtId": 274,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "e2d460e9-2bef-4613-b126-092ab7cb37e5",
+   "name": "Disneyland Railroad",
+   "park": "DL",
+   "lat": 33.811256,
+   "lng": -117.921876,
+   "type": "RIDE",
+   "qtId": 674,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "ca32ef8a-ae0d-4c24-bf4f-e59192122e01",
+   "name": "Donald's Duck Pond",
+   "park": "DL",
+   "lat": 33.815232,
+   "lng": -117.919019,
+   "type": "UNKNOWN",
+   "qtId": 13814,
+   "land": "Mickey's Toontown"
+  },
+  {
+   "id": "cc980e8e-192f-48b6-848c-27784084e54b",
+   "name": "Dumbo the Flying Elephant",
+   "park": "DL",
+   "lat": 33.8136094534,
+   "lng": -117.9188292111,
+   "type": "RIDE",
+   "qtId": 275,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "64d44aaa-6857-4693-b24b-bcff6c6dcfa1",
+   "name": "Finding Nemo Submarine Voyage",
+   "park": "DL",
+   "lat": 33.812618,
+   "lng": -117.916947,
+   "type": "RIDE",
+   "qtId": 276,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "c2997e65-6db0-413f-a2db-ee995711d931",
+   "name": "Fortune Tellers",
+   "park": "DL",
+   "lat": 33.811237,
+   "lng": -117.919057,
+   "type": "UNKNOWN",
+   "qtId": null,
+   "land": null
+  },
+  {
+   "id": "835deb74-de54-4d7f-9dc4-dacab90fcb60",
+   "name": "Frontierland Shootin' Exposition",
+   "park": "DL",
+   "lat": 33.8122300089,
+   "lng": -117.919855621,
+   "type": "UNKNOWN",
+   "qtId": 679,
+   "land": "Frontierland"
+  },
+  {
+   "id": "b0eca3d3-a519-47f9-a5a7-9911126da2df",
+   "name": "Goofy's How-to-Play Yard",
+   "park": "DL",
+   "lat": 33.8151987474,
+   "lng": -117.9186858237,
+   "type": "UNKNOWN",
+   "qtId": 11980,
+   "land": "Mickey's Toontown"
+  },
+  {
+   "id": "1b23667a-d8fb-436d-8952-c3e3f2e56d13",
+   "name": "Great Moments with Mr. Lincoln",
+   "park": "DL",
+   "lat": 33.810265,
+   "lng": -117.918559,
+   "type": "UNKNOWN",
+   "qtId": 690,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "ff52cb64-c1d5-4feb-9d43-5dbd429bac81",
+   "name": "Haunted Mansion Holiday",
+   "park": "DL",
+   "lat": 33.811656,
+   "lng": -117.921873,
+   "type": "RIDE",
+   "qtId": 325,
+   "land": "New Orleans Square"
+  },
+  {
+   "id": "2aedc657-1ee2-4545-a1ce-14753f28cc66",
+   "name": "Indiana Jones™ Adventure",
+   "park": "DL",
+   "lat": 33.81130552,
+   "lng": -117.9203269,
+   "type": "RIDE",
+   "qtId": 326,
+   "land": "Adventureland"
+  },
+  {
+   "id": "3638ac09-9fce-4a43-8c79-8ebbe17afce2",
+   "name": "\"it's a small world\"",
+   "park": "DL",
+   "lat": 33.8144,
+   "lng": -117.917782,
+   "type": "RIDE",
+   "qtId": 307,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "1b83fda8-d60e-48e4-9a3d-90ddcbcd1001",
+   "name": "Jungle Cruise",
+   "park": "DL",
+   "lat": 33.81144,
+   "lng": -117.920092,
+   "type": "RIDE",
+   "qtId": 296,
+   "land": "Adventureland"
+  },
+  {
+   "id": "11209961-2ac2-4f76-a11b-ed793939f796",
+   "name": "Key to Disneyland",
+   "park": "DL",
+   "lat": 33.811732,
+   "lng": -117.919968,
+   "type": "UNKNOWN",
+   "qtId": null,
+   "land": null
+  },
+  {
+   "id": "f7904912-3f08-4563-b99e-fd59f43cc9f2",
+   "name": "King Arthur Carrousel",
+   "park": "DL",
+   "lat": 33.813474,
+   "lng": -117.918974,
+   "type": "RIDE",
+   "qtId": 277,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "e0cfed11-96d7-40f3-907f-5cfed172592a",
+   "name": "Mad Tea Party",
+   "park": "DL",
+   "lat": 33.8135273725,
+   "lng": -117.9184149206,
+   "type": "RIDE",
+   "qtId": 278,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "f5bb0d14-7eee-4ede-9230-eb256ce3664c",
+   "name": "Main Street Cinema",
+   "park": "DL",
+   "lat": 33.810768,
+   "lng": -117.918887,
+   "type": "UNKNOWN",
+   "qtId": 686,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "4e239b89-a794-4bb2-a32f-736e04416695",
+   "name": "Main Street Pumpkin Festival",
+   "park": "DL",
+   "lat": 33.810472,
+   "lng": -117.91897,
+   "type": "UNKNOWN",
+   "qtId": null,
+   "land": null
+  },
+  {
+   "id": "bcfd1e17-3eab-4203-b597-6257a257d427",
+   "name": "Main Street Vehicles",
+   "park": "DL",
+   "lat": 33.8102153073,
+   "lng": -117.9189620912,
+   "type": "RIDE",
+   "qtId": 691,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "52a8ef64-d54c-4974-883f-027c3026e3f1",
+   "name": "The Many Adventures of Winnie the Pooh",
+   "park": "DL",
+   "lat": 33.812376,
+   "lng": -117.922632,
+   "type": "RIDE",
+   "qtId": 306,
+   "land": "Bayou Country"
+  },
+  {
+   "id": "6c30d5b0-8c0a-406f-9258-0b6c55d4a5e4",
+   "name": "Mark Twain Riverboat",
+   "park": "DL",
+   "lat": 33.8122772066,
+   "lng": -117.9204627872,
+   "type": "RIDE",
+   "qtId": 456,
+   "land": "Frontierland"
+  },
+  {
+   "id": "faaa8be9-cc1e-4535-ac20-04a535654bd0",
+   "name": "Matterhorn Bobsleds",
+   "park": "DL",
+   "lat": 33.813453,
+   "lng": -117.91782,
+   "type": "RIDE",
+   "qtId": 279,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "cd670bff-81d1-4f34-8676-7bafdf49220a",
+   "name": "Mickey & Minnie's Runaway Railway",
+   "park": "DL",
+   "lat": 33.815507,
+   "lng": -117.91839,
+   "type": "RIDE",
+   "qtId": 11526,
+   "land": "Mickey's Toontown"
+  },
+  {
+   "id": "b2c2549c-e9da-4fdd-98ea-1dcff596fed7",
+   "name": "Millennium Falcon: Smugglers Run",
+   "park": "DL",
+   "lat": 33.814867,
+   "lng": -117.921379,
+   "type": "RIDE",
+   "qtId": 6339,
+   "land": "Star Wars: Galaxy's Edge"
+  },
+  {
+   "id": "c02fb82d-0860-4e95-8c61-899fa594d20e",
+   "name": "Minnie's House",
+   "park": "DL",
+   "lat": 33.815524801,
+   "lng": -117.9189902544,
+   "type": "UNKNOWN",
+   "qtId": 684,
+   "land": "Mickey's Toontown"
+  },
+  {
+   "id": "9d401ad3-49b2-469f-ac73-93eb429428fb",
+   "name": "Mr. Toad's Wild Ride",
+   "park": "DL",
+   "lat": 33.8133812161,
+   "lng": -117.9187763289,
+   "type": "RIDE",
+   "qtId": 280,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "6e2af074-3a67-4f38-9bcf-2f5a572c87df",
+   "name": "Opera House - Walt Disney - A Magical Life",
+   "park": "DL",
+   "lat": 33.81025839377293,
+   "lng": -117.91843056689687,
+   "type": "UNKNOWN",
+   "qtId": 14915,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "c23af6ba-8515-406a-8a48-d0818ba0bfc9",
+   "name": "Peter Pan's Flight",
+   "park": "DL",
+   "lat": 33.8131949042,
+   "lng": -117.9188762605,
+   "type": "RIDE",
+   "qtId": 281,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "90ee50d4-7cc9-4824-b29d-2aac801acc29",
+   "name": "Pinocchio's Daring Journey",
+   "park": "DL",
+   "lat": 33.8132880704,
+   "lng": -117.9190900509,
+   "type": "RIDE",
+   "qtId": 282,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "07952343-3498-404b-8337-734de9a185c1",
+   "name": "Pirate's Lair on Tom Sawyer Island",
+   "park": "DL",
+   "lat": 33.8116538616,
+   "lng": -117.921538353,
+   "type": "UNKNOWN",
+   "qtId": 331,
+   "land": "Frontierland"
+  },
+  {
+   "id": "82aeb29b-504a-416f-b13f-f41fa5b766aa",
+   "name": "Pirates of the Caribbean",
+   "park": "DL",
+   "lat": 33.811387,
+   "lng": -117.920819,
+   "type": "RIDE",
+   "qtId": 289,
+   "land": "New Orleans Square"
+  },
+  {
+   "id": "526ada11-4688-442b-96d4-4077eac4f988",
+   "name": "Pixar Short Film Spotlight",
+   "park": "DL",
+   "lat": 33.811604,
+   "lng": -117.917208,
+   "type": "UNKNOWN",
+   "qtId": 16627,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "6ce9cdd1-0a43-459e-83cd-f4cace9cfa7b",
+   "name": "Roger Rabbit's Car Toon Spin",
+   "park": "DL",
+   "lat": 33.815204,
+   "lng": -117.918085,
+   "type": "RIDE",
+   "qtId": 332,
+   "land": "Mickey's Toontown"
+  },
+  {
+   "id": "c9e39189-7e99-4e0a-97e0-4a0d5654d257",
+   "name": "Sailing Ship Columbia",
+   "park": "DL",
+   "lat": 33.8122772066,
+   "lng": -117.9204627872,
+   "type": "RIDE",
+   "qtId": 328,
+   "land": "Frontierland"
+  },
+  {
+   "id": "90d5a091-478c-4df1-adfe-c605b4005013",
+   "name": "Sleeping Beauty Castle Walkthrough",
+   "park": "DL",
+   "lat": 33.812912,
+   "lng": -117.919078,
+   "type": "UNKNOWN",
+   "qtId": 687,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "4f0053e7-b8db-4833-b02f-35e1c91b4523",
+   "name": "Snow White's Enchanted Wish",
+   "park": "DL",
+   "lat": 33.8131664471,
+   "lng": -117.9190614653,
+   "type": "RIDE",
+   "qtId": 283,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "9167db1d-e5e7-46da-a07f-ae30a87bc4c4",
+   "name": "Space Mountain",
+   "park": "DL",
+   "lat": 33.811548,
+   "lng": -117.917056,
+   "type": "RIDE",
+   "qtId": 284,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "cc718d11-fa15-44ee-87d0-ded989ad61bc",
+   "name": "Star Tours - The Adventures Continue",
+   "park": "DL",
+   "lat": 33.811997,
+   "lng": -117.917978,
+   "type": "RIDE",
+   "qtId": 286,
+   "land": "Tomorrowland"
+  },
+  {
+   "id": "34b1d70f-11c4-42df-935e-d5582c9f1a8e",
+   "name": "Star Wars: Rise of the Resistance",
+   "park": "DL",
+   "lat": 33.813859,
+   "lng": -117.923079,
+   "type": "RIDE",
+   "qtId": 6340,
+   "land": "Star Wars: Galaxy's Edge"
+  },
+  {
+   "id": "cb929138-d77a-4dd2-983c-f651bbd1bd92",
+   "name": "Storybook Land Canal Boats",
+   "park": "DL",
+   "lat": 33.8136306683,
+   "lng": -117.9182008987,
+   "type": "RIDE",
+   "qtId": 305,
+   "land": "Fantasyland"
+  },
+  {
+   "id": "a9076acd-7630-4bad-a8da-e6bd689ddcac",
+   "name": "Tiana's Bayou Adventure",
+   "park": "DL",
+   "lat": 33.812245,
+   "lng": -117.922802,
+   "type": "RIDE",
+   "qtId": 14168,
+   "land": "Bayou Country"
+  },
+  {
+   "id": "05b17c11-fd4c-4b85-ab45-3e269dc56559",
+   "name": "Walt Disney - A Magical Life",
+   "park": "DL",
+   "lat": 33.810265,
+   "lng": -117.918559,
+   "type": "UNKNOWN",
+   "qtId": 14923,
+   "land": "Main Street U.S.A"
+  },
+  {
+   "id": "106c1e5a-a5e7-42d7-96ab-bc100d8faf71",
+   "name": "Walt Disney's Enchanted Tiki Room",
+   "park": "DL",
+   "lat": 33.811829,
+   "lng": -117.919569,
+   "type": "UNKNOWN",
+   "qtId": 288,
+   "land": "Adventureland"
+  },
+  {
+   "id": "d2aa0987-49a2-45dc-a635-3a8bf7401230",
+   "name": "Animation Academy",
+   "park": "DCA",
+   "lat": 33.8075587653,
+   "lng": -117.9175029695,
+   "type": "UNKNOWN",
+   "qtId": 321,
+   "land": "Hollywood Land"
+  },
+  {
+   "id": "eb77ee1f-3207-44fd-acfc-d7bc18602007",
+   "name": "The Bakery Tour",
+   "park": "DCA",
+   "lat": 33.8060995504,
+   "lng": -117.9196897202,
+   "type": "UNKNOWN",
+   "qtId": 869,
+   "land": "Pacific Wharf"
+  },
+  {
+   "id": "1d24dd7a-372b-4195-8ad0-ba9679d72b08",
+   "name": "Games of Pixar Pier",
+   "park": "DCA",
+   "lat": 33.8048925714,
+   "lng": -117.9224220894,
+   "type": "UNKNOWN",
+   "qtId": 866,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "10a5fc6f-5ad3-414b-9bdd-e6bae097b6ad",
+   "name": "Golden Zephyr",
+   "park": "DCA",
+   "lat": 33.8060334617,
+   "lng": -117.9222742945,
+   "type": "RIDE",
+   "qtId": 298,
+   "land": "Paradise Gardens Park"
+  },
+  {
+   "id": "f44a5072-3cda-4c7c-8574-33ad09d16cca",
+   "name": "Goofy's Sky School",
+   "park": "DCA",
+   "lat": 33.8063159054,
+   "lng": -117.922805411,
+   "type": "RIDE",
+   "qtId": 319,
+   "land": "Paradise Gardens Park"
+  },
+  {
+   "id": "b1d285a7-2444-4a7c-b7bb-d2d4d6428a85",
+   "name": "Grizzly River Run",
+   "park": "DCA",
+   "lat": 33.807491905,
+   "lng": -117.9208812632,
+   "type": "RIDE",
+   "qtId": 302,
+   "land": "Grizzly Peak"
+  },
+  {
+   "id": "b7678dab-5544-48d5-8fdc-c1a0127cfbcd",
+   "name": "Guardians of the Galaxy - Mission: BREAKOUT!",
+   "park": "DCA",
+   "lat": 33.8068702058,
+   "lng": -117.9171870344,
+   "type": "RIDE",
+   "qtId": 329,
+   "land": "Avengers Campus"
+  },
+  {
+   "id": "2108cc58-80df-4fff-9b91-735e89873ffd",
+   "name": "Guardians of the Galaxy - Monsters After Dark",
+   "park": "DCA",
+   "lat": 33.8068702058,
+   "lng": -117.9171870344,
+   "type": "RIDE",
+   "qtId": 5146,
+   "land": "Halloween"
+  },
+  {
+   "id": "5d07a2b1-49ca-4de7-9d32-6d08edf69b08",
+   "name": "Incredicoaster",
+   "park": "DCA",
+   "lat": 33.8046241652,
+   "lng": -117.9207961819,
+   "type": "RIDE",
+   "qtId": 322,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "6d876f4c-c3ff-4ae3-a2d8-d4b831e1039b",
+   "name": "Inside Out Emotional Whirlwind",
+   "park": "DCA",
+   "lat": 33.805154,
+   "lng": -117.922737,
+   "type": "RIDE",
+   "qtId": 6643,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "388ad3f1-5cf5-4a9d-8d0e-6dfb817d7822",
+   "name": "Jessie's Critter Carousel",
+   "park": "DCA",
+   "lat": 33.804635558,
+   "lng": -117.9211482245,
+   "type": "RIDE",
+   "qtId": 310,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "c8a4b7b1-c1b2-4dfe-b73c-4e834b4a73db",
+   "name": "Jumpin' Jellyfish",
+   "park": "DCA",
+   "lat": 33.8061414361,
+   "lng": -117.92253033,
+   "type": "RIDE",
+   "qtId": 300,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "e1fbc7a1-2cd1-4282-b373-ac11d9d9d38a",
+   "name": "The Little Mermaid - Ariel's Undersea Adventure",
+   "park": "DCA",
+   "lat": 33.80626,
+   "lng": -117.92108,
+   "type": "RIDE",
+   "qtId": 316,
+   "land": "Paradise Gardens Park"
+  },
+  {
+   "id": "7a09a2f0-e226-4f3e-86f8-2598ab67ec44",
+   "name": "Luigi's Honkin' Haul-O-Ween",
+   "park": "DCA",
+   "lat": 33.805534,
+   "lng": -117.918544,
+   "type": "RIDE",
+   "qtId": 2608,
+   "land": "Cars Land"
+  },
+  {
+   "id": "46097afe-a1ea-4807-93d3-14d14f36e55f",
+   "name": "Mater's Graveyard JamBOOree",
+   "park": "DCA",
+   "lat": 33.8062447301,
+   "lng": -117.9192481607,
+   "type": "RIDE",
+   "qtId": 4723,
+   "land": "Halloween"
+  },
+  {
+   "id": "8f586a2f-cef5-46d3-b822-fd622c4e9e33",
+   "name": "Mickey's PhilharMagic",
+   "park": "DCA",
+   "lat": 33.80773,
+   "lng": -117.918041,
+   "type": "UNKNOWN",
+   "qtId": 6440,
+   "land": "Hollywood Land"
+  },
+  {
+   "id": "40524fba-5d84-49e7-9204-f493dbe2d5a4",
+   "name": "Monsters, Inc. Mike & Sulley to the Rescue!",
+   "park": "DCA",
+   "lat": 33.8081215045,
+   "lng": -117.9173246541,
+   "type": "RIDE",
+   "qtId": 291,
+   "land": "Hollywood Land"
+  },
+  {
+   "id": "4ca6cdbf-4c5f-45bf-b0dc-db83393ec208",
+   "name": "Pixar Pal-A-Round – Non-Swinging",
+   "park": "DCA",
+   "lat": 33.8050267246,
+   "lng": -117.922378889,
+   "type": "RIDE",
+   "qtId": 5557,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "528016ef-db24-47fa-a0f2-b6d26d61e29f",
+   "name": "Pixar Pal-A-Round - Swinging",
+   "park": "DCA",
+   "lat": 33.8050267246,
+   "lng": -117.922378889,
+   "type": "RIDE",
+   "qtId": 311,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "c60c768b-3461-465c-8f4f-b44b087506fc",
+   "name": "Radiator Springs Racers",
+   "park": "DCA",
+   "lat": 33.8051689198,
+   "lng": -117.9186152283,
+   "type": "RIDE",
+   "qtId": 295,
+   "land": "Cars Land"
+  },
+  {
+   "id": "c9803366-6f37-4406-82af-7692357e3ca9",
+   "name": "Redwood Creek Challenge Trail",
+   "park": "DCA",
+   "lat": 33.8069726212,
+   "lng": -117.9213787615,
+   "type": "UNKNOWN",
+   "qtId": 293,
+   "land": "Grizzly Peak"
+  },
+  {
+   "id": "4f5b28d0-b78e-482b-8e2e-1f90756d6220",
+   "name": "Silly Symphony Swings",
+   "park": "DCA",
+   "lat": 33.8056182721,
+   "lng": -117.9228962027,
+   "type": "RIDE",
+   "qtId": 301,
+   "land": "Paradise Gardens Park"
+  },
+  {
+   "id": "77f205a4-d482-4d91-a5ff-71e54a086ad2",
+   "name": "Soarin’ Across America",
+   "park": "DCA",
+   "lat": 33.8082495017,
+   "lng": -117.9200000105,
+   "type": "RIDE",
+   "qtId": 17129,
+   "land": "Grizzly Peak"
+  },
+  {
+   "id": "44c1f655-25d3-440c-b1a8-db736a12b105",
+   "name": "Sorcerer's Workshop",
+   "park": "DCA",
+   "lat": 33.8075587653,
+   "lng": -117.9175029695,
+   "type": "UNKNOWN",
+   "qtId": 868,
+   "land": "Hollywood Land"
+  },
+  {
+   "id": "86ab3069-110d-49c5-a7e7-29ddf28695a6",
+   "name": "Toy Story Midway Mania!",
+   "park": "DCA",
+   "lat": 33.804645,
+   "lng": -117.921839,
+   "type": "RIDE",
+   "qtId": 313,
+   "land": "Pixar Pier"
+  },
+  {
+   "id": "75dfd5ed-4bfb-4727-b24a-bf5fb2284950",
+   "name": "Treat Trails at Oogie Boogie Bash",
+   "park": "DCA",
+   "lat": 33.807574,
+   "lng": -117.918318,
+   "type": "UNKNOWN",
+   "qtId": null,
+   "land": null
+  },
+  {
+   "id": "7561bcd8-18ea-4e3f-89d5-c905b7ba3d42",
+   "name": "Turtle Talk with Crush",
+   "park": "DCA",
+   "lat": 33.8075587653,
+   "lng": -117.9175029695,
+   "type": "UNKNOWN",
+   "qtId": 294,
+   "land": "Hollywood Land"
+  },
+  {
+   "id": "24066306-d364-4048-b4c9-a0e81980c5b4",
+   "name": "Villains Grove at Oogie Boogie Bash",
+   "park": "DCA",
+   "lat": 33.8069726212,
+   "lng": -117.9213787615,
+   "type": "UNKNOWN",
+   "qtId": 7292,
+   "land": "Halloween"
+  },
+  {
+   "id": "2295351d-ce6b-4c04-92d5-5b416372c5b5",
+   "name": "WEB SLINGERS: A Spider-Man Adventure",
+   "park": "DCA",
+   "lat": 33.806651,
+   "lng": -117.918264,
+   "type": "RIDE",
+   "qtId": 8843,
+   "land": "Avengers Campus"
+  }
+ ]
+}

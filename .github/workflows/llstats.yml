@@ -1,0 +1,31 @@
+name: llstats
+on:
+  schedule:
+    - cron: '30 12 * * *' # 5:30 am Pacific: learn from yesterday before the parks open
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: llstats
+  cancel-in-progress: false
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/build-llstats.mjs
+      - name: Commit if changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app/data/llstats.json
+          if git diff --cached --quiet; then echo "no change"; else git commit -q -m "llstats: daily refresh $(date -u +%F)" && git push -q; fi
+  deploy:
+    needs: stats
+    uses: ./.github/workflows/pages.yml

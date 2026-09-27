@@ -1,0 +1,14 @@
+{
+  "name": "disneyland-next-ride",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "What should we ride next? Live waits + GPS + your ride list for Disneyland Resort.",
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "catalog": "node scripts/build-catalog.mjs",
+    "cache": "node scripts/fetch-cache.mjs",
+    "serve": "node scripts/serve.mjs"
+  },
+  "license": "MIT"
+}

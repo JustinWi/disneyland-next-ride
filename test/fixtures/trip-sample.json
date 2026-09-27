@@ -1,0 +1,45 @@
+{
+  "meta": { "tripDates": ["2026-10-19", "2026-10-21", "2026-10-23"] },
+  "ride": [
+    { "id": "dl-pirates", "name": "Pirates of the Caribbean", "park": "DL", "priority": "must", "lightningLane": "none", "typicalWaitMins": 25 },
+    { "id": "dl-big-thunder", "name": "Big Thunder Mountain Railroad", "park": "DL", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 45 },
+    { "id": "dl-matterhorn", "name": "Matterhorn Bobsleds", "park": "DL", "priority": "conditional", "lightningLane": "multipass", "typicalWaitMins": 50, "conditionalOn": "dl-big-thunder" },
+    { "id": "dl-space-mountain", "name": "Space Mountain", "park": "DL", "priority": "conditional", "lightningLane": "multipass", "typicalWaitMins": 60, "conditionalOn": "dl-matterhorn", "scheduleHint": "Friday, save it for the finale" },
+    { "id": "dl-haunted-mansion", "name": "Haunted Mansion", "park": "DL", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 50, "ropeDropTarget": true },
+    { "id": "dl-small-world", "name": "It's a Small World", "park": "DL", "priority": "medium", "lightningLane": "multipass", "typicalWaitMins": 25 },
+    { "id": "dl-peter-pan", "name": "Peter Pan's Flight", "park": "DL", "priority": "high", "lightningLane": "none", "typicalWaitMins": 50, "ropeDropTarget": true },
+    { "id": "dl-toad", "name": "Mr. Toad's Wild Ride", "park": "DL", "priority": "low", "lightningLane": "none", "typicalWaitMins": 20 },
+    { "id": "dl-alice", "name": "Alice in Wonderland", "park": "DL", "priority": "medium", "lightningLane": "none", "typicalWaitMins": 30 },
+    { "id": "dl-dumbo", "name": "Dumbo the Flying Elephant", "park": "DL", "priority": "low", "lightningLane": "none", "typicalWaitMins": 20 },
+    { "id": "dl-jungle-cruise", "name": "Jungle Cruise", "park": "DL", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 40 },
+    { "id": "dl-indiana-jones", "name": "Indiana Jones Adventure", "park": "DL", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 50 },
+    { "id": "dl-tiki", "name": "Enchanted Tiki Room", "park": "DL", "priority": "low", "lightningLane": "none", "typicalWaitMins": 5, "restStop": true },
+    { "id": "dl-rise", "name": "Rise of the Resistance", "park": "DL", "priority": "medium", "lightningLane": "singlepass", "typicalWaitMins": 60 },
+    { "id": "dl-smugglers", "name": "Millennium Falcon: Smugglers Run", "park": "DL", "priority": "medium", "lightningLane": "multipass", "typicalWaitMins": 40 },
+    { "id": "dl-buzz", "name": "Buzz Lightyear Astro Blasters", "park": "DL", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 30 },
+    { "id": "dl-runaway-railway", "name": "Mickey & Minnie's Runaway Railway", "park": "DL", "priority": "must", "lightningLane": "multipass", "typicalWaitMins": 45 },
+    { "id": "dl-gadget", "name": "Gadget's Go Coaster", "park": "DL", "priority": "medium", "lightningLane": "none", "typicalWaitMins": 20 },
+    { "id": "dl-tom-sawyer", "name": "Tom Sawyer Island", "park": "DL", "priority": "low", "lightningLane": "none", "typicalWaitMins": 0, "restStop": true },
+    { "id": "dl-tianas", "name": "Tiana's Bayou Adventure", "park": "DL", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 60 },
+    { "id": "dl-casey", "name": "Casey Jr. Circus Train", "park": "DL", "priority": "low", "lightningLane": "none", "typicalWaitMins": 15 },
+    { "id": "dca-grizzly-river-run", "name": "Grizzly River Run", "park": "DCA", "priority": "high", "lightningLane": "multipass", "typicalWaitMins": 30 },
+    { "id": "dca-radiator", "name": "Radiator Springs Racers", "park": "DCA", "priority": "must", "lightningLane": "singlepass", "typicalWaitMins": 70 },
+    { "id": "dca-mater", "name": "Mater's Junkyard Jamboree", "park": "DCA", "priority": "medium", "lightningLane": "none", "typicalWaitMins": 15 },
+    { "id": "dca-luigi", "name": "Luigi's Rollickin' Roadsters", "park": "DCA", "priority": "low", "lightningLane": "none", "typicalWaitMins": 15 },
+    { "id": "dca-zephyr", "name": "Golden Zephyr", "park": "DCA", "priority": "low", "lightningLane": "none", "typicalWaitMins": 10 },
+    { "id": "dca-inside-out", "name": "Inside Out Emotional Whirlwind", "park": "DCA", "priority": "medium", "lightningLane": "none", "typicalWaitMins": 15 },
+    { "id": "dca-goofy", "name": "Goofy's Sky School", "park": "DCA", "priority": "medium", "lightningLane": "multipass", "typicalWaitMins": 15 },
+    { "id": "dca-pal-a-round-stationary", "name": "Pixar Pal-A-Round (non-swinging)", "park": "DCA", "priority": "low", "lightningLane": "none", "typicalWaitMins": 10 }
+  ],
+  "avoid": [
+    { "id": "dl-autopia", "name": "Autopia", "park": "DL", "reason": "Long line for a slow drive" },
+    { "id": "dl-tea-cups", "name": "Mad Tea Party", "park": "DL", "reason": "Spinning" },
+    { "id": "dca-incredicoaster", "name": "Incredicoaster", "park": "DCA", "reason": "Too intense for this sample" },
+    { "id": "dca-swings", "name": "Silly Symphony Swings", "park": "DCA", "reason": "Height" },
+    { "id": "dca-jellyfish", "name": "Jumpin' Jellyfish", "park": "DCA", "reason": "Drops" }
+  ],
+  "rules": {
+    "dropTestLadder": ["dl-pirates", "dl-big-thunder", "dca-grizzly-river-run"],
+    "coasterLadder": ["dl-big-thunder", "dl-matterhorn", "dl-space-mountain"]
+  }
+}
