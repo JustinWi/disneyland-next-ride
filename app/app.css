@@ -282,6 +282,7 @@ footer.credits { margin-top: 28px; font-size: 13px; color: var(--muted); }
 .list li.stack { display: block; }
 .list li.stack > .row { display: flex; align-items: center; gap: 10px; }
 .avoid-why { font-size: 13px; color: var(--muted); margin: 2px 0 0 38px; }
+.preview { display: inline-block; padding: 8px 0; font-weight: 600; white-space: nowrap; }
 .toggle.big { font-size: 15px; color: var(--ink); margin: 8px 0; }
 .rules { margin-top: 18px; }
 .tabs button { font-size: 15px; }

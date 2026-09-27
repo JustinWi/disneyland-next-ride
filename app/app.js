@@ -1144,13 +1144,22 @@ function renderRideList(snap, done) {
           </button>
           ${picked ? `<button type="button" data-act="${isDone ? 'undone' : 'done'}" data-id="${esc(r.id)}">${isDone ? 'Undo' : 'Done'}</button>` : ''}</div>
           ${av?.reason ? `<div class="sub avoid-why">${esc(av.reason)}</div>` : ''}
-          ${picked && info(r.id)?.expect ? `<div class="sub avoid-why">${esc(info(r.id).expect)}</div>` : ''}
+          ${ridePreview(r.id, picked)}
         </li>`;
       }
       html += `</ul>`;
     }
   }
   el.innerHTML = html;
+}
+
+// Rides tab: a preview link for every ride, after its "what to expect" line once it's picked.
+// It sits outside the row's pick button, so tapping it never ticks or unticks the ride.
+function ridePreview(id, picked) {
+  const i = info(id);
+  if (!i?.video) return '';
+  const link = `<a class="preview" href="${esc(i.video)}" target="_blank" rel="noopener" aria-label="Preview ${esc(catalogRide(id)?.name ?? 'this ride')} on YouTube">Preview ↗</a>`;
+  return `<div class="sub avoid-why">${picked && i.expect ? `${esc(i.expect)} ` : ''}${link}</div>`;
 }
 
 function renderRidesShell(done) {
