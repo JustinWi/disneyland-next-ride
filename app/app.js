@@ -6,13 +6,14 @@ import { load, save, remove } from './js/store.js';
 import { atResort, haversineMeters, parkFootprints, parkAt, walkMinutes } from './js/geo.js';
 import { fmtTime, fmtAge, parkDayKey, parkTime, hhmm, fmtDay, parkHour, weekdayOf } from './js/time.js';
 import { forecastAt } from './js/forecast.js';
-import { parseTripFile, attachIds, tripDay, encodeTrip, decodeTrip, PRIORITY_BIAS, hintWeekday, computeLocks, twinIds } from './js/trip.js';
+import { parseTripFile, attachIds, tripDay, encodeTrip, decodeTrip, PRIORITY_BIAS, hintWeekday, computeLocks, twinIds, ladderGates } from './js/trip.js';
 import { clampStars, effectiveDone, favorites, againBias, starText } from './js/ratings.js';
-import { forDay, nextBooking, adviseMulti, convertDown, dueBookings, heldBookings, multiExpOptions, LL, laneStats, planLaneDay, singlePassAdvice } from './js/lightning.js';
+import { forDay, nextBooking, adviseMulti, convertDown, dueBookings, heldBookings, multiExpOptions, LL, laneStats, planLaneDay, singlePassAdvice, usuallyGoneBy } from './js/lightning.js';
 import { laneAlerts, bookNextAlert, lastChanceAlerts, statusAlerts, showAlerts, finalClose, mergeBanners } from './js/alerts.js';
 import { showsToday, nextTime, ridesThatEmpty, classifyShow } from './js/shows.js';
 import { similarRides, tooShortFor } from './js/similar.js';
 import { PARK_IDS } from './js/normalize.js';
+import { feelOf, coolOf, rideWeight, HEAT_MINUTES, HEAT_BIAS, COOL_LABEL, heatOn, coolSpots, withDropTest, testRideBias } from './js/boost.js';
 
 const SNOOZE_MIN = 45;
 const REFRESH_MS = 60e3;
@@ -70,7 +71,9 @@ const S = {
   done: initial.done,
   history: initial.history,
   snoozed: load('snoozed', {}),
-  settings: { speed: 'normal', hopMinutes: 20, start: 'DL', showAll: false, llPrice: null, party: null, battery: false, heightIn: null, ...load('settings', {}) },
+  settings: { speed: 'normal', hopMinutes: 20, start: 'DL', showAll: false, llPrice: null, party: null, battery: false, heightIn: null, thrills: true, ...load('settings', {}) },
+  heat: load('heat', null), // { until } while "We're hot" is on
+  tests: {}, // { rideId: 'Drop test' | 'Screen test' | 'Warm-up' } rides that unlock others, this render
   llstats: null,
   llDays: load('llDays', {}) ?? {}, // { 'YYYY-MM-DD': 'on' | 'off' }
   ratings: load('ratings', {}) ?? {}, // { rideId: { stars, at } } for the whole trip
@@ -149,17 +152,40 @@ function ensureToday(now) {
 
 // ---------- trip ----------
 
+// The trip as planned with: the drop test (Rise of the Resistance on the list behind Pirates' drops,
+// when the trip file had it as a conditional avoid). See boost.js.
+let tripXm = null;
+function tripX() {
+  if (tripXm && tripXm.src === S.trip) return tripXm;
+  tripXm = { src: S.trip, ...withDropTest(S.trip) };
+  // Rise joins the picked list once, when it first moves on; unticking it later sticks.
+  const rise = tripXm.added ? tripXm.trip.rides.find((r) => r.key === tripXm.riseKey) : null;
+  if (rise?.tpwId && !load('dropTestAdded', false)) {
+    S.wanted.add(rise.tpwId);
+    saveWanted();
+    save('dropTestAdded', true);
+  }
+  return tripXm;
+}
+
+const feelOfId = (id, fallback) => feelOf(catalogRide(id)?.name ?? fallback);
+
 let tripIx = null;
 function tripIndex() {
-  if (tripIx && tripIx.trip === S.trip && tripIx.catalog === S.catalog) return tripIx;
-  const t = S.trip;
-  const ix = { trip: t, catalog: S.catalog, byTpw: new Map(), byKey: new Map(), prio: {}, bias: {}, typical: {}, avoid: new Map() };
+  const tx = tripX();
+  if (tripIx && tripIx.trip === tx.trip && tripIx.catalog === S.catalog && tripIx.thrills === S.settings.thrills) return tripIx;
+  const t = tx.trip;
+  const ix = { trip: t, catalog: S.catalog, thrills: S.settings.thrills, byTpw: new Map(), byKey: new Map(), prio: {}, bias: {}, feel: {}, typical: {}, avoid: new Map() };
   for (const r of t?.rides ?? []) {
     ix.byKey.set(r.key, r);
     if (!r.tpwId) continue;
     ix.byTpw.set(r.tpwId, r);
-    ix.prio[r.tpwId] = r.priority;
-    ix.bias[r.tpwId] = PRIORITY_BIAS[r.priority] ?? 0;
+    const feel = feelOfId(r.tpwId, r.name);
+    ix.feel[r.tpwId] = feel;
+    // Thrills first: thrill rides count as Must-do and go ahead of the other must-dos; calm rides two steps lower.
+    const wt = rideWeight(r.priority, feel, S.settings.thrills);
+    ix.prio[r.tpwId] = wt.priority;
+    ix.bias[r.tpwId] = wt.bias;
     if (Number.isFinite(r.typical)) ix.typical[r.tpwId] = r.typical;
   }
   for (const a of t?.avoid ?? []) {
@@ -196,15 +222,41 @@ function todayPark(today) {
 }
 
 /** Trip priorities, plus a head start for loved rides you put back on today's list. */
-function rideBias(today) {
-  const bias = { ...tripIndex().bias };
+function rideBias(today, { locked = {}, info = {}, ridden = new Set(), now = Date.now() } = {}) {
+  const ix = tripIndex();
+  const bias = { ...ix.bias };
   for (const id of S.again[today] ?? []) bias[id] = (bias[id] ?? 0) + againBias(S.ratings[id]?.stars ?? 0);
+  // Test rides (Pirates' drops, Runaway Railway's screens) go just ahead of the ride they unlock.
+  const blocked = new Set(Object.keys(locked).filter((id) => info[id]?.kind !== 'wait'));
+  const boost = testRideBias(ix.trip, ladderGates(ix.trip), { bias, wanted: S.wanted, ridden, gate: S.gate, blocked });
+  Object.assign(bias, boost);
+  S.tests = testLabels(Object.keys(boost));
+  // We're hot: indoor and water rides first, long sunny queues later.
+  if (heatOn(S.heat, now)) {
+    for (const id of S.wanted) {
+      const cool = coolOf(catalogRide(id)?.name);
+      if (cool) bias[id] = (bias[id] ?? 0) + HEAT_BIAS[cool];
+    }
+  }
   return bias;
+}
+
+/** 'Drop test' for the drop test ride, 'Screen test' for Runaway Railway, else 'Warm-up'. */
+function testLabels(ids) {
+  const tx = tripX();
+  const ix = tripIndex();
+  const out = {};
+  const screenKey = tx.trip?.ladders?.screenTest?.[0];
+  for (const id of ids) {
+    const key = ix.byTpw.get(id)?.key;
+    out[id] = key && key === tx.dropKey ? 'Drop test' : key && key === screenKey ? 'Screen test' : 'Warm-up';
+  }
+  return out;
 }
 
 /** Trip locks for a park day (see computeLocks in trip.js). */
 function locks(day, ridden) {
-  return computeLocks(S.trip, { ridden, gate: S.gate, unlock: S.unlock, weekday: weekdayOf(day) });
+  return computeLocks(tripX().trip, { ridden, gate: S.gate, unlock: S.unlock, weekday: weekdayOf(day) });
 }
 
 
@@ -265,7 +317,7 @@ function lanePlan(day, park, snap) {
   const lk = locks(day, done);
   const tooShort = tooShortFor(S.rideinfo?.rides, S.settings.heightIn);
   const src = S.trip
-    ? S.trip.rides.filter((r) => r.tpwId)
+    ? ix.trip.rides.filter((r) => r.tpwId)
     : [...S.wanted].map((id) => catalogRide(id)).filter(Boolean).map((c) => ({ key: c.id, tpwId: c.id, name: c.name, park: c.park, priority: 'medium' }));
   const rides = src
     .filter((r) => r.park === park && S.wanted.has(r.tpwId) && !done.has(r.tpwId) && stats.get(r.tpwId)?.kind === 'multi' && !ix.avoid.has(r.tpwId))
@@ -274,7 +326,7 @@ function lanePlan(day, park, snap) {
     .map((r) => {
       const l = lk.info[r.tpwId];
       // A ride still waiting on its ladder counts half, and only after its gates in the plan.
-      return { id: r.tpwId, name: r.name, priority: r.priority, typical: r.typical, conditional: Boolean(l), after: l?.after ?? [] };
+      return { id: r.tpwId, name: r.name, priority: ix.prio[r.tpwId] ?? r.priority, typical: r.typical, conditional: Boolean(l), after: l?.after ?? [] };
     });
   const h = S.llstats.hours?.[`${day}|${park}`];
   const dayOpen = h?.open ? Date.parse(h.open) : parkTime(day, '08:00');
@@ -350,9 +402,30 @@ function llLines(ll) {
 
 const waitBig = (e) => (e.flags.includes('wait-unknown') ? '?' : String(Math.round(e.waitNow)));
 const prioChip = (id) => {
-  const p = tripIndex().prio[id];
-  return p ? `<span class="prio prio-${esc(p)}">${esc(PRIO_LABEL[p] ?? p)}</span>` : '';
+  const ix = tripIndex();
+  const p = ix.prio[id];
+  const bolt = ix.thrills && ix.feel[id] === 'thrill' ? '⚡ ' : '';
+  const test = S.tests[id] ? `<span class="prio prio-test">${esc(S.tests[id])}</span>` : '';
+  return (p ? `<span class="prio prio-${esc(p)}">${bolt}${esc(PRIO_LABEL[p] ?? p)}</span>` : '') + test;
 };
+/** One line under a pick: why a test ride goes early, and how the queue treats you when it's hot. */
+function boostLine(id) {
+  const tx = tripX();
+  const parts = [];
+  if (S.tests[id] === 'Drop test') {
+    const rise = tx.riseKey ? tripIndex().byKey.get(tx.riseKey)?.name : null;
+    parts.push(`<b>Drop test:</b> two short drops in the dark.${rise ? ` If they go well, ${esc(rise)} (a bigger drop in the dark) is next on the list.` : ''}`);
+  } else if (S.tests[id] === 'Screen test') {
+    parts.push('<b>Screen test:</b> screens with gentle motion. Say how it went afterwards.');
+  } else if (S.tests[id]) {
+    parts.push('<b>Warm-up:</b> unlocks a bigger ride once it goes well.');
+  }
+  if (heatOn(S.heat, Date.now())) {
+    const cool = coolOf(catalogRide(id)?.name);
+    if (cool) parts.push(`${cool === 'sun' ? '☀️' : cool === 'water' ? '💦' : cool === 'indoor' ? '❄️' : '⛱️'} ${esc(COOL_LABEL[cool])}`);
+  }
+  return parts.length ? `<p class="expect">${parts.join(' ')}</p>` : '';
+}
 const tripNote = (id) => {
   const r = tripIndex().byTpw.get(id);
   const parts = [r?.hint ? `Best: ${r.hint}.` : '', r?.notes ?? ''].filter(Boolean);
@@ -426,7 +499,8 @@ function compute(now) {
 
   const ix = tripIndex();
   const done = doneSet(today);
-  const { locked, prompts } = locks(today, riddenSet(today));
+  const ridden = riddenSet(today);
+  const { locked, info: lockInfo, prompts } = locks(today, ridden);
   // F5: rides the height check rules out are set aside like a locked ride.
   const short = tooShortFor(S.rideinfo?.rides, S.settings.heightIn);
   for (const [id, h] of Object.entries(short)) if (!locked[id]) locked[id] = `height minimum ${h} in.`;
@@ -456,7 +530,7 @@ function compute(now) {
     hopMinutes: S.settings.hopMinutes,
     parks: snap.parks,
     todayPark: tp.park,
-    bias: rideBias(today),
+    bias: rideBias(today, { locked, info: lockInfo, ridden, now }),
     typical: ix.typical,
     locked,
     lanes: heldBookings(S.ll),
@@ -469,7 +543,15 @@ function compute(now) {
     .filter((id) => !live.has(id) && !done.has(id))
     .map((id) => catalogRide(id))
     .filter((r) => r && (!tp.park || r.park === tp.park));
-  const advice = adviseMulti(snap.rides, { ...ctx, priority: ix.prio, locked: new Set(Object.keys(locked)), stats: statsFor(tp.park, today), hourOf: parkHour }, S.ll);
+  // A ride only waiting on a test ride (Big Thunder after the Pirates drop test) can still be booked:
+  // the test comes first anyway, and a booking you don't use can be cancelled.
+  const waiting = (id) => lockInfo[id]?.kind === 'wait' && !short[id];
+  const advice = adviseMulti(snap.rides, { ...ctx, priority: ix.prio, locked: new Set(Object.keys(locked).filter((id) => !waiting(id))), stats: statsFor(tp.park, today), hourOf: parkHour }, S.ll);
+  for (const rec of advice.recs) {
+    if (!waiting(rec.ride.id)) continue;
+    const gates = (lockInfo[rec.ride.id].after ?? []).map((id) => nameOf(id, snap));
+    rec.reason += `, only if ${gates.join(' and ') || 'its test ride'} goes well first`;
+  }
   const next = nextBooking(S.ll, now);
 
   // Shows today, both parks (the Friday chooser compares them); the rest of the app uses today's park.
@@ -512,7 +594,7 @@ function compute(now) {
     ...showAlerts(shows, now, wantsShow),
     ...statusNews,
   ]);
-  return { ...base, res, missing, advice, next, due: dueBookings(S.ll, now), prompts, ctx, ridesById, done, llOn: today_ll, shows, showsAll, short };
+  return { ...base, res, missing, advice, next, due: dueBookings(S.ll, now), prompts, ctx, ridesById, done, llOn: today_ll, shows, showsAll, short, lockInfo };
 }
 
 // ---------- render: chips ----------
@@ -576,15 +658,15 @@ function parkChoiceCard(c) {
   const weight = { must: 3, high: 2, medium: 1, low: 0.5, conditional: 1 };
   const score = { DL: 0, DCA: 0 };
   const left = { DL: [], DCA: [] };
-  for (const r of S.trip?.rides ?? []) {
+  for (const r of ix.trip?.rides ?? []) {
     if (!r.tpwId || c.done?.has(r.tpwId) || !S.wanted.has(r.tpwId) || c.short?.[r.tpwId]) continue;
-    score[r.park] += weight[r.priority] ?? 1;
+    score[r.park] += weight[ix.prio[r.tpwId] ?? r.priority] ?? 1;
     left[r.park].push(r);
   }
   const favs = favorites({ ratings: S.ratings, ridden: riddenSet(c.today), ridesById: c.ridesById ?? new Map((c.snap?.rides ?? []).map((r) => [r.id, r])) });
   for (const x of favs) score[x.ride.park] += x.stars >= 5 ? 1 : 0.5;
   const line = (p) => {
-    const must = left[p].filter((r) => r.priority === 'must').map((r) => r.name);
+    const must = left[p].filter((r) => ix.prio[r.tpwId] === 'must').map((r) => r.name);
     const f = favs.filter((x) => x.ride.park === p).map((x) => `${x.ride.name} ${x.stars}★`);
     return `${left[p].length} rides left${must.length ? `, must-dos: ${must.slice(0, 4).join(', ')}${must.length > 4 ? '…' : ''}` : ''}${f.length ? `; favorites to ride again: ${f.slice(0, 3).join(', ')}` : ''}`;
   };
@@ -812,14 +894,85 @@ function showsSection(c) {
 }
 
 function gatePromptCards(c) {
+  const dropKey = tripX().dropKey;
   return c.prompts
-    .map(
-      ({ gate, unlocks }) => `<section class="card accent"><div class="eyebrow">Ladder</div><h3>How did ${esc(gate.name)} go?</h3>
+    .map(({ gate, unlocks }) =>
+      gate.key === dropKey
+        ? `<section class="card accent"><div class="eyebrow">Drop test</div><h3>Did the drops in the dark on ${esc(gate.name)} go well?</h3>
+      <p class="muted small">👍 opens the next step for ${esc(unlocks.map((r) => r.name).join(' and '))}. 👎 skips ${unlocks.length > 1 ? 'them' : 'it'} (you can still unlock any of them on the Rides tab).</p>
+      ${unlocks.map((u) => c.ridesById?.get(u.tpwId)).filter((r) => r?.ll?.singleState != null).map((r) => `<p class="small">${esc(r.name)} right now: ${r.ll.single ? `Single Pass ${esc(r.ll.singlePrice ?? '')}, return ~${esc(fmtTime(r.ll.single.start))}` : r.ll.singleState === 'FINISHED' ? 'Single Pass sold out today' : 'Single Pass not on sale'}${Number.isFinite(r.wait) ? `, standby ${r.wait} min` : ''}.</p>`).join('')}
+      <div class="actions"><button type="button" data-act="gate" data-key="${esc(gate.key)}" data-v="yes">👍 Liked the drops</button>
+      <button type="button" data-act="gate" data-key="${esc(gate.key)}" data-v="no">👎 Not the drops</button></div></section>`
+        : `<section class="card accent"><div class="eyebrow">Ladder</div><h3>How did ${esc(gate.name)} go?</h3>
       <p class="muted small">Next on the ladder: ${esc(unlocks.map((r) => r.name).join(', '))}.</p>
       <div class="actions"><button type="button" data-act="gate" data-key="${esc(gate.key)}" data-v="yes">👍 Went well</button>
       <button type="button" data-act="gate" data-key="${esc(gate.key)}" data-v="no">👎 Not for us</button></div></section>`,
     )
     .join('');
+}
+
+/**
+ * Single Pass or standby for one ride, in words: today's advice, when the pass usually sells out, and,
+ * for a ride still waiting on its test ride, what to do until then.
+ */
+function singleAdvice(r, c, now) {
+  const stats = statsFor(r.park, c.today)?.get(r.id);
+  const adv = singlePassAdvice(r, { now, stats, hourOf: parkHour, close: finalClose(r, now) });
+  const goneH = stats && r.ll?.singleState !== 'FINISHED' ? usuallyGoneBy(stats, parkHour(now) + 1) : null;
+  const gone = goneH != null ? ` It usually sells out by about ${goneH === 12 ? '12 pm' : goneH > 12 ? `${goneH - 12} pm` : `${goneH} am`}.` : '';
+  const wait = c.lockInfo?.[r.id]?.kind === 'wait' ? c.ctx.locked[r.id] : null;
+  if (wait) {
+    const text = `Not yet: ${wait}. Do the test first, then decide; buying before you know risks paying for a ride you skip.${gone}`;
+    return { kind: 'wait', text };
+  }
+  return { ...adv, text: adv.text + (adv.kind === 'buy' ? gone : '') };
+}
+
+/** Rise of the Resistance just came off the drop test: pass or line, right on the Next screen. */
+function unlockedSingleCard(c) {
+  const tx = tripX();
+  const rise = tx.riseKey ? tripIndex().byKey.get(tx.riseKey) : null;
+  if (!rise?.tpwId || S.gate[tx.dropKey] !== 'yes') return '';
+  const r = c.ridesById?.get(rise.tpwId);
+  if (!r || !S.wanted.has(r.id) || c.done.has(r.id) || c.ctx.locked?.[r.id] || r.ll?.singleState == null) return '';
+  if ((c.tp.park && r.park !== c.tp.park) || S.ll.bookings.some((b) => b.rideId === r.id && b.status !== 'cancelled')) return '';
+  const now = c.ctx.now;
+  const adv = singleAdvice(r, c, now);
+  const avail = r.ll.single ? `Single Pass ${r.ll.singlePrice ?? ''}, return ~${fmtTime(r.ll.single.start)}` : r.ll.singleState === 'FINISHED' ? 'Single Pass sold out today' : 'Single Pass not on sale right now';
+  const standby = Number.isFinite(r.wait) ? ` · standby ${r.wait} min` : '';
+  const btn = r.ll.single ? `<button type="button" data-act="book-open" data-id="${esc(r.id)}" data-kind="single" data-t="${esc(hhmm(r.ll.single.start))}">I bought it</button>` : '';
+  const form = S.bookForm?.rideId === r.id && S.bookForm.kind === 'single' ? bookForm(c, { ride: r, kind: 'single' }) : '';
+  return `<section class="card book"><div class="eyebrow">⚡ ${esc(r.name)}: pass or line?</div>
+    <p>${esc(avail)}${esc(standby)}</p><p class="advice advice-${esc(adv.kind)}">${esc(adv.text)}</p>
+    <p class="muted small">A Single Pass is its own purchase in the Disneyland app (Multi Pass doesn't cover this ride). It breaks down often: if it's down during your return window, ask a cast member at the Lightning Lane entrance what your pass is good for.</p>
+    ${form || `<div class="actions">${btn}</div>`}</section>`;
+}
+
+/** "We're hot": one tap favors indoor and water rides for an hour and lists air-conditioned spots nearby. */
+function heatCard(c) {
+  const now = c.ctx?.now ?? Date.now();
+  if (!heatOn(S.heat, now)) {
+    return `<div class="heat-row"><button type="button" data-act="heat" aria-pressed="false">🥵 We're hot</button>
+      <span class="muted small">Indoor and water rides first for an hour</span></div>`;
+  }
+  const spots = coolSpots(S.catalog?.rides ?? [], {
+    park: c.tp.park,
+    pos: c.w?.pos,
+    walk: (pos, r) => Math.max(1, Math.round(walkMinutes(pos, r, { speed: S.settings.speed }))),
+    skip: new Set([...tripIndex().avoid.keys()]),
+  });
+  const live = (id) => c.ridesById?.get(id);
+  const rows = spots
+    .filter((x) => !['CLOSED', 'REFURBISHMENT'].includes(live(x.r.id)?.status))
+    .map((x) => `<li>${esc(x.r.name)}${x.walk != null ? ` · ${x.walk} min walk` : ''}</li>`)
+    .join('');
+  return `<section class="card heat" aria-label="Cooling off">
+    <div class="eyebrow">Cooling off until ${esc(fmtTime(S.heat.until))}</div>
+    <p>Picks favor indoor, air-conditioned rides and water rides; long queues in the sun drop back.</p>
+    ${rows ? `<p class="small"><b>Air-conditioned spots nearby, no ride needed:</b></p><ul class="small">${rows}</ul>` : ''}
+    <p class="muted small">Free cups of ice water at any quick-service counter. Hottest stretch is about 1 to 5 pm: indoor rides then, outdoor queues in the morning and evening.</p>
+    <div class="actions"><button type="button" data-act="heat" aria-pressed="true">+1 hour</button><button type="button" data-act="heat-off">We've cooled off</button></div>
+  </section>`;
 }
 
 function topCard(e) {
@@ -837,6 +990,7 @@ function topCard(e) {
   <p class="reason">${esc(e.why ?? 'Best mix of wait and walk right now')}</p>
   ${ll.length ? `<p class="ll">${ll.join(' · ')}</p>` : ''}
   ${routeLine(e)}
+  ${boostLine(r.id)}
   ${expectLine(r.id)}
   ${tripNote(r.id)}
   <div class="actions">
@@ -859,6 +1013,7 @@ function altCard(e) {
   ${e.why ? `<p class="reason">${esc(e.why)}</p>` : ''}
   ${ll.length ? `<p class="ll">${ll.join(' · ')}</p>` : ''}
   ${routeLine(e)}
+  ${boostLine(r.id)}
   ${expectLine(r.id)}
   <div class="actions">
     <button type="button" data-act="done" data-id="${esc(r.id)}">✓ Rode it</button>
@@ -962,7 +1117,8 @@ function renderNext(now, c) {
   }
   let html = head + parkChoiceCard(c);
   if (c.tp.needsChoice) return html + credits(snap);
-  html += briefCard(c) + rateCard(c) + dueCards(c) + gatePromptCards(c) + llDecisionBanner(c) + bookBanner(c) + onOurWayBanner(c);
+  html += briefCard(c) + rateCard(c) + dueCards(c) + gatePromptCards(c) + unlockedSingleCard(c) + llDecisionBanner(c) + bookBanner(c) + onOurWayBanner(c);
+  html += heatCard(c);
   const [top, ...others] = res.ranked;
   if (arrivalActive(c)) {
     html += arrivalCard(c);
@@ -1070,16 +1226,16 @@ function renderLightning(now, c) {
         .join('')}`
     : `<p class="muted">Nothing on your list can be booked right now.</p>`;
   const soldOut = c.advice.soldOut.length ? `<p class="muted small"><b>Sold out today:</b> ${c.advice.soldOut.map((x) => esc(x.ride.name)).join(', ')}.</p>` : '';
-  const singles = c.snap.rides.filter((r) => S.wanted.has(r.id) && r.ll?.singleState != null && (!c.tp.park || r.park === c.tp.park) && !c.done.has(r.id) && !c.ctx.locked?.[r.id]);
+  const singles = c.snap.rides.filter((r) => S.wanted.has(r.id) && r.ll?.singleState != null && (!c.tp.park || r.park === c.tp.park) && !c.done.has(r.id) && (!c.ctx.locked?.[r.id] || c.lockInfo?.[r.id]?.kind === 'wait'));
   const singleHtml = singles.length
     ? `<h3 class="section-title">Single Pass (paid per ride)</h3><ul class="list">${singles
         .map((r) => {
           const avail = r.ll.single ? `${r.ll.singlePrice ?? ''} · return ~${fmtTime(r.ll.single.start)}` : r.ll.singleState === 'FINISHED' ? 'sold out today' : 'not on sale now';
           const standby = Number.isFinite(r.wait) ? ` · standby ${r.wait} min` : '';
-          const adv = singlePassAdvice(r, { now, stats: statsFor(r.park, c.today)?.get(r.id), hourOf: parkHour, close: finalClose(r, now) });
+          const adv = singleAdvice(r, c, now);
           const btn = r.ll.single ? `<button type="button" data-act="book-open" data-id="${esc(r.id)}" data-kind="single" data-t="${esc(hhmm(r.ll.single.start))}">I bought it</button>` : '';
           const form = S.bookForm?.rideId === r.id && S.bookForm.kind === 'single' ? bookForm(c, { ride: r, kind: 'single' }) : '';
-          return `<li class="stack"><div class="row"><div class="grow"><div class="name">${esc(r.name)}</div><div class="sub">${esc(avail)}${esc(standby)}</div><div class="sub advice advice-${esc(adv.kind)}">${esc(adv.text)}</div></div>${form ? '' : btn}</div>${form}</li>`;
+          return `<li class="stack"><div class="row"><div class="grow"><div class="name">${esc(r.name)}</div><div class="sub">${esc(avail)}${esc(standby)}</div><div class="sub advice advice-${esc(adv.kind)}">${esc(adv.text)}</div></div>${form || c.ctx.locked?.[r.id] ? '' : btn}</div>${form}</li>`;
         })
         .join('')}</ul>`
     : '';
@@ -1088,6 +1244,13 @@ function renderLightning(now, c) {
     : `<div class="actions"><button type="button" data-act="book-manual">Add a booking made another way</button></div>`;
   return `${noteBar()}${decision}<section class="card"><div class="eyebrow">⚡ Booking${c.tp.park ? ' · ' + esc(PARK[c.tp.park]) : ''}</div>${status}</section>
     ${bookings}${recList}${soldOut}${singleHtml}${manual}${tripHtml}
+    <details class="shows"><summary>How Lightning Lane works (stacking, modify, timing)</summary><ul class="small">
+      <li><b>Arrive at opening.</b> You can't book anything until you've scanned into the park, so the first booking happens at the gate. Buy the Multi Pass the night before so you only have to pick rides.</li>
+      <li><b>Stacking.</b> Book the next ride the moment you're allowed: when you tap in, or 2 hours after your last booking. Popular rides give return times hours away, so by midday you're holding two or three and walk past the standby lines all afternoon. This tab tells you when the next booking opens.</li>
+      <li><b>Return window.</b> One hour, shown on the booking. Be there inside it; don't count on a grace period. Cancel one you can't make in the Disneyland app rather than letting it lapse.</li>
+      <li><b>Modify.</b> In the Disneyland app, open a booking and tap Modify to look for an earlier time or another ride. Your current booking stays until you confirm the swap, so it costs nothing to check after a good ride. Disney picks from the times it has open; you can't type one in.</li>
+      <li><b>Thrills first.</b> With Thrills first on (Rides tab), the picks below favour the big rides. A ride still waiting on its test ride can be booked; it says which test comes first.</li>
+    </ul></details>
     <p class="muted small rules">Rules used: book your first one after you scan in; the next opens when you tap in or 2 hours after booking, whichever is first; each ride once a day; a ride that breaks down during your window turns the booking into a Multiple Experience pass for any other Multi Pass ride in the park. The Disneyland app is the authority; this is your own record and advice.</p>
     ${credits(c.snap)}`;
 }
@@ -1167,6 +1330,7 @@ function renderRidesShell(done) {
   return `<div class="search">
     <input type="search" id="q" placeholder="Search rides" value="${esc(S.query)}" autocomplete="off" aria-label="Search rides">
     <label class="toggle"><input type="checkbox" data-act="showall" ${S.settings.showAll ? 'checked' : ''}> Shows too</label>
+    <label class="toggle"><input type="checkbox" data-act="thrills" ${S.settings.thrills ? 'checked' : ''}> ⚡ Thrills first</label>
   </div>
   <p class="muted small" id="pick-count">${S.wanted.size} picked · ${left} still to do</p>
   <div id="ride-list"></div>`;
@@ -1449,6 +1613,19 @@ document.addEventListener('click', (ev) => {
     case 'showall':
       S.settings.showAll = el.checked;
       saveSettings();
+      break;
+    case 'thrills':
+      S.settings.thrills = el.checked;
+      saveSettings();
+      S.note = el.checked ? 'Thrills first: coasters and big rides move up, slow calm rides move down.' : 'Thrills first is off: back to the trip file’s priorities.';
+      break;
+    case 'heat':
+      S.heat = { until: Math.max(Date.now(), S.heat?.until ?? 0) + HEAT_MINUTES * 60e3 };
+      save('heat', S.heat);
+      break;
+    case 'heat-off':
+      S.heat = null;
+      save('heat', null);
       break;
     case 'speed':
       S.settings.speed = el.dataset.v;
