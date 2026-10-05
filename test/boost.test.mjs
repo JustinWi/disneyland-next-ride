@@ -19,9 +19,10 @@ test('feel and cool: thrills, calm rides and seasonal names', () => {
   assert.equal(feelOf('Some New Ride'), null);
 });
 
-test('thrillPriority: thrills to Must-do, active at least High, calm two steps down, never removed', () => {
+test('thrillPriority: thrills to Must-do, active one step up, calm two steps down, never removed', () => {
   assert.equal(thrillPriority('medium', 'thrill'), 'must');
   assert.equal(thrillPriority('medium', 'active'), 'high');
+  assert.equal(thrillPriority('low', 'active'), 'medium'); // one step up, a kiddie ride doesn't leap past must-dos
   assert.equal(thrillPriority('must', 'active'), 'must');
   assert.equal(thrillPriority('must', 'calm'), 'medium');
   assert.equal(thrillPriority('high', 'calm'), 'low');

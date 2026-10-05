@@ -175,7 +175,7 @@ function tripIndex() {
   const tx = tripX();
   if (tripIx && tripIx.trip === tx.trip && tripIx.catalog === S.catalog && tripIx.thrills === S.settings.thrills) return tripIx;
   const t = tx.trip;
-  const ix = { trip: t, catalog: S.catalog, thrills: S.settings.thrills, byTpw: new Map(), byKey: new Map(), prio: {}, bias: {}, feel: {}, typical: {}, avoid: new Map() };
+  const ix = { trip: t, catalog: S.catalog, thrills: S.settings.thrills, byTpw: new Map(), byKey: new Map(), prio: {}, filePrio: {}, bias: {}, feel: {}, typical: {}, avoid: new Map() };
   for (const r of t?.rides ?? []) {
     ix.byKey.set(r.key, r);
     if (!r.tpwId) continue;
@@ -185,6 +185,7 @@ function tripIndex() {
     // Thrills first: thrill rides count as Must-do and go ahead of the other must-dos; calm rides two steps lower.
     const wt = rideWeight(r.priority, feel, S.settings.thrills);
     ix.prio[r.tpwId] = wt.priority;
+    ix.filePrio[r.tpwId] = r.priority; // safety alerts (last chance, try instead) keep the trip file's must-dos
     ix.bias[r.tpwId] = wt.bias;
     if (Number.isFinite(r.typical)) ix.typical[r.tpwId] = r.typical;
   }
@@ -222,12 +223,12 @@ function todayPark(today) {
 }
 
 /** Trip priorities, plus a head start for loved rides you put back on today's list. */
-function rideBias(today, { locked = {}, info = {}, ridden = new Set(), now = Date.now() } = {}) {
+function rideBias(today, { locked = {}, info = {}, ridden = new Set(), now = Date.now(), short = {} } = {}) {
   const ix = tripIndex();
   const bias = { ...ix.bias };
   for (const id of S.again[today] ?? []) bias[id] = (bias[id] ?? 0) + againBias(S.ratings[id]?.stars ?? 0);
   // Test rides (Pirates' drops, Runaway Railway's screens) go just ahead of the ride they unlock.
-  const blocked = new Set(Object.keys(locked).filter((id) => info[id]?.kind !== 'wait'));
+  const blocked = new Set([...Object.keys(locked).filter((id) => info[id]?.kind !== 'wait'), ...Object.keys(short)]);
   const boost = testRideBias(ix.trip, ladderGates(ix.trip), { bias, wanted: S.wanted, ridden, gate: S.gate, blocked });
   Object.assign(bias, boost);
   S.tests = testLabels(Object.keys(boost));
@@ -413,7 +414,8 @@ function boostLine(id) {
   const tx = tripX();
   const parts = [];
   if (S.tests[id] === 'Drop test') {
-    const rise = tx.riseKey ? tripIndex().byKey.get(tx.riseKey)?.name : null;
+    const rr = tx.riseKey ? tripIndex().byKey.get(tx.riseKey) : null;
+    const rise = rr?.tpwId && S.wanted.has(rr.tpwId) && !(S.unlock[rr.key] === 'no') ? rr.name : null;
     parts.push(`<b>Drop test:</b> two short drops in the dark.${rise ? ` If they go well, ${esc(rise)} (a bigger drop in the dark) is next on the list.` : ''}`);
   } else if (S.tests[id] === 'Screen test') {
     parts.push('<b>Screen test:</b> screens with gentle motion. Say how it went afterwards.');
@@ -503,7 +505,10 @@ function compute(now) {
   const { locked, info: lockInfo, prompts } = locks(today, ridden);
   // F5: rides the height check rules out are set aside like a locked ride.
   const short = tooShortFor(S.rideinfo?.rides, S.settings.heightIn);
-  for (const [id, h] of Object.entries(short)) if (!locked[id]) locked[id] = `height minimum ${h} in.`;
+  for (const [id, h] of Object.entries(short)) {
+    locked[id] = `height minimum ${h} in.`;
+    delete lockInfo[id]; // too short beats "waiting on a test": nothing to wait for
+  }
   const ridesById = new Map(snap.rides.map((r) => [r.id, r]));
   const headingTo = S.stickyId;
 
@@ -530,7 +535,7 @@ function compute(now) {
     hopMinutes: S.settings.hopMinutes,
     parks: snap.parks,
     todayPark: tp.park,
-    bias: rideBias(today, { locked, info: lockInfo, ridden, now }),
+    bias: rideBias(today, { locked, info: lockInfo, ridden, now, short }),
     typical: ix.typical,
     locked,
     lanes: heldBookings(S.ll),
@@ -545,13 +550,24 @@ function compute(now) {
     .filter((r) => r && (!tp.park || r.park === tp.park));
   // A ride only waiting on a test ride (Big Thunder after the Pirates drop test) can still be booked:
   // the test comes first anyway, and a booking you don't use can be cancelled.
-  const waiting = (id) => lockInfo[id]?.kind === 'wait' && !short[id];
+  // Only when every test ride in its chain can be ridden today, in today's park.
+  const chain = (id, seen = new Set()) => {
+    for (const g of lockInfo[id]?.after ?? []) if (!seen.has(g)) chain(g, seen.add(g));
+    return seen;
+  };
+  const waiting = (id) =>
+    lockInfo[id]?.kind === 'wait' &&
+    !short[id] &&
+    [...chain(id)].every((g) => (!tp.park || catalogRide(g)?.park === tp.park) && (!locked[g] || lockInfo[g]?.kind === 'wait'));
   const advice = adviseMulti(snap.rides, { ...ctx, priority: ix.prio, locked: new Set(Object.keys(locked).filter((id) => !waiting(id))), stats: statsFor(tp.park, today), hourOf: parkHour }, S.ll);
   for (const rec of advice.recs) {
     if (!waiting(rec.ride.id)) continue;
-    const gates = (lockInfo[rec.ride.id].after ?? []).map((id) => nameOf(id, snap));
-    rec.reason += `, only if ${gates.join(' and ') || 'its test ride'} goes well first`;
+    const gates = [...chain(rec.ride.id)].reverse().map((id) => nameOf(id, snap));
+    rec.cond = `only if ${gates.join(' and ')} ${gates.length > 1 ? 'go' : 'goes'} well first`;
+    rec.reason += `, ${rec.cond}`;
+    rec.value *= 0.5; // a 👎 on the test would waste the booking, as in the day plan
   }
+  advice.recs.sort((a, b) => b.value - a.value);
   const next = nextBooking(S.ll, now);
 
   // Shows today, both parks (the Friday chooser compares them); the rest of the app uses today's park.
@@ -590,7 +606,7 @@ function compute(now) {
   fireAlerts([
     ...laneAlerts(S.ll.bookings, now, (id) => nameOf(id, snap)),
     ...bookNextAlert({ llOn: today_ll, next, recs: advice.recs }),
-    ...lastChanceAlerts({ rides: inPark, wanted: S.wanted, done, priority: ix.prio, locked: new Set(Object.keys(locked)), now }),
+    ...lastChanceAlerts({ rides: inPark, wanted: S.wanted, done, priority: { ...ix.filePrio, ...Object.fromEntries(Object.entries(ix.prio).filter(([, p]) => p === 'must')) }, locked: new Set(Object.keys(locked)), now }),
     ...showAlerts(shows, now, wantsShow),
     ...statusNews,
   ]);
@@ -757,7 +773,7 @@ function bookBanner(c) {
   const top = c.advice.recs[0];
   if (c.next.why === 'scan') {
     if (!top || !(S.trip || S.ll.bookings.length)) return '';
-    return `<p class="banner">⚡ After you scan in, book <b>${esc(top.ride.name)}</b> first. <button type="button" class="linkish" data-act="scan-in">We're in the park</button></p>`;
+    return `<p class="banner">⚡ After you scan in, book <b>${esc(top.ride.name)}</b> first${top.cond ? ` (${esc(top.cond)})` : ''}. <button type="button" class="linkish" data-act="scan-in">We're in the park</button></p>`;
   }
   if (c.next.why === 'wait') {
     const last = c.next.last ? nameOf(c.next.last.rideId, c.snap) : '';
@@ -893,13 +909,26 @@ function showsSection(c) {
     <p class="muted small">🔔 means you'll get a reminder in time to find a spot.</p></details>`;
 }
 
+/** Every ride a 👎 on this gate would skip: anything whose ladder runs through it, still picked and not ridden. */
+function skippedBy(gateKey, c) {
+  const ix = tripIndex();
+  const gates = ladderGates(ix.trip);
+  const out = new Set();
+  let grew = true;
+  while (grew) {
+    grew = false;
+    for (const [k, gs] of gates) if (!out.has(k) && gs.some((g) => g === gateKey || out.has(g))) out.add(k), (grew = true);
+  }
+  return [...out].map((k) => ix.byKey.get(k)).filter((r) => r?.tpwId && S.wanted.has(r.tpwId) && !c.done?.has(r.tpwId));
+}
+
 function gatePromptCards(c) {
   const dropKey = tripX().dropKey;
   return c.prompts
     .map(({ gate, unlocks }) =>
       gate.key === dropKey
         ? `<section class="card accent"><div class="eyebrow">Drop test</div><h3>Did the drops in the dark on ${esc(gate.name)} go well?</h3>
-      <p class="muted small">👍 opens the next step for ${esc(unlocks.map((r) => r.name).join(' and '))}. 👎 skips ${unlocks.length > 1 ? 'them' : 'it'} (you can still unlock any of them on the Rides tab).</p>
+      <p class="muted small">👍 opens the next step for ${esc(unlocks.map((r) => r.name).join(' and '))}. 👎 skips ${esc(skippedBy(gate.key, c).map((r) => r.name).join(', ') || 'them')}, the rides your trip file put after it (you can still unlock any of them on the Rides tab).</p>
       ${unlocks.map((u) => c.ridesById?.get(u.tpwId)).filter((r) => r?.ll?.singleState != null).map((r) => `<p class="small">${esc(r.name)} right now: ${r.ll.single ? `Single Pass ${esc(r.ll.singlePrice ?? '')}, return ~${esc(fmtTime(r.ll.single.start))}` : r.ll.singleState === 'FINISHED' ? 'Single Pass sold out today' : 'Single Pass not on sale'}${Number.isFinite(r.wait) ? `, standby ${r.wait} min` : ''}.</p>`).join('')}
       <div class="actions"><button type="button" data-act="gate" data-key="${esc(gate.key)}" data-v="yes">👍 Liked the drops</button>
       <button type="button" data-act="gate" data-key="${esc(gate.key)}" data-v="no">👎 Not the drops</button></div></section>`
@@ -959,11 +988,11 @@ function heatCard(c) {
     park: c.tp.park,
     pos: c.w?.pos,
     walk: (pos, r) => Math.max(1, Math.round(walkMinutes(pos, r, { speed: S.settings.speed }))),
-    skip: new Set([...tripIndex().avoid.keys()]),
+    skip: new Set([...tripIndex().avoid.keys(), ...S.wanted]),
   });
   const live = (id) => c.ridesById?.get(id);
   const rows = spots
-    .filter((x) => !['CLOSED', 'REFURBISHMENT'].includes(live(x.r.id)?.status))
+    .filter((x) => !['CLOSED', 'REFURBISHMENT', 'DOWN'].includes(live(x.r.id)?.status))
     .map((x) => `<li>${esc(x.r.name)}${x.walk != null ? ` · ${x.walk} min walk` : ''}</li>`)
     .join('');
   return `<section class="card heat" aria-label="Cooling off">
@@ -1058,7 +1087,7 @@ function unavailableList(res, missing, c) {
         : x.why === 'locked' && key
           ? `<button type="button" data-act="unlock" data-key="${esc(key)}" data-v="yes">Unlock</button>`
           : x.why === 'lane' ? '' : doneBtn(x.ride.id, x.ride.name);
-      const prio = ix.prio[x.ride.id];
+      const prio = ['must', 'high'].includes(ix.filePrio[x.ride.id]) ? ix.filePrio[x.ride.id] : ix.prio[x.ride.id];
       let alt = '';
       // Only for rides that are out (not ones that simply open later today).
       if (['down', 'closed', 'refurb', 'closes', 'unknown'].includes(x.why) && !/^opens|reopens/.test(x.detail ?? '') && (prio === 'must' || prio === 'high')) {
@@ -1226,7 +1255,7 @@ function renderLightning(now, c) {
         .join('')}`
     : `<p class="muted">Nothing on your list can be booked right now.</p>`;
   const soldOut = c.advice.soldOut.length ? `<p class="muted small"><b>Sold out today:</b> ${c.advice.soldOut.map((x) => esc(x.ride.name)).join(', ')}.</p>` : '';
-  const singles = c.snap.rides.filter((r) => S.wanted.has(r.id) && r.ll?.singleState != null && (!c.tp.park || r.park === c.tp.park) && !c.done.has(r.id) && (!c.ctx.locked?.[r.id] || c.lockInfo?.[r.id]?.kind === 'wait'));
+  const singles = c.snap.rides.filter((r) => S.wanted.has(r.id) && r.ll?.singleState != null && (!c.tp.park || r.park === c.tp.park) && !c.done.has(r.id) && !c.short?.[r.id] && (!c.ctx.locked?.[r.id] || c.lockInfo?.[r.id]?.kind === 'wait'));
   const singleHtml = singles.length
     ? `<h3 class="section-title">Single Pass (paid per ride)</h3><ul class="list">${singles
         .map((r) => {
@@ -1563,6 +1592,8 @@ async function importTrip(obj, how) {
   const trip = attachIds(parsed, S.catalog.rides);
   S.trip = trip;
   save('trip', trip);
+  save('dropTestAdded', false); // a fresh trip gets Rise added again by the drop test
+  tripXm = null;
   const ids = trip.rides.map((r) => r.tpwId).filter(Boolean);
   S.wanted = new Set(ids);
   saveWanted();

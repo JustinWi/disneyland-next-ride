@@ -159,6 +159,16 @@
 <li><strong>A rough first GPS fix</strong> used to pick the park. It's now guarded: a fix rougher than 250 m doesn't pick one.</li>
 </ul>
 
+<h2>Update 2026-10-04: thrills first, drop test, "We're hot"</h2>
+<ul>
+<li><b>Thrills first</b> (Rides tab, on by default). Thrill rides become Must-do (⚡) and go first. Active rides move up one step, at most to High. Calm rides drop two steps and get a 10-minute handicap. Nothing leaves the list. Last-chance and "Try instead" alerts still follow the trip file's must-dos.</li>
+<li><b>Drop test.</b> Pirates' short dark drops gate Rise of the Resistance (which ends with a bigger dark drop), along with the Runaway Railway screen test. Test rides get a head start so they happen early. The card lists every ride a 👎 would skip.</li>
+<li><b>Rise: pass or line.</b> Once unlocked, a Next-screen card shows the Single Pass price, return time and standby, says which to do, and when the pass usually sells out.</li>
+<li><b>🥵 We're hot.</b> For an hour, indoor and water rides go first, sunny queues drop back, and air-conditioned places nearby that you don't have to ride are listed.</li>
+<li><b>Lightning Lane.</b> Picks follow the thrill priorities. A ride still waiting on its test can be booked, but it counts half and says "only if … goes well first". It must also be bookable today in this park. The Lightning tab explains stacking, modify, the 1-hour window and why to arrive at opening.</li>
+</ul>
+<p>Review 4 (one opus-high attacker on commit a90d6c7) found 10 problems: 0 Critical, 2 Medium-High, 4 Medium, 4 Low. Fixed: losing alerts for demoted must-dos; the first Lightning Lane pick being a ride still waiting on a test; gates in the other park; reloading the trip dropping Rise; the 👎 card under-stating what it skips; too-short rides counted as "waiting"; the drop-test line naming Rise after it was unticked; kiddie rides jumping past must-dos; and the cool-spot list (picked rides, non-AC walkthrough, duplicate, down spots). Accepted: the warm-up head start for Pal-A-Round Non-Swinging (it gates the swinging gondolas, so it should go first).</p>
+
 <h2>Not in this version</h2>
 <ul>
 <li>One list shared live across two phones. A private trip link sets both phones up once, but done marks and bookings stay per phone.</li>

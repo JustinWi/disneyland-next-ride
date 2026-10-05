@@ -58,10 +58,8 @@ const TABLE = [
   ['walt disneys enchanted tiki room', 'calm', 'indoor'],
   ['great moments with mr lincoln', 'calm', 'indoor'],
   ['opera house', 'calm', 'indoor'],
-  ['walt disney a magical life', 'calm', 'indoor'],
   ['disney gallery', 'calm', 'indoor'],
   ['pixar short film spotlight', 'calm', 'indoor'],
-  ['sleeping beauty castle walkthrough', 'calm', 'indoor'],
   // ---- Disney California Adventure ----
   ['radiator springs racers', 'thrill', 'sun'],
   ['grizzly river run', 'thrill', 'water'],
@@ -123,7 +121,7 @@ export function thrillPriority(priority, feel) {
   const i = LEVELS.indexOf(priority);
   if (i < 0) return priority;
   if (feel === 'thrill') return 'must';
-  if (feel === 'active') return LEVELS[Math.max(i, 2)];
+  if (feel === 'active') return LEVELS[Math.max(i, Math.min(i + 1, 2))]; // one step up, not past High
   return LEVELS[Math.max(0, i - 2)]; // calm: two steps down, still on the list
 }
 
