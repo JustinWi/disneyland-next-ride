@@ -200,6 +200,10 @@ button:active, .btn:active { transform: translateY(1px); }
 .toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); white-space: nowrap; min-height: 44px; }
 .toggle input { width: 20px; height: 20px; }
 .park-h { font-size: 20px; margin: 18px 0 2px; }
+.park-fold { all: unset; box-sizing: border-box; display: flex; align-items: baseline; gap: 8px; width: 100%; min-height: 44px; padding: 8px 0; cursor: pointer; font: inherit; color: inherit; }
+.park-fold .chev { width: 1em; color: var(--muted); }
+.park-fold .small { margin-left: auto; font-weight: normal; }
+.park-fold:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .land-h { font-size: 13px; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); margin: 14px 0 2px; }
 .list .pick {
   flex: 1;

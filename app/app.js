@@ -73,6 +73,7 @@ const S = {
   snoozed: load('snoozed', {}),
   settings: { speed: 'normal', hopMinutes: 20, start: 'DL', showAll: false, llPrice: null, party: null, battery: false, heightIn: null, thrills: true, ...load('settings', {}) },
   heat: load('heat', null), // { until } while "We're hot" is on
+  folded: load('folded', {}) ?? {}, // { DL: true } park sections collapsed on the Rides tab
   tests: {}, // { rideId: 'Drop test' | 'Screen test' | 'Warm-up' } rides that unlock others, this render
   llstats: null,
   llDays: load('llDays', {}) ?? {}, // { 'YYYY-MM-DD': 'on' | 'off' }
@@ -1314,7 +1315,12 @@ function renderRideList(snap, done) {
   for (const park of ['DL', 'DCA']) {
     const inPark = rows.filter((r) => r.park === park);
     if (!inPark.length) continue;
-    html += `<h2 class="park-h">${PARK[park]}</h2>`;
+    // A collapsed park stays collapsed across visits, but opens while searching so matches show.
+    const folded = !!S.folded[park] && !q;
+    const picks = inPark.filter((r) => S.wanted.has(r.id)).length;
+    html += `<h2 class="park-h"><button type="button" class="park-fold" data-act="fold" data-park="${park}" aria-expanded="${!folded}">
+      <span class="chev" aria-hidden="true">${folded ? '▸' : '▾'}</span>${PARK[park]}<span class="muted small">${picks} picked</span></button></h2>`;
+    if (folded) continue;
     const lands = new Map();
     for (const r of inPark) {
       const k = r.land ?? 'Other';
@@ -1640,6 +1646,10 @@ document.addEventListener('click', (ev) => {
       if (S.wanted.has(id)) S.wanted.delete(id);
       else S.wanted.add(id);
       saveWanted();
+      break;
+    case 'fold':
+      S.folded[el.dataset.park] = !S.folded[el.dataset.park];
+      save('folded', S.folded);
       break;
     case 'showall':
       S.settings.showAll = el.checked;
