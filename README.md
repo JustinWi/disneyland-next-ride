@@ -16,3 +16,11 @@ ride next from live waits, the wait forecast, your location and closing times.
 
 Data: [ThemeParks.wiki](https://themeparks.wiki). Land names and backup waits:
 [Powered by Queue-Times.com](https://queue-times.com/).
+
+## Using it or making your own
+
+- **Just use it:** open the app link on your phone and pick your rides on the Rides tab. Your list,
+  ratings and location stay on your phone; nothing is uploaded. Add it to your Home Screen for one-tap use.
+- **Fork it:** in your fork, turn on Actions, set Settings → Pages → Source to "GitHub Actions", and
+  push to `main`. Point `CACHE_BASE` in `app/js/sources.js` at your own repo's `data` branch.
+- Unofficial: not affiliated with Disney. MIT licensed (see `LICENSE`).
