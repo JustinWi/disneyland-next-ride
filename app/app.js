@@ -1,7 +1,7 @@
 // Next Ride: UI, state, timers, geolocation, storage. The engine lives in js/ (pure, tested).
 
 import { plan, arrivalPlan } from './js/plan.js';
-import { fetchFresh, buildSnapshot } from './js/sources.js';
+import { fetchFresh, fetchHours, buildSnapshot } from './js/sources.js';
 import { load, save, remove } from './js/store.js';
 import { atResort, haversineMeters, parkFootprints, parkAt, walkMinutes } from './js/geo.js';
 import { fmtTime, fmtAge, parkDayKey, parkTime, hhmm, fmtDay, parkHour, weekdayOf } from './js/time.js';
@@ -63,7 +63,7 @@ const initial = loadDoneAndHistory();
 const S = {
   catalog: null,
   footprints: null,
-  data: { tpw: load('tpw', null), qt: load('qt', null) },
+  data: { tpw: load('tpw', null), qt: load('qt', null), hours: load('hours', null) }, // hours: official park hours by day
   fetching: false,
   lastAttempt: null,
   offline: false,
@@ -1475,7 +1475,7 @@ function safeCompute(now) {
       waitsOk = false;
     }
     if (!waitsOk) {
-      S.data = { tpw: null, qt: null };
+      S.data = { tpw: null, qt: null, hours: S.data.hours };
       remove('tpw');
       remove('qt');
     } else if (S.trip) {
@@ -1944,7 +1944,16 @@ async function refresh() {
   render();
   let r;
   try {
-    r = SIMULATE_OFFLINE ? { via: null, error: 'simulated offline' } : await fetchFresh();
+    const hoursStale = !S.data.hours?.days?.[parkDayKey()] || Date.now() - S.data.hours.at > 3600e3;
+    const [fresh, hours] = await Promise.all([
+      SIMULATE_OFFLINE ? { via: null, error: 'simulated offline' } : fetchFresh(),
+      hoursStale && !SIMULATE_OFFLINE ? fetchHours().catch(() => null) : null,
+    ]);
+    r = fresh;
+    if (hours) {
+      S.data.hours = hours;
+      save('hours', hours);
+    }
   } catch (err) {
     r = { via: null, error: String(err) };
   }

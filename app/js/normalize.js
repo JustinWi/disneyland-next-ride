@@ -180,6 +180,41 @@ export function withForecastsFrom(snapshot, previous) {
   return { ...snapshot, rides, parks };
 }
 
+/**
+ * Park hours by day from the two /schedule payloads: { 'YYYY-MM-DD': { DL: {open, close}, DCA } }.
+ * Only the regular OPERATING session counts. A party night's TICKETED_EVENT after 6 pm isn't open
+ * to day guests.
+ */
+export function parkHoursFrom(schedules, { from = todayKey(), days = 4 } = {}) {
+  const out = {};
+  for (const [k, sch] of Object.entries(schedules ?? {})) {
+    for (const e of sch?.schedule ?? []) {
+      if (e?.type !== 'OPERATING' || typeof e.date !== 'string' || e.date < from) continue;
+      const open = parseT(e.openingTime);
+      const close = parseT(e.closingTime);
+      if (!Number.isFinite(open) || !Number.isFinite(close)) continue;
+      const day = (out[e.date] ??= {});
+      const p = day[k];
+      day[k] = p ? { open: Math.min(p.open, open), close: Math.max(p.close, close) } : { open, close };
+    }
+  }
+  const keep = Object.keys(out).sort().slice(0, days);
+  return Object.fromEntries(keep.map((d) => [d, out[d]]));
+}
+
+/**
+ * Put the official park hours on a snapshot. Without them the park's hours are guessed from ride
+ * hours, which the live feed sometimes leaves on yesterday's (2026-10-07: California Adventure
+ * showed "open until 6 pm" from one walkthrough's hours on a 10 pm day).
+ */
+export function withParkHours(snapshot, hours, dayKey) {
+  const today = hours?.days?.[dayKey];
+  if (!snapshot || !today) return snapshot;
+  const parks = { ...snapshot.parks };
+  for (const k of ['DL', 'DCA']) if (today[k]) parks[k] = { open: today[k].open, close: today[k].close };
+  return { ...snapshot, parks };
+}
+
 /** Mean coordinates of the catalog's rides per park; used to decide which park we're standing in. */
 export function parkCenters(catalog) {
   const acc = {};

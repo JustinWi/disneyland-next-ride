@@ -6,7 +6,8 @@
 // Raw payloads are stored (trimmed) and re-normalized at render time, so operating windows and
 // "opens at" logic always use the current clock.
 
-import { normalizeTpw, normalizeQt, withForecastsFrom } from './normalize.js';
+import { normalizeTpw, normalizeQt, withForecastsFrom, withParkHours, parkHoursFrom, PARK_IDS } from './normalize.js';
+import { parkDayKey } from './time.js';
 
 export const TPW_LIVE = 'https://api.themeparks.wiki/v1/entity/disneylandresort/live';
 export const CACHE_BASE = 'https://raw.githubusercontent.com/JustinWi/disneyland-next-ride/data/';
@@ -77,11 +78,29 @@ export async function fetchFresh() {
 }
 
 /**
+ * Official park hours for the next few days, from each park's schedule. Resolves to
+ * { at, days } or null when neither schedule loads (the app then guesses from ride hours).
+ */
+export async function fetchHours(now = Date.now()) {
+  const entries = await Promise.all(
+    Object.entries(PARK_IDS).map(async ([k, id]) => [k, await getJson(`https://api.themeparks.wiki/v1/entity/${id}/schedule`).catch(() => null)]),
+  );
+  const ok = Object.fromEntries(entries.filter(([, j]) => Array.isArray(j?.schedule)));
+  if (!Object.keys(ok).length) return null;
+  const days = parkHoursFrom(ok, { from: parkDayKey(now) });
+  return Object.keys(days).length ? { at: now, days } : null;
+}
+
+/**
  * Build the snapshot to plan from: the newest of the stored ThemeParks.wiki and Queue-Times data.
  * Queue-Times has no forecasts, hours or Lightning Lane, so those are carried over from the
  * last ThemeParks.wiki snapshot when QT is newer.
  */
-export function buildSnapshot({ tpw, qt }, catalog, now = Date.now()) {
+export function buildSnapshot({ tpw, qt, hours }, catalog, now = Date.now()) {
+  return withParkHours(rideSnapshot({ tpw, qt }, catalog, now), hours, parkDayKey(now));
+}
+
+function rideSnapshot({ tpw, qt }, catalog, now) {
   const tpwSnap = tpw ? { ...normalizeTpw(tpw.data, catalog, { now }), at: tpw.at } : null;
   if (qt && (!tpw || qt.at > tpw.at + 60e3)) {
     const qtSnap = { ...normalizeQt(qt.data, catalog, { now }), at: qt.at };
