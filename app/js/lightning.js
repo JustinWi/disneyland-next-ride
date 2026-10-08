@@ -88,7 +88,7 @@ export function adviseMulti(rides, ctx, st) {
   const skipped = [];
   for (const r of rides) {
     if (!ctx.wanted?.has(r.id) || ctx.done?.has(r.id)) continue;
-    if (ctx.todayPark && r.park !== ctx.todayPark) continue;
+    if (ctx.todayPark ? r.park !== ctx.todayPark : r.park === 'KBF') continue;
     if (r.ll?.multiState == null) continue; // no Multi Pass on this ride
     if (taken.has(r.id)) continue;
     if (r.status === 'REFURBISHMENT') continue;

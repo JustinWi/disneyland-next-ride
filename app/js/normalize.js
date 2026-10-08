@@ -7,7 +7,10 @@ import { todayKey } from './time.js';
 export const PARK_IDS = {
   DL: '7340550b-c14d-4def-80bb-acdb51d49a66',
   DCA: '832fcd51-ea19-4e77-85c7-75d5843b127c',
+  KBF: '0a6123bb-1e8c-4b18-a2d3-2696cf2451f5', // Knott's Berry Farm: its own trip, a drive from Disneyland
 };
+export const PARK_KEYS = Object.keys(PARK_IDS);
+const emptyParks = () => Object.fromEntries(PARK_KEYS.map((k) => [k, { open: null, close: null }]));
 export const QT_PARK_IDS = { 16: 'DL', 17: 'DCA' };
 
 const STATUSES = new Set(['OPERATING', 'DOWN', 'CLOSED', 'REFURBISHMENT']);
@@ -62,11 +65,13 @@ function hoursFor(list, now) {
 export function normalizeTpw(live, catalog, { now = Date.now() } = {}) {
   const byId = new Map((catalog?.rides ?? []).map((r) => [r.id, r]));
   const rides = [];
-  const parks = { DL: { open: null, close: null }, DCA: { open: null, close: null } };
+  const parks = emptyParks();
   for (const e of live?.liveData ?? []) {
     if (!e || e.entityType !== 'ATTRACTION' || !e.id) continue;
     const cat = byId.get(e.id);
     const park = cat?.park ?? parkKeyFor(e.parkId, catalog);
+    // Knott's feed also carries Soak City slides and night-only Scary Farm mazes: only catalog rides count.
+    if (park === 'KBF' && !cat) continue;
     const q = e.queue ?? null;
     const standby = q?.STANDBY?.waitTime;
     const forecast = Array.isArray(e.forecast) && e.forecast.length
@@ -142,7 +147,7 @@ export function normalizeQt(payloads, catalog, { now = Date.now() } = {}) {
       });
     }
   }
-  return { at: now, source: 'qt', rides, parks: { DL: { open: null, close: null }, DCA: { open: null, close: null } } };
+  return { at: now, source: 'qt', rides, parks: emptyParks() };
 }
 
 /** Carry forecasts, hours and Lightning Lane info from an older (richer) snapshot onto a newer one, by id. */
@@ -171,7 +176,7 @@ export function withForecastsFrom(snapshot, previous) {
     };
   });
   const parks = {};
-  for (const k of ['DL', 'DCA']) {
+  for (const k of PARK_KEYS) {
     parks[k] = {
       open: snapshot.parks?.[k]?.open ?? previous.parks?.[k]?.open ?? null,
       close: snapshot.parks?.[k]?.close ?? previous.parks?.[k]?.close ?? null,
@@ -211,8 +216,13 @@ export function withParkHours(snapshot, hours, dayKey) {
   const today = hours?.days?.[dayKey];
   if (!snapshot || !today) return snapshot;
   const parks = { ...snapshot.parks };
-  for (const k of ['DL', 'DCA']) if (today[k]) parks[k] = { open: today[k].open, close: today[k].close };
-  return { ...snapshot, parks };
+  for (const k of PARK_KEYS) if (today[k]) parks[k] = { open: today[k].open, close: today[k].close };
+  // Knott's rides carry no hours of their own: they run park hours (rope drop, closing, last call).
+  const k = today.KBF;
+  const rides = k
+    ? snapshot.rides.map((r) => (r.park === 'KBF' && r.open == null && !r.windows?.length ? { ...r, open: k.open, close: k.close, windows: [{ open: k.open, close: k.close }] } : r))
+    : snapshot.rides;
+  return { ...snapshot, parks, rides };
 }
 
 /** Mean coordinates of the catalog's rides per park; used to decide which park we're standing in. */

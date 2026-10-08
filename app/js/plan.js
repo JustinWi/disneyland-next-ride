@@ -20,7 +20,8 @@ const RIDE_MIN = 7;
 
 export function plan(rides, ctx, { stickyId = null } = {}) {
   const now = ctx.now;
-  const pool = ctx.todayPark ? rides.filter((r) => r.park === ctx.todayPark) : rides;
+  // No park set = hopping between the two Disney parks; Knott's is a drive away, never mixed in.
+  const pool = ctx.todayPark ? rides.filter((r) => r.park === ctx.todayPark) : rides.filter((r) => r.park !== 'KBF');
   const byId = new Map(rides.map((r) => [r.id, r]));
   const wanted = new Set([...(ctx.wanted ?? [])].filter((id) => byId.get(id) && pool.includes(byId.get(id))));
   const done = ctx.done ?? new Set();

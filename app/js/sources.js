@@ -10,6 +10,7 @@ import { normalizeTpw, normalizeQt, withForecastsFrom, withParkHours, parkHoursF
 import { parkDayKey } from './time.js';
 
 export const TPW_LIVE = 'https://api.themeparks.wiki/v1/entity/disneylandresort/live';
+export const KBF_LIVE = `https://api.themeparks.wiki/v1/entity/${PARK_IDS.KBF}/live`;
 export const CACHE_BASE = 'https://raw.githubusercontent.com/JustinWi/disneyland-next-ride/data/';
 const TIMEOUT_MS = 8000;
 
@@ -91,13 +92,33 @@ export async function fetchHours(now = Date.now()) {
   return Object.keys(days).length ? { at: now, days } : null;
 }
 
+/** Knott's Berry Farm live waits, kept apart from Disney's so each has its own age. Null on failure. */
+export async function fetchKnotts() {
+  try {
+    const live = await getJson(KBF_LIVE);
+    return validTpw(live) ? { at: Date.now(), data: trimTpw(live) } : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Build the snapshot to plan from: the newest of the stored ThemeParks.wiki and Queue-Times data.
  * Queue-Times has no forecasts, hours or Lightning Lane, so those are carried over from the
  * last ThemeParks.wiki snapshot when QT is newer.
  */
-export function buildSnapshot({ tpw, qt, hours }, catalog, now = Date.now()) {
-  return withParkHours(rideSnapshot({ tpw, qt }, catalog, now), hours, parkDayKey(now));
+export function buildSnapshot({ tpw, qt, hours, kbf }, catalog, now = Date.now()) {
+  const disney = tpw || qt ? rideSnapshot({ tpw, qt }, catalog, now) : null;
+  const k = kbf ? normalizeTpw(kbf.data, catalog, { now }) : null;
+  let snap = disney;
+  if (k) {
+    const kRides = k.rides.filter((r) => r.park === 'KBF');
+    snap = disney
+      ? { ...disney, rides: [...disney.rides.filter((r) => r.park !== 'KBF'), ...kRides], parks: { ...disney.parks, KBF: k.parks.KBF } }
+      : { ...k, rides: kRides, at: kbf.at };
+    snap.atKBF = kbf.at; // Knott's waits have their own age
+  }
+  return withParkHours(snap, hours, parkDayKey(now));
 }
 
 function rideSnapshot({ tpw, qt }, catalog, now) {

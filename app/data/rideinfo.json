@@ -14,7 +14,9 @@
   "https://disneyland.disney.go.com/entertainment/disneyland/blueys-best-day-ever/",
   "https://deeparrival.com/theme-parks/disneyland-resort/disneyland-park/height-requirements/",
   "https://deeparrival.com/theme-parks/disneyland-resort/disney-california-adventure-park/california-adventure-height-requirements/",
-  "https://travelingears.com/disneyland-rides-height-requirements/"
+  "https://travelingears.com/disneyland-rides-height-requirements/",
+  "https://www.sixflags.com/knotts/attractions",
+  "https://www.sixflags.com/knotts/fast-lane"
  ],
  "rides": {
   "e27b1db8-9ec9-4f8b-9ca6-fd6377de66ee": {
@@ -1208,6 +1210,476 @@
    ],
    "intensity": 2,
    "video": "https://www.youtube.com/results?search_query=WEB+SLINGERS%3A+A+Spider-Man+Adventure+POV+California+Adventure"
+  },
+  "ab058c94-3bc3-4944-b4b5-c5c76de73575": {
+   "name": "GhostRider",
+   "heightIn": 48,
+   "expect": "Giant wooden coaster: 118 ft first drop, 14 hills, rough and fast, about 3 minutes.",
+   "tags": [
+    "coaster",
+    "drop",
+    "outdoor",
+    "fast"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=GhostRider%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "53c1481b-186f-4e3d-a239-3e68e29674a0": {
+   "name": "Silver Bullet",
+   "heightIn": 54,
+   "expect": "Inverted coaster, feet dangling: 6 upside-downs including a 105 ft loop.",
+   "tags": [
+    "coaster",
+    "inversions",
+    "outdoor",
+    "fast"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Silver%20Bullet%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "7b3ed978-a4fe-46aa-9255-1a8d87d1a5b7": {
+   "name": "Xcelerator The Ride®",
+   "heightIn": 52,
+   "expect": "Launch from 0 to 82 mph in 2.3 seconds, straight up 205 ft and a 90-degree drop. Very short.",
+   "tags": [
+    "coaster",
+    "launch",
+    "drop",
+    "outdoor",
+    "fast"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Xcelerator%20The%20Ride%20POV%20Knotts%20Berry%20Farm"
+  },
+  "8b7a8285-2ef9-40ed-a8c1-e6dc775fb6f2": {
+   "name": "HangTime",
+   "heightIn": 48,
+   "heightNote": "Maximum height 77 in.",
+   "expect": "Dive coaster: a 96-degree beyond-vertical drop, then 5 upside-downs.",
+   "tags": [
+    "coaster",
+    "drop",
+    "inversions",
+    "outdoor",
+    "fast"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=HangTime%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "6fce6f53-0cd1-468a-b2c1-6cad0f62e407": {
+   "name": "Supreme Scream",
+   "heightIn": 52,
+   "expect": "Drop tower: up 252 ft, then down in about 3 seconds.",
+   "tags": [
+    "drop",
+    "tower",
+    "outdoor"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Supreme%20Scream%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "7a7c3242-c63c-46b5-a8dd-9685ea90f747": {
+   "name": "Sol Spin",
+   "heightIn": 54,
+   "expect": "Six arms swing you six stories up and spin you head over heels.",
+   "tags": [
+    "spin",
+    "inversions",
+    "outdoor"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=Sol%20Spin%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "ffc06d5c-7310-4257-99af-501c82c338b4": {
+   "name": "MonteZOOMa: The Forbidden Fortress",
+   "heightIn": 48,
+   "heightNote": "Reopened 2026: check the sign at the ride.",
+   "expect": "Launch coaster (the old Montezooma): 0 to 55 mph, a loop, then up a vertical spike, forward and backward.",
+   "tags": [
+    "coaster",
+    "launch",
+    "inversions",
+    "outdoor",
+    "fast"
+   ],
+   "intensity": 5,
+   "video": "https://www.youtube.com/results?search_query=MonteZOOMa%3A%20The%20Forbidden%20Fortress%20POV%20Knotts%20Berry%20Farm"
+  },
+  "68b91858-b39e-4192-8626-a3f23d7eb628": {
+   "name": "Jaguar!",
+   "heightIn": 48,
+   "expect": "Long steel coaster through a Mayan temple: drops and curves, no upside-downs.",
+   "tags": [
+    "coaster",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Jaguar!%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "1d88c29e-ad25-4cc0-b497-646d8f93bdde": {
+   "name": "Pony Express",
+   "heightIn": 48,
+   "expect": "Ride a horse-saddle seat: launch to 38 mph in under 3 seconds, no upside-downs.",
+   "tags": [
+    "coaster",
+    "launch",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Pony%20Express%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "76677384-a64a-482f-af7c-ae0807f83ab0": {
+   "name": "Sierra Sidewinder",
+   "heightIn": 42,
+   "heightNote": "48 in. to ride alone; 42-47 in. with a companion",
+   "expect": "Spinning coaster: the cars rotate as they dive and turn, 37 mph.",
+   "tags": [
+    "coaster",
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Sierra%20Sidewinder%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "5bb893d1-5b93-4734-8f3c-5207480ab668": {
+   "name": "Coast Rider",
+   "heightIn": 44,
+   "heightNote": "54 in. to ride alone; 44-53 in. with a companion",
+   "expect": "Mouse-style coaster: 52 ft climb, tight hairpin turns and little drops.",
+   "tags": [
+    "coaster",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Coast%20Rider%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "9616bf64-ec7e-4f8a-9235-fb27f6b7ffa2": {
+   "name": "La Revolucion",
+   "heightIn": 48,
+   "expect": "Giant swinging, spinning pendulum 64 ft up, 120 degrees each way.",
+   "tags": [
+    "swing",
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=La%20Revolucion%20POV%20Knotts%20Berry%20Farm"
+  },
+  "e15759d0-05bc-480b-ba11-19b8251826fb": {
+   "name": "Wipeout",
+   "heightIn": 48,
+   "expect": "Spinner that tilts up off the ground while it whirls.",
+   "tags": [
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 4,
+   "video": "https://www.youtube.com/results?search_query=Wipeout%20POV%20Knotts%20Berry%20Farm"
+  },
+  "a797abec-0eea-43df-ab0e-595f75c98815": {
+   "name": "Timber Mountain Log Ride",
+   "heightIn": 36,
+   "heightNote": "46 in. to ride alone; 36-45 in. with a companion",
+   "expect": "Log flume past lumber-camp scenes, ends with a big splash drop. You will get wet.",
+   "tags": [
+    "water",
+    "drop",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Timber%20Mountain%20Log%20Ride%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "1c6f66a8-30bb-4127-8850-98c37be89797": {
+   "name": "Calico River Rapids",
+   "heightIn": 46,
+   "expect": "Round rafts on rapids through the woods. Expect to get soaked.",
+   "tags": [
+    "water",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Calico%20River%20Rapids%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "5f815169-24ca-4853-b03f-7a7f74d57d0e": {
+   "name": "Dragon Swing",
+   "heightIn": 48,
+   "expect": "Pirate-ship swing that rises nearly straight up at each end.",
+   "tags": [
+    "swing",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Dragon%20Swing%20POV%20Knotts%20Berry%20Farm"
+  },
+  "bb09eee6-d81e-49a3-83b3-4697be5284a1": {
+   "name": "Pacific Scrambler",
+   "heightIn": 36,
+   "heightNote": "48 in. to ride alone; 36-47 in. with a companion",
+   "expect": "Classic Scrambler: whips you around in spinning arcs.",
+   "tags": [
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Pacific%20Scrambler%20POV%20Knotts%20Berry%20Farm"
+  },
+  "b1a34d4a-25e6-4d55-9a3c-3210f9dd95b3": {
+   "name": "Wheeler Dealer Bumper Cars",
+   "heightIn": 42,
+   "heightNote": "48 in. to drive alone; 42-47 in. with a companion",
+   "expect": "Bumper cars, under a roof.",
+   "tags": [
+    "drive",
+    "outdoor"
+   ],
+   "intensity": 3,
+   "video": "https://www.youtube.com/results?search_query=Wheeler%20Dealer%20Bumper%20Cars%20POV%20Knotts%20Berry%20Farm"
+  },
+  "ccb5d9cb-1400-4eb2-a56b-7e944ec110fd": {
+   "name": "Hat Dance",
+   "heightIn": 36,
+   "heightNote": "42 in. to ride alone; 36-41 in. with a companion",
+   "expect": "Spinning sombrero teacups; you control the spin.",
+   "tags": [
+    "spin",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Hat%20Dance%20POV%20Knotts%20Berry%20Farm"
+  },
+  "e356dfe4-0235-4130-bea1-61e54a74fad9": {
+   "name": "Surfside Gliders",
+   "heightIn": 36,
+   "heightNote": "44 in. to ride alone; 36-43 in. with a companion",
+   "expect": "Two-seat planes you tilt yourself, 28 ft up over the Boardwalk.",
+   "tags": [
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Surfside%20Gliders%20POV%20Knotts%20Berry%20Farm"
+  },
+  "e086f207-baf9-499f-9d66-13caee279aea": {
+   "name": "Los Voladores",
+   "heightIn": 48,
+   "expect": "Swing ride 40 ft up, round and round; mellow.",
+   "tags": [
+    "swing",
+    "outdoor"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Los%20Voladores%20POV%20Knotts%20Berry%20Farm"
+  },
+  "f0c44ce7-88a4-4741-b476-b4ba709c2463": {
+   "name": "Knott's Bear-y Tales: Return to the Fair",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone; shorter riders with an adult",
+   "expect": "Indoor 4-D dark ride: shoot jelly blasters at targets. No drops. Air-conditioned.",
+   "tags": [
+    "dark",
+    "shooter",
+    "indoor",
+    "slow"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Knott's%20Bear-y%20Tales%3A%20Return%20to%20the%20Fair%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "ccb9353d-6325-4d7a-b026-be1ad8791801": {
+   "name": "Calico Mine Ride",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone; shorter riders with an adult",
+   "expect": "Gentle ore-car ride through a mine full of animated miners. Indoors.",
+   "tags": [
+    "dark",
+    "train",
+    "indoor",
+    "slow"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Calico%20Mine%20Ride%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
+  },
+  "dc35a00a-07a3-4230-86e3-4a27f7952ee9": {
+   "name": "Sky Cabin",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone; shorter riders with an adult",
+   "expect": "Slow rotating cabin up a 180 ft tower: views of the whole park.",
+   "tags": [
+    "views",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Sky%20Cabin%20POV%20Knotts%20Berry%20Farm"
+  },
+  "5a328918-6ce2-4e72-b90e-0db0278deff7": {
+   "name": "Calico Railroad",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone; shorter riders with an adult",
+   "expect": "Real narrow-gauge steam train around the park; bandits may hold it up.",
+   "tags": [
+    "train",
+    "outdoor",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Calico%20Railroad%20POV%20Knotts%20Berry%20Farm"
+  },
+  "8f118f85-049f-47a4-93c3-1cfc65b04813": {
+   "name": "Butterfield Stagecoach",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone; shorter riders with an adult",
+   "expect": "Horse-drawn stagecoach around the park.",
+   "tags": [
+    "outdoor",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Butterfield%20Stagecoach%20POV%20Knotts%20Berry%20Farm"
+  },
+  "4ee0c3b6-4d11-4f20-908e-7fae5377f908": {
+   "name": "Carrusel de California",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone; shorter riders with an adult",
+   "expect": "Antique 1902 carousel with carved animals, shaded.",
+   "tags": [
+    "carousel",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Carrusel%20de%20California%20POV%20Knotts%20Berry%20Farm"
+  },
+  "cc3b2a7a-0a32-4caf-89e2-28a159fcfee4": {
+   "name": "Snoopy’s Tenderpaw Twister Coaster",
+   "heightIn": 36,
+   "heightNote": "42 in. to ride alone; 36-41 in. with a companion",
+   "expect": "Small family coaster with a gentle launch through the trees.",
+   "tags": [
+    "coaster",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Snoopy%E2%80%99s%20Tenderpaw%20Twister%20Coaster%20POV%20Knotts%20Berry%20Farm"
+  },
+  "a9dfe25f-6efa-49aa-a769-20570d52c5be": {
+   "name": "Linus Launcher",
+   "heightIn": 36,
+   "heightNote": "42 in. to ride alone; 36-41 in. with an adult",
+   "expect": "Lie face-down on a \"blanket\" and swing up through the air.",
+   "tags": [
+    "swing",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Linus%20Launcher%20POV%20Knotts%20Berry%20Farm"
+  },
+  "594a9236-73bd-45e7-b62c-400d9904893a": {
+   "name": "Charlie Brown's Kite Flyer",
+   "heightIn": 36,
+   "expect": "Kids' swing ride above the trees.",
+   "tags": [
+    "swing",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 2,
+   "video": "https://www.youtube.com/results?search_query=Charlie%20Brown's%20Kite%20Flyer%20POV%20Knotts%20Berry%20Farm"
+  },
+  "d0b180ca-ac02-4059-a221-03d25dbb9aaa": {
+   "name": "Balloon Race",
+   "heightIn": 36,
+   "expect": "Kids' hot-air-balloon ride that spins gently.",
+   "tags": [
+    "spin",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Balloon%20Race%20POV%20Knotts%20Berry%20Farm"
+  },
+  "aeed59c3-9d4b-40de-b3aa-7bd5315c6e32": {
+   "name": "Flying Ace",
+   "heightIn": 32,
+   "expect": "Kids' Snoopy plane ride that swoops up and down.",
+   "tags": [
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Flying%20Ace%20POV%20Knotts%20Berry%20Farm"
+  },
+  "299ac23e-62f0-4dcd-a838-3e6858a0bd2d": {
+   "name": "Camp Snoopy's Off-Road Rally",
+   "heightIn": 36,
+   "expect": "Kids drive Peanuts trucks on a little track.",
+   "tags": [
+    "drive",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Camp%20Snoopy's%20Off-Road%20Rally%20POV%20Knotts%20Berry%20Farm"
+  },
+  "81542789-5caf-49cf-b945-3793b89e797e": {
+   "name": "Pig-Pen's Mud Buggies",
+   "heightIn": 36,
+   "expect": "Kids' bouncing buggies (no real mud).",
+   "tags": [
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Pig-Pen's%20Mud%20Buggies%20POV%20Knotts%20Berry%20Farm"
+  },
+  "63d7d43d-95a7-4c78-bb5c-8d842e04d7aa": {
+   "name": "Rapid River Run",
+   "heightIn": 42,
+   "expect": "Kids' tugboat ride on winding water.",
+   "tags": [
+    "water",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Rapid%20River%20Run%20POV%20Knotts%20Berry%20Farm"
+  },
+  "ff9f3abd-92d5-42d4-8077-3851d52c6ffe": {
+   "name": "Beagle Express Railroad",
+   "heightIn": null,
+   "heightNote": "46 in. to ride alone",
+   "expect": "Little Peanuts train around Camp Snoopy.",
+   "tags": [
+    "train",
+    "outdoor",
+    "kids",
+    "slow"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Beagle%20Express%20Railroad%20POV%20Knotts%20Berry%20Farm"
+  },
+  "87be303c-22e0-43ef-80e7-869489b88abc": {
+   "name": "Sally's Swing Along",
+   "heightIn": null,
+   "expect": "Kids' swing ride.",
+   "tags": [
+    "swing",
+    "outdoor",
+    "kids"
+   ],
+   "intensity": 1,
+   "video": "https://www.youtube.com/results?search_query=Sally's%20Swing%20Along%20POV%20Knotts%20Berry%20Farm"
   }
  },
  "uncertain": [

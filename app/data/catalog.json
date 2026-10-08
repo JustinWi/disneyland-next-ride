@@ -12,6 +12,31 @@
    "name": "Disney California Adventure Park",
    "lat": 33.8087804896,
    "lng": -117.9189353206
+  },
+  "KBF": {
+   "id": "0a6123bb-1e8c-4b18-a2d3-2696cf2451f5",
+   "name": "Knott's Berry Farm",
+   "lat": 33.8442,
+   "lng": -117.9989,
+   "fastLane": {
+    "from": 75,
+    "how": "Buy in the Six Flags app, on sixflags.com/knotts, or at the ticket booth. Everyone in the group needs their own wristband.",
+    "rides": [
+     "ab058c94-3bc3-4944-b4b5-c5c76de73575",
+     "53c1481b-186f-4e3d-a239-3e68e29674a0",
+     "8b7a8285-2ef9-40ed-a8c1-e6dc775fb6f2",
+     "6fce6f53-0cd1-468a-b2c1-6cad0f62e407",
+     "7a7c3242-c63c-46b5-a8dd-9685ea90f747",
+     "68b91858-b39e-4192-8626-a3f23d7eb628",
+     "1d88c29e-ad25-4cc0-b497-646d8f93bdde",
+     "76677384-a64a-482f-af7c-ae0807f83ab0",
+     "5bb893d1-5b93-4734-8f3c-5207480ab668",
+     "a797abec-0eea-43df-ab0e-595f75c98815",
+     "1c6f66a8-30bb-4127-8850-98c37be89797",
+     "f0c44ce7-88a4-4741-b476-b4ba709c2463",
+     "ccb9353d-6325-4d7a-b026-be1ad8791801"
+    ]
+   }
   }
  },
  "rides": [
@@ -844,6 +869,376 @@
    "type": "RIDE",
    "qtId": 8843,
    "land": "Avengers Campus"
+  },
+  {
+   "id": "ab058c94-3bc3-4944-b4b5-c5c76de73575",
+   "name": "GhostRider",
+   "park": "KBF",
+   "lat": 33.843733,
+   "lng": -117.999269,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "53c1481b-186f-4e3d-a239-3e68e29674a0",
+   "name": "Silver Bullet",
+   "park": "KBF",
+   "lat": 33.844571,
+   "lng": -117.999923,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "7b3ed978-a4fe-46aa-9255-1a8d87d1a5b7",
+   "name": "Xcelerator The Ride®",
+   "park": "KBF",
+   "lat": 33.84582,
+   "lng": -118.001889,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "8b7a8285-2ef9-40ed-a8c1-e6dc775fb6f2",
+   "name": "HangTime",
+   "park": "KBF",
+   "lat": 33.844772,
+   "lng": -118.00158,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "6fce6f53-0cd1-468a-b2c1-6cad0f62e407",
+   "name": "Supreme Scream",
+   "park": "KBF",
+   "lat": 33.845912,
+   "lng": -118.00055,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "7a7c3242-c63c-46b5-a8dd-9685ea90f747",
+   "name": "Sol Spin",
+   "park": "KBF",
+   "lat": 33.845461,
+   "lng": -117.99937,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "ffc06d5c-7310-4257-99af-501c82c338b4",
+   "name": "MonteZOOMa: The Forbidden Fortress",
+   "park": "KBF",
+   "lat": 33.846153,
+   "lng": -117.999057,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "68b91858-b39e-4192-8626-a3f23d7eb628",
+   "name": "Jaguar!",
+   "park": "KBF",
+   "lat": 33.845833,
+   "lng": -117.99936,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "1d88c29e-ad25-4cc0-b497-646d8f93bdde",
+   "name": "Pony Express",
+   "park": "KBF",
+   "lat": 33.842946,
+   "lng": -118.0014,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "76677384-a64a-482f-af7c-ae0807f83ab0",
+   "name": "Sierra Sidewinder",
+   "park": "KBF",
+   "lat": 33.84476,
+   "lng": -117.99878,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "5bb893d1-5b93-4734-8f3c-5207480ab668",
+   "name": "Coast Rider",
+   "park": "KBF",
+   "lat": 33.84537,
+   "lng": -118.00196,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "9616bf64-ec7e-4f8a-9235-fb27f6b7ffa2",
+   "name": "La Revolucion",
+   "park": "KBF",
+   "lat": 33.846217,
+   "lng": -117.999525,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "e15759d0-05bc-480b-ba11-19b8251826fb",
+   "name": "Wipeout",
+   "park": "KBF",
+   "lat": 33.845302,
+   "lng": -118.001617,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "a797abec-0eea-43df-ab0e-595f75c98815",
+   "name": "Timber Mountain Log Ride",
+   "park": "KBF",
+   "lat": 33.845152,
+   "lng": -118.000715,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "1c6f66a8-30bb-4127-8850-98c37be89797",
+   "name": "Calico River Rapids",
+   "park": "KBF",
+   "lat": 33.842821,
+   "lng": -118.001007,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "5f815169-24ca-4853-b03f-7a7f74d57d0e",
+   "name": "Dragon Swing",
+   "park": "KBF",
+   "lat": 33.846287,
+   "lng": -118.0001,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "bb09eee6-d81e-49a3-83b3-4697be5284a1",
+   "name": "Pacific Scrambler",
+   "park": "KBF",
+   "lat": 33.844391,
+   "lng": -118.002004,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "b1a34d4a-25e6-4d55-9a3c-3210f9dd95b3",
+   "name": "Wheeler Dealer Bumper Cars",
+   "park": "KBF",
+   "lat": 33.843421,
+   "lng": -118.001885,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "ccb5d9cb-1400-4eb2-a56b-7e944ec110fd",
+   "name": "Hat Dance",
+   "park": "KBF",
+   "lat": 33.84635,
+   "lng": -117.99975,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "e356dfe4-0235-4130-bea1-61e54a74fad9",
+   "name": "Surfside Gliders",
+   "park": "KBF",
+   "lat": 33.844593,
+   "lng": -118.001985,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "e086f207-baf9-499f-9d66-13caee279aea",
+   "name": "Los Voladores",
+   "park": "KBF",
+   "lat": 33.846065,
+   "lng": -117.999904,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "f0c44ce7-88a4-4741-b476-b4ba709c2463",
+   "name": "Knott's Bear-y Tales: Return to the Fair",
+   "park": "KBF",
+   "lat": 33.843839,
+   "lng": -118.001874,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "ccb9353d-6325-4d7a-b026-be1ad8791801",
+   "name": "Calico Mine Ride",
+   "park": "KBF",
+   "lat": 33.844395,
+   "lng": -118.000827,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "dc35a00a-07a3-4230-86e3-4a27f7952ee9",
+   "name": "Sky Cabin",
+   "park": "KBF",
+   "lat": 33.84573,
+   "lng": -118.00145,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "The Boardwalk"
+  },
+  {
+   "id": "5a328918-6ce2-4e72-b90e-0db0278deff7",
+   "name": "Calico Railroad",
+   "park": "KBF",
+   "lat": 33.844322,
+   "lng": -118.000371,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "8f118f85-049f-47a4-93c3-1cfc65b04813",
+   "name": "Butterfield Stagecoach",
+   "park": "KBF",
+   "lat": 33.84431,
+   "lng": -117.999983,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Ghost Town"
+  },
+  {
+   "id": "4ee0c3b6-4d11-4f20-908e-7fae5377f908",
+   "name": "Carrusel de California",
+   "park": "KBF",
+   "lat": 33.845502,
+   "lng": -117.999715,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Fiesta Village"
+  },
+  {
+   "id": "cc3b2a7a-0a32-4caf-89e2-28a159fcfee4",
+   "name": "Snoopy’s Tenderpaw Twister Coaster",
+   "park": "KBF",
+   "lat": 33.845779,
+   "lng": -117.998387,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "a9dfe25f-6efa-49aa-a769-20570d52c5be",
+   "name": "Linus Launcher",
+   "park": "KBF",
+   "lat": 33.84574,
+   "lng": -117.99881,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "594a9236-73bd-45e7-b62c-400d9904893a",
+   "name": "Charlie Brown's Kite Flyer",
+   "park": "KBF",
+   "lat": 33.84623,
+   "lng": -117.99873,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "d0b180ca-ac02-4059-a221-03d25dbb9aaa",
+   "name": "Balloon Race",
+   "park": "KBF",
+   "lat": 33.845224,
+   "lng": -117.998814,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "aeed59c3-9d4b-40de-b3aa-7bd5315c6e32",
+   "name": "Flying Ace",
+   "park": "KBF",
+   "lat": 33.845096,
+   "lng": -117.998407,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "299ac23e-62f0-4dcd-a838-3e6858a0bd2d",
+   "name": "Camp Snoopy's Off-Road Rally",
+   "park": "KBF",
+   "lat": 33.846225,
+   "lng": -117.998845,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "81542789-5caf-49cf-b945-3793b89e797e",
+   "name": "Pig-Pen's Mud Buggies",
+   "park": "KBF",
+   "lat": 33.84639,
+   "lng": -117.998397,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "63d7d43d-95a7-4c78-bb5c-8d842e04d7aa",
+   "name": "Rapid River Run",
+   "park": "KBF",
+   "lat": 33.84647,
+   "lng": -117.99819,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "ff9f3abd-92d5-42d4-8077-3851d52c6ffe",
+   "name": "Beagle Express Railroad",
+   "park": "KBF",
+   "lat": 33.845228,
+   "lng": -117.998584,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
+  },
+  {
+   "id": "87be303c-22e0-43ef-80e7-869489b88abc",
+   "name": "Sally's Swing Along",
+   "park": "KBF",
+   "lat": 33.846285,
+   "lng": -117.998635,
+   "type": "RIDE",
+   "qtId": null,
+   "land": "Camp Snoopy"
   }
  ]
 }

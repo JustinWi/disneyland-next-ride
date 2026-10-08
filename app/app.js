@@ -1,7 +1,7 @@
 // Next Ride: UI, state, timers, geolocation, storage. The engine lives in js/ (pure, tested).
 
 import { plan, arrivalPlan } from './js/plan.js';
-import { fetchFresh, fetchHours, buildSnapshot } from './js/sources.js';
+import { fetchFresh, fetchHours, fetchKnotts, buildSnapshot } from './js/sources.js';
 import { load, save, remove } from './js/store.js';
 import { atResort, haversineMeters, parkFootprints, parkAt, walkMinutes } from './js/geo.js';
 import { fmtTime, fmtAge, parkDayKey, parkTime, hhmm, fmtDay, parkHour, weekdayOf } from './js/time.js';
@@ -19,8 +19,9 @@ const SNOOZE_MIN = 45;
 const REFRESH_MS = 60e3;
 const TICK_MS = 30e3;
 const MIN = 60e3;
-const PARK = { DL: 'Disneyland', DCA: 'California Adventure' };
-const PARK_SHORT = { DL: 'Disneyland', DCA: 'DCA' };
+const PARK = { DL: 'Disneyland', DCA: 'California Adventure', KBF: "Knott's Berry Farm" };
+const PARK_SHORT = { DL: 'Disneyland', DCA: 'DCA', KBF: "Knott's" };
+const KBF_RADIUS_M = 1200; // Knott's and its parking lots, measured from the park's center
 const PRIO_LABEL = { must: 'Must-do', high: 'High', medium: 'Medium', low: 'Low', conditional: 'Maybe' };
 const COARSE_M = 250; // a GPS fix rougher than this can't tell which park you're in
 
@@ -63,7 +64,7 @@ const initial = loadDoneAndHistory();
 const S = {
   catalog: null,
   footprints: null,
-  data: { tpw: load('tpw', null), qt: load('qt', null), hours: load('hours', null) }, // hours: official park hours by day
+  data: { tpw: load('tpw', null), qt: load('qt', null), hours: load('hours', null), kbf: load('kbf', null) }, // hours: official park hours by day; kbf: Knott's waits
   fetching: false,
   lastAttempt: null,
   offline: false,
@@ -190,6 +191,15 @@ function tripIndex() {
     ix.bias[r.tpwId] = wt.bias;
     if (Number.isFinite(r.typical)) ix.typical[r.tpwId] = r.typical;
   }
+  // Knott's rides aren't in the trip file: Thrills first orders them by how wild they are.
+  for (const r of S.catalog?.rides ?? []) {
+    if (r.park !== 'KBF' || ix.byTpw.has(r.id)) continue;
+    const feel = feelOf(r.name);
+    const wt = rideWeight('medium', feel, S.settings.thrills);
+    ix.feel[r.id] = feel;
+    ix.prio[r.id] = wt.priority;
+    ix.bias[r.id] = wt.bias;
+  }
   for (const a of t?.avoid ?? []) {
     if (!a.tpwId) continue;
     ix.avoid.set(a.tpwId, a);
@@ -213,12 +223,21 @@ function riddenSet(today) {
 /** What counts as done for planning: ridden, minus rides put back on today's list with "Ride again". */
 const doneSet = (today) => effectiveDone(riddenSet(today), S.again[today]);
 
-/** { park: 'DL'|'DCA'|null (both), needsChoice, tripDay } for today. */
+/** Is the phone at Knott's (or set to a test location there)? */
+function atKnotts() {
+  const p = S.override ?? S.geo.pos;
+  const k = S.catalog?.parks?.KBF;
+  return Boolean(p && k && atResort(p, k, KBF_RADIUS_M));
+}
+
+/** { park: 'DL'|'DCA'|'KBF'|null (both Disney parks), needsChoice, tripDay } for today. */
 function todayPark(today) {
   const td = tripDay(S.trip, today);
   const chosen = S.dayPark[today];
-  if (chosen === 'DL' || chosen === 'DCA') return { park: chosen, needsChoice: false, td };
+  if (chosen === 'DL' || chosen === 'DCA' || chosen === 'KBF') return { park: chosen, needsChoice: false, td };
   if (chosen === 'both') return { park: null, needsChoice: false, td };
+  // Standing at Knott's settles it, trip day or not.
+  if (atKnotts()) return { park: 'KBF', needsChoice: false, td, auto: true };
   if (td) return td.park ? { park: td.park, needsChoice: false, td } : { park: null, needsChoice: true, td };
   return { park: null, needsChoice: false, td: null };
 }
@@ -365,10 +384,22 @@ const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const fold = (s) => String(s ?? '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-function where() {
+function where(tpPark = null) {
   const cat = S.catalog;
-  const gates = cat?.parks?.DL && cat?.parks?.DCA ? { DL: cat.parks.DL, DCA: cat.parks.DCA } : null;
+  const gates = cat?.parks?.DL && cat?.parks?.DCA ? { DL: cat.parks.DL, DCA: cat.parks.DCA, ...(cat.parks.KBF ? { KBF: cat.parks.KBF } : {}) } : null;
   const p = S.override ?? S.geo.pos;
+  const kbf = gates?.KBF;
+  if (kbf && (atKnotts() || tpPark === 'KBF')) {
+    const gate = { lat: kbf.lat, lng: kbf.lng };
+    if (p && atKnotts()) {
+      const coarse = !S.override && S.geo.acc != null && S.geo.acc > COARSE_M;
+      // In the lot or at the gate (outside the rides' footprint): walks from the gate.
+      const inside = !coarse && parkAt(p, S.footprints) === 'KBF';
+      return { pos: inside ? p : gate, posPark: inside ? 'KBF' : null, gates, mode: S.override ? 'override' : coarse ? 'coarse' : 'gps' };
+    }
+    // A Knott's day away from Knott's (on the way, or no location): plan from its gate.
+    return { pos: gate, posPark: p ? null : 'KBF', gates, mode: p ? 'far' : 'nogps' };
+  }
   if (p && gates && atResort(p, cat.parks.DL)) {
     const coarse = !S.override && S.geo.acc != null && S.geo.acc > COARSE_M;
     // posPark null = outside both parks (esplanade, Downtown Disney, hotels): walks go via each gate.
@@ -494,11 +525,13 @@ function compute(now) {
   const today = parkDayKey(now);
   const tp = todayPark(today);
   const snap = S.catalog ? buildSnapshot(S.data, S.catalog, now) : null;
-  const w = where();
+  const w = where(tp.park);
   const base = { snap, w, res: null, missing: [], today, tp, advice: null, next: null, due: [], prompts: [] };
   if (!snap) return base;
+  // At Knott's, its own feed's age is what counts; no Knott's data yet means no waits yet.
+  if (tp.park === 'KBF' && snap.atKBF == null) return { ...base, snap: null };
   // Waits from a previous park day say nothing about today (review finding R4).
-  if (parkDayKey(snap.at) !== parkDayKey(now)) return { ...base, oldDay: true };
+  if (parkDayKey(snapAt({ snap, tp })) !== parkDayKey(now)) return { ...base, oldDay: true };
 
   const ix = tripIndex();
   const done = doneSet(today);
@@ -548,7 +581,7 @@ function compute(now) {
   const missing = [...S.wanted]
     .filter((id) => !live.has(id) && !done.has(id))
     .map((id) => catalogRide(id))
-    .filter((r) => r && (!tp.park || r.park === tp.park));
+    .filter((r) => r && inToday(r, tp.park));
   // A ride only waiting on a test ride (Big Thunder after the Pirates drop test) can still be booked:
   // the test comes first anyway, and a booking you don't use can be cancelled.
   // Only when every test ride in its chain can be ridden today, in today's park.
@@ -582,7 +615,7 @@ function compute(now) {
   }
 
   // Reminders.
-  const inPark = snap.rides.filter((r) => !tp.park || r.park === tp.park);
+  const inPark = snap.rides.filter((r) => inToday(r, tp.park));
   // Track every ride's status (both parks, so switching today's park doesn't compare against a
   // look from hours ago), but only rides on the list in today's park can alert, and never rides
   // the plan has set aside.
@@ -616,6 +649,15 @@ function compute(now) {
 
 // ---------- render: chips ----------
 
+/** When the waits being shown were fetched: Knott's has its own feed. */
+function snapAt(c) {
+  return c.tp?.park === 'KBF' && c.snap?.atKBF != null ? c.snap.atKBF : c.snap?.at;
+}
+/** Today's rides: today's park, or both Disney parks when hopping (Knott's is a separate day). */
+function inToday(r, park) {
+  return park ? r.park === park : r.park !== 'KBF';
+}
+
 function renderChips(now, c) {
   const { snap, w } = c;
   const el = document.getElementById('chips');
@@ -623,7 +665,7 @@ function renderChips(now, c) {
   if (!snap) {
     dataChip = S.fetching ? `<span class="dot"></span>Getting wait times…` : `<span class="dot bad"></span>No wait times yet. Tap to retry`;
   } else {
-    const age = now - snap.at;
+    const age = now - snapAt(c);
     const cls = age > 30 * MIN ? 'bad' : age > 10 * MIN ? 'warn' : 'good';
     const ageText = age < MIN ? 'just now' : `${fmtAge(age)} old`;
     const label = S.offline ? 'Offline, waits' : snap.source === 'qt' ? 'Backup waits' : 'Waits';
@@ -1126,10 +1168,32 @@ function credits(snap) {
   ${qt ? '<strong>Backup waits</strong> ' : 'Land names '}<a href="https://queue-times.com/" target="_blank" rel="noopener">Powered by Queue-Times.com</a>.</footer>`;
 }
 
+/** Rides the one-tap Knott's pick adds: coasters, drops, spinners and water rides this party can ride. */
+function knottsPicks() {
+  const short = tooShortFor(S.rideinfo?.rides, S.settings.heightIn);
+  const rides = (S.catalog?.rides ?? []).filter((r) => r.park === 'KBF' && ['thrill', 'active'].includes(feelOf(r.name)));
+  return { ids: rides.filter((r) => !short[r.id]).map((r) => r.id), short: rides.filter((r) => short[r.id]) };
+}
+
+/** A Knott's day with nothing picked there yet: offer the thrill rides in one tap. */
+function knottsPickCard(c) {
+  if (c.tp?.park !== 'KBF' || [...S.wanted].some((id) => catalogRide(id)?.park === 'KBF')) return '';
+  const { ids, short } = knottsPicks();
+  const h = S.settings.heightIn;
+  const heightLine = h
+    ? ` Rides taller than ${h} in. are left out${short.length ? ` (${esc(short.map((r) => r.name).join(', '))})` : ''}.`
+    : " Set the shortest rider's height in More to leave out rides they can't go on.";
+  return `<section class="card accent"><div class="eyebrow">Knott's Berry Farm</div><h2>Pick the thrill rides?</h2>
+    <p>One tap picks ${ids.length} rides: every coaster and drop first, then the spinners, swings and water rides.${heightLine}</p>
+    <div class="actions"><button type="button" class="primary" data-act="kbf-pick">Pick thrill rides</button><button type="button" data-act="tab" data-tab="rides">Choose myself</button></div></section>`;
+}
+
 function renderNext(now, c) {
   const { snap, res, missing, oldDay } = c;
   const head = noteBar() + pendingTripCard();
   if (!S.catalog) return `<p class="muted">Loading the ride list…</p>`;
+  const kbf = knottsPickCard(c);
+  if (kbf) return head + kbf + credits(snap);
   if (S.wanted.size === 0) {
     return `${head}<div class="card empty"><h2>What do you want to ride today?</h2>
       <p class="muted">Pick your rides, or load your trip file in More. Then this screen tells you which one to do next.</p>
@@ -1142,7 +1206,7 @@ function renderNext(now, c) {
   }
   if (oldDay) {
     return `${head}<div class="card empty"><h2>No waits for today yet</h2>
-      <p class="muted">The last wait times on this phone are from ${esc(fmtAge(now - snap.at))} ago, a previous park day, so nothing is ranked from them. It keeps trying every minute.</p>
+      <p class="muted">The last wait times on this phone are from ${esc(fmtAge(now - snapAt(c)))} ago, a previous park day, so nothing is ranked from them. It keeps trying every minute.</p>
       <button type="button" data-act="refresh">Try now</button></div>${credits(snap)}`;
   }
   let html = head + parkChoiceCard(c);
@@ -1195,10 +1259,45 @@ function bookForm(c, rec) {
     <div class="actions"><button type="button" class="primary" data-act="book-save">Save booking</button><button type="button" data-act="book-cancel">Cancel</button></div></div>`;
 }
 
+/** Knott's Fast Lane: a paid all-day wristband. Is it worth it for what's left on the list? */
+function fastLaneCard(c) {
+  const fl = S.catalog?.parks?.KBF?.fastLane;
+  const now = c.ctx?.now ?? Date.now();
+  const close = c.snap?.parks?.KBF?.close ?? null;
+  const left = (c.snap?.rides ?? []).filter((r) => r.park === 'KBF' && S.wanted.has(r.id) && !c.done?.has(r.id) && !c.short?.[r.id]);
+  const covered = left.filter((r) => info(r.id)?.fastLane);
+  const FL_WAIT = 10; // Knott's doesn't publish Fast Lane waits; about 10 minutes is typical
+  const open = covered.filter((r) => r.status === 'OPERATING' && Number.isFinite(r.wait));
+  const standby = open.reduce((a, r) => a + r.wait, 0);
+  const saved = open.reduce((a, r) => a + Math.max(0, r.wait - FL_WAIT), 0);
+  const hoursLeft = close ? Math.max(0, (close - now) / 3600e3) : null;
+  const party = partySize();
+  const price = fl?.from ?? 75;
+  let verdict;
+  if (!covered.length) verdict = '<b>Skip it.</b> Nothing left on your list is a Fast Lane ride.';
+  else if (!open.length) verdict = 'No live waits for your Fast Lane rides yet. Check again once the park is open.';
+  else if (hoursLeft != null && hoursLeft < 1.5) verdict = `<b>Probably not now.</b> The park closes at ${esc(fmtTime(close))}, too soon to get your money's worth.`;
+  else if (saved >= 60) verdict = `<b>Probably worth it.</b> It would save about ${saved} minutes of standby right now.`;
+  else if (saved >= 30) verdict = `<b>Borderline.</b> It would save about ${saved} minutes right now. Worth it if the lines grow.`;
+  else verdict = `<b>Skip it for now.</b> It would save only about ${saved} minutes at today's waits.`;
+  const rows = covered
+    .map((r) => {
+      const st = r.status === 'OPERATING' && Number.isFinite(r.wait) ? `${r.wait} min standby now` : r.status === 'DOWN' ? 'down right now' : 'not open now';
+      return `<li><div class="grow"><div class="name">${esc(r.name)}</div><div class="sub">${esc(st)}</div></div></li>`;
+    })
+    .join('');
+  return `<section class="card"><div class="eyebrow">⚡ Knott's Fast Lane</div><h2>Is Fast Lane worth it today?</h2>
+    <p>${verdict}</p>
+    <p class="muted small">Fast Lane is a paid all-day wristband: from about $${price} each (about $${price * party} for ${party}), more on busy days. Fast Lane lines are usually around ${FL_WAIT} minutes.${open.length ? ` Your ${open.length} open Fast Lane rides add up to ${standby} minutes of standby right now.` : ''}</p>
+    ${rows ? `<h3 class="section-title">Your Fast Lane rides</h3><ul class="list">${rows}</ul>` : ''}
+    <p class="muted small">${esc(fl?.how ?? '')} Not covered: Xcelerator, MonteZOOMa and most smaller rides. GhostRider sometimes has a single rider line on busy days; ask at the entrance.</p></section>`;
+}
+
 function renderLightning(now, c) {
   if (!c.snap) return `${noteBar()}<div class="card empty"><h2>No wait times yet</h2><p class="muted">Lightning Lane advice needs live data. It keeps trying every minute.</p></div>`;
   if (c.oldDay) return `${noteBar()}<div class="card empty"><h2>No data for today yet</h2><p class="muted">It keeps trying every minute.</p></div>`;
   if (c.tp.needsChoice) return `${noteBar()}${parkChoiceCard(c)}<p class="muted small">Lightning Lane advice starts once today's park is set.</p>`;
+  if (c.tp.park === 'KBF') return `${noteBar()}${fastLaneCard(c)}`;
   const onToday = c.llOn;
   const todayPlan = c.tp.park ? lanePlan(c.today, c.tp.park, c.snap) : null;
   const decision = `<section class="card"><div class="eyebrow">⚡ Today${c.tp.park ? ' · ' + esc(PARK[c.tp.park]) : ''}</div>
@@ -1312,7 +1411,8 @@ function renderRideList(snap, done) {
     return;
   }
   let html = '';
-  for (const park of ['DL', 'DCA']) {
+  const first = todayPark(parkDayKey()).park;
+  for (const park of ['DL', 'DCA', 'KBF'].sort((a, b) => (b === first) - (a === first))) {
     const inPark = rows.filter((r) => r.park === park);
     if (!inPark.length) continue;
     // A collapsed park stays collapsed across visits, but opens while searching so matches show.
@@ -1421,11 +1521,11 @@ function heightSummary() {
 function renderMore(c) {
   const confirmList = S.confirm === 'clear-list';
   const confirmDone = S.confirm === 'clear-done';
-  const tpVal = S.dayPark[c.today] ?? (c.tp.td?.park ?? (c.tp.needsChoice ? '' : 'both'));
+  const tpVal = S.dayPark[c.today] ?? (c.tp.auto ? c.tp.park : c.tp.td?.park ?? (c.tp.needsChoice ? '' : 'both'));
   return `${noteBar()}${tripCard(c)}
   <section class="card"><h2>Today's park</h2>
-    ${seg('daypark', tpVal, [['DL', 'Disneyland'], ['DCA', 'DCA'], ['both', 'Both (hopper)']])}
-    <p class="muted small">Only rides in today's park are suggested. Trip days set this for you.</p></section>
+    ${seg('daypark', tpVal, [['DL', 'Disneyland'], ['DCA', 'DCA'], ['both', 'Both (hopper)'], ['KBF', "Knott's"]])}
+    <p class="muted small">Only rides in today's park are suggested. Trip days set this for you, and at Knott's it switches by itself.</p></section>
   <section class="card"><h2>Multi Pass cost</h2>
     ${seg('llprice', S.settings.llPrice ?? '', [[32, '$32'], [37, '$37'], [42, '$42'], [49, '$49']])}
     ${seg('party', partySize(), [[2, '2 people'], [3, '3'], [4, '4'], [5, '5']])}
@@ -1475,7 +1575,8 @@ function safeCompute(now) {
       waitsOk = false;
     }
     if (!waitsOk) {
-      S.data = { tpw: null, qt: null, hours: S.data.hours };
+      S.data = { tpw: null, qt: null, hours: S.data.hours, kbf: null };
+      remove('kbf');
       remove('tpw');
       remove('qt');
     } else if (S.trip) {
@@ -1647,6 +1748,13 @@ document.addEventListener('click', (ev) => {
       else S.wanted.add(id);
       saveWanted();
       break;
+    case 'kbf-pick': {
+      const { ids, short } = knottsPicks();
+      for (const id of ids) S.wanted.add(id);
+      saveWanted();
+      S.note = `Picked ${ids.length} Knott's rides. Thrills first puts the coasters and drops at the top.${short.length ? ` Left out for height: ${short.map((r) => r.name).join(', ')}.` : ''}`;
+      break;
+    }
     case 'fold':
       S.folded[el.dataset.park] = !S.folded[el.dataset.park];
       save('folded', S.folded);
@@ -1945,11 +2053,16 @@ async function refresh() {
   let r;
   try {
     const hoursStale = !S.data.hours?.days?.[parkDayKey()] || Date.now() - S.data.hours.at > 3600e3;
-    const [fresh, hours] = await Promise.all([
+    const [fresh, hours, kbf] = await Promise.all([
       SIMULATE_OFFLINE ? { via: null, error: 'simulated offline' } : fetchFresh(),
       hoursStale && !SIMULATE_OFFLINE ? fetchHours().catch(() => null) : null,
+      SIMULATE_OFFLINE ? null : fetchKnotts(),
     ]);
     r = fresh;
+    if (kbf && (!S.data.kbf || kbf.at >= S.data.kbf.at)) {
+      S.data.kbf = kbf;
+      save('kbf', kbf);
+    }
     if (hours) {
       S.data.hours = hours;
       save('hours', hours);
@@ -1967,7 +2080,8 @@ async function refresh() {
     S.data.qt = r.qt;
     save('qt', r.qt);
   }
-  S.offline = r.via === null;
+  // At Knott's, its own feed decides whether we're offline.
+  S.offline = todayPark(parkDayKey()).park === 'KBF' ? !(S.data.kbf && Date.now() - S.data.kbf.at < 2 * MIN) : r.via === null;
   render();
 }
 
