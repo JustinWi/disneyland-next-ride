@@ -2,6 +2,7 @@
 
 import { plan, arrivalPlan } from './js/plan.js';
 import { fetchFresh, fetchHours, fetchKnotts, buildSnapshot } from './js/sources.js';
+import { parsePickLink, warmupBias } from './js/picklink.js';
 import { load, save, remove } from './js/store.js';
 import { atResort, haversineMeters, parkFootprints, parkAt, walkMinutes } from './js/geo.js';
 import { fmtTime, fmtAge, parkDayKey, parkTime, hhmm, fmtDay, parkHour, weekdayOf } from './js/time.js';
@@ -99,6 +100,7 @@ const S = {
   confirm: null,
   trip: load('trip', null),
   dayPark: load('dayPark', {}) ?? {},
+  warmup: load('warmup', []) ?? [], // ride ids from a pick link, ridden first and in order
   unlock: load('unlock', {}) ?? {}, // { rideKey: 'yes' | 'no' } manual override per ride
   gate: load('gate', {}) ?? {}, // { rideKey: 'yes' | 'no' } how a ladder ride went
   ll: forDay(load('ll', null), parkDayKey()),
@@ -261,6 +263,13 @@ function rideBias(today, { locked = {}, info = {}, ridden = new Set(), now = Dat
   const boost = testRideBias(ix.trip, ladderGates(ix.trip), { bias, wanted: S.wanted, ridden, gate: S.gate, blocked });
   Object.assign(bias, boost);
   S.tests = testLabels(Object.keys(boost));
+  // Warm-ups from a pick link: an easier ride or two first, then the big ones.
+  const warm = warmupBias(S.warmup, { wanted: S.wanted, ridden });
+  for (const [id, b] of Object.entries(warm)) {
+    if (blocked.has(id)) continue;
+    bias[id] = (bias[id] ?? 0) + b;
+    S.tests[id] = 'Warm-up';
+  }
   // We're hot: indoor and water rides first, long sunny queues later.
   if (heatOn(S.heat, now)) {
     for (const id of S.wanted) {
@@ -460,6 +469,8 @@ function boostLine(id) {
     parts.push(`<b>Drop test:</b> two short drops in the dark.${rise ? ` If they go well, ${esc(rise)} (a bigger drop in the dark) is next on the list.` : ''}`);
   } else if (S.tests[id] === 'Screen test') {
     parts.push('<b>Screen test:</b> screens with gentle motion. Say how it went afterwards.');
+  } else if (S.tests[id] && S.warmup.includes(id)) {
+    parts.push('<b>Warm-up:</b> an easier ride first; the big ones come after.');
   } else if (S.tests[id]) {
     parts.push('<b>Warm-up:</b> unlocks a bigger ride once it goes well.');
   }
@@ -2148,6 +2159,39 @@ async function readTripLink() {
   }
 }
 
+/** A pick link (#pick=...) selects a day's rides, its warm-ups, park and height in one tap. */
+function readPickLink() {
+  const p = parsePickLink(location.hash, S.catalog?.rides);
+  if (!p) return;
+  try {
+    history.replaceState(null, '', location.pathname + location.search); // don't leave it in the address bar
+  } catch {
+    /* ignore */
+  }
+  if (!p.ids.length) {
+    S.note = "That pick link didn't match any rides.";
+    return;
+  }
+  // The link's rides replace that park's list; other parks' picks stay.
+  if (p.park) for (const id of [...S.wanted]) if (catalogRide(id)?.park === p.park && !p.ids.includes(id)) S.wanted.delete(id);
+  for (const id of p.ids) S.wanted.add(id);
+  saveWanted();
+  S.warmup = p.warm;
+  save('warmup', S.warmup);
+  if (p.park && p.date) {
+    S.dayPark[p.date] = p.park;
+    save('dayPark', S.dayPark);
+  }
+  if (p.heightIn) {
+    S.settings.heightIn = p.heightIn;
+    saveSettings();
+  }
+  S.tab = 'next';
+  const day = p.date ? new Date(`${p.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) : null;
+  const names = p.warm.map((id) => catalogRide(id)?.name).filter(Boolean).join(', then ');
+  S.note = `Picked ${p.ids.length} rides${day && p.park ? ` for ${PARK[p.park]} on ${day}` : ''}.${names ? ` Warm-ups first: ${names}.` : ''}${p.heightIn ? ` Height set to ${p.heightIn} in.` : ''}${p.unknown.length ? ` Didn't recognize: ${p.unknown.join(', ')}.` : ''}`;
+}
+
 async function boot() {
   render();
   try {
@@ -2162,6 +2206,7 @@ async function boot() {
     return;
   }
   await readTripLink();
+  readPickLink();
   render();
   if (!S.override) startGeo();
   refresh();

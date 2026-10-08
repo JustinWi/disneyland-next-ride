@@ -25,6 +25,8 @@ const SHELL = [
   'js/alerts.js',
   'js/shows.js',
   'js/similar.js',
+  'js/boost.js',
+  'js/picklink.js',
   'data/catalog.json',
   'data/llstats.json',
   'data/rideinfo.json',
