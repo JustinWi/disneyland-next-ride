@@ -236,9 +236,18 @@ function todayPark(today) {
   const chosen = S.dayPark[today];
   if (chosen === 'DL' || chosen === 'DCA' || chosen === 'KBF') return { park: chosen, needsChoice: false, td };
   if (chosen === 'both') return { park: null, needsChoice: false, td };
-  // Standing at Knott's settles it, trip day or not.
-  if (atKnotts()) return { park: 'KBF', needsChoice: false, td, auto: true };
-  if (td) return td.park ? { park: td.park, needsChoice: false, td } : { park: null, needsChoice: true, td };
+  // A trip day's own park wins (a hotel near Knott's mustn't turn a Disneyland day into Knott's).
+  if (td?.park) return { park: td.park, needsChoice: false, td };
+  // Standing at Knott's settles it, and is remembered for the day: lunch off-site, a lost GPS fix
+  // or location turned off mustn't turn a Knott's day back into a Disney one.
+  if (atKnotts()) {
+    if (!S.override && S.geo.acc != null && S.geo.acc <= 500) {
+      S.dayPark[today] = 'KBF';
+      save('dayPark', S.dayPark);
+    }
+    return { park: 'KBF', needsChoice: false, td, auto: true };
+  }
+  if (td) return { park: null, needsChoice: true, td };
   return { park: null, needsChoice: false, td: null };
 }
 
@@ -1228,7 +1237,7 @@ function renderNext(now, c) {
       <p class="muted">Start with these, in this order. Waits are the usual ones for opening time.</p>
       <ol class="list">${rd.ranked.slice(0, 3).map((e) => `<li><div class="grow"><div class="name">${esc(e.ride.name)} ${prioChip(e.ride.id)}</div><div class="sub">${esc(e.reason)}</div></div></li>`).join('')}</ol></div>`;
   } else {
-    const left = [...S.wanted].filter((id) => !c.done.has(id)).length;
+    const left = [...S.wanted].filter((id) => !c.done.has(id) && (!catalogRide(id) || inToday(catalogRide(id), c.tp.park))).length;
     html += left === 0
       ? `<div class="card empty"><h2>🎉 That's everything on your list</h2><p class="muted">Add more on the Rides tab, or call it a day.</p>
          <button type="button" data-act="tab" data-tab="rides">Add rides</button></div>`
@@ -2053,7 +2062,10 @@ async function refresh() {
   render();
   let r;
   try {
-    const hoursStale = !S.data.hours?.days?.[parkDayKey()] || Date.now() - S.data.hours.at > 3600e3;
+    // Knott's missing from today's hours (its schedule fetch failed) is stale too, at most every 5 minutes.
+    const hToday = S.data.hours?.days?.[parkDayKey()];
+    const hAge = Date.now() - (S.data.hours?.at ?? 0);
+    const hoursStale = !hToday || hAge > 3600e3 || (!hToday.KBF && todayPark(parkDayKey()).park === 'KBF' && hAge > 5 * MIN);
     const [fresh, hours, kbf] = await Promise.all([
       SIMULATE_OFFLINE ? { via: null, error: 'simulated offline' } : fetchFresh(),
       hoursStale && !SIMULATE_OFFLINE ? fetchHours().catch(() => null) : null,
