@@ -1251,7 +1251,8 @@
     "fast"
    ],
    "intensity": 5,
-   "video": "https://www.youtube.com/results?search_query=Xcelerator%20The%20Ride%20POV%20Knotts%20Berry%20Farm"
+   "video": "https://www.youtube.com/results?search_query=Xcelerator%20The%20Ride%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
   },
   "8b7a8285-2ef9-40ed-a8c1-e6dc775fb6f2": {
    "name": "HangTime",
@@ -1372,7 +1373,8 @@
     "outdoor"
    ],
    "intensity": 4,
-   "video": "https://www.youtube.com/results?search_query=La%20Revolucion%20POV%20Knotts%20Berry%20Farm"
+   "video": "https://www.youtube.com/results?search_query=La%20Revolucion%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
   },
   "e15759d0-05bc-480b-ba11-19b8251826fb": {
    "name": "Wipeout",
@@ -1478,7 +1480,8 @@
     "outdoor"
    ],
    "intensity": 2,
-   "video": "https://www.youtube.com/results?search_query=Los%20Voladores%20POV%20Knotts%20Berry%20Farm"
+   "video": "https://www.youtube.com/results?search_query=Los%20Voladores%20POV%20Knotts%20Berry%20Farm",
+   "fastLane": true
   },
   "f0c44ce7-88a4-4741-b476-b4ba709c2463": {
    "name": "Knott's Bear-y Tales: Return to the Fair",

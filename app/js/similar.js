@@ -14,10 +14,11 @@ const WEAK = new Set(['indoor', 'outdoor', 'slow', 'loud', 'vehicle']);
 
 /**
  * @param {string} id the ride that's unavailable
- * @param {object} o { info: rideinfo.rides, rides: live rides[], exclude: Set, maxResults }
+ * @param {object} o { info: rideinfo.rides, rides: live rides[], exclude: Set, maxResults, now }
+ * With `now`, rides closing within 15 minutes aren't suggested (no time to walk there).
  * Returns [{ ride, score }] best first; empty without ride facts.
  */
-export function similarRides(id, { info, rides, exclude = new Set(), maxResults = 2 }) {
+export function similarRides(id, { info, rides, exclude = new Set(), maxResults = 2, now = null }) {
   const me = info?.[id];
   const self = rides.find((r) => r.id === id);
   if (!me || !self) return [];
@@ -25,6 +26,7 @@ export function similarRides(id, { info, rides, exclude = new Set(), maxResults 
   const out = [];
   for (const r of rides) {
     if (r.id === id || r.park !== self.park || r.status !== 'OPERATING' || exclude.has(r.id)) continue;
+    if (now != null && r.close != null && r.close - now < 15 * 60e3) continue;
     const other = info[r.id];
     if (!other) continue;
     const sim = jaccard(myTags, new Set((other.tags ?? []).filter((t) => !WEAK.has(t))));

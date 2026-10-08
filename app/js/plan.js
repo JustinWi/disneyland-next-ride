@@ -116,7 +116,7 @@ export function rideAt(r, t, now) {
   if (!wins.length) return r;
   const inside = wins.some((w) => w.open <= t && t < w.close);
   if (r.status === 'OPERATING') {
-    const staleHours = !wins.some((w) => w.close > now); // every listed window is over, yet it's running
+    const staleHours = !r.parkHours && !wins.some((w) => w.close > now); // every listed window is over, yet it's running
     const early = t < wins[0].open; // running ahead of its listed opening: still running then
     if (!inside && !staleHours && !early) return { ...r, status: 'CLOSED', wait: null };
     return Number.isFinite(r.wait) ? { ...r, wait: Math.round(anchoredWait(r.forecast, r.wait, now, t)) } : r;

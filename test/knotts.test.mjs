@@ -62,6 +62,15 @@ test("Knott's is never mixed into a Disney day, and a Knott's day is only Knott'
   assert.deepEqual(kbf.ranked.map((e) => e.ride.id).sort(), ['k1', 'k2']);
 });
 
+test("Knott's: nothing is suggested after the park closes, even while the feed still says OPERATING", () => {
+  const snap = buildSnapshot({ kbf: { at: now, data: knottsLive }, hours }, catalog, now);
+  const ctx = (t) => ({ now: t, pos: { lat: 33.8442, lng: -117.9989 }, posPark: 'KBF', gates: catalog.parks, wanted: new Set(['k1', 'k2']), done: new Set(), snoozed: {}, speed: 'normal', parks: snap.parks, lookahead: false, todayPark: 'KBF' });
+  assert.equal(plan(snap.rides, ctx(T('2026-03-12T17:00:00-07:00'))).ranked.length, 2, 'open at 5 pm');
+  const late = plan(snap.rides, ctx(T('2026-03-12T17:40:00-07:00')));
+  assert.equal(late.ranked.length, 0, '5:40 pm: closed at 5:30, a lagging feed must not reopen it');
+  assert.ok(late.excluded.some((x) => x.ride?.id === 'k1' && x.why === 'closes'));
+});
+
 test("Knott's thrills and heights", () => {
   assert.equal(feelOf('GhostRider'), 'thrill');
   assert.equal(feelOf('Xcelerator The Ride®'), 'thrill');

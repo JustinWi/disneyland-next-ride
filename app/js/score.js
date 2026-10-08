@@ -170,12 +170,13 @@ export function scoreRides(rides, ctx, overrides = {}) {
 
     // Operating windows still ahead of us today. A ride can pause (fireworks) and reopen later.
     // An OPERATING ride whose listed window already ended has stale hours: treat it as open.
+    // Not when the hours are the park's own (Knott's): the park has closed and the feed is lagging.
     const listed = (ride.windows?.length ? ride.windows : [{ open: ride.open ?? -Infinity, close: ride.close ?? ctx.parks?.[ride.park]?.close ?? null }]).map((w) => ({
       open: w.open ?? -Infinity,
       close: w.close ?? null,
     }));
     let windows = listed.filter((w) => w.close == null || w.close > now);
-    if (!windows.length) windows = [{ open: -Infinity, close: null }];
+    if (!windows.length && !ride.parkHours) windows = [{ open: -Infinity, close: null }];
     // OPERATING before its listed opening (soft opening, early entry): the live status wins (R3).
     // Only before the day's first window: once a fireworks pause has started, a feed that still
     // says OPERATING is lagging, and the ride isn't open until its next window.

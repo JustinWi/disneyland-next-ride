@@ -218,9 +218,10 @@ export function withParkHours(snapshot, hours, dayKey) {
   const parks = { ...snapshot.parks };
   for (const k of PARK_KEYS) if (today[k]) parks[k] = { open: today[k].open, close: today[k].close };
   // Knott's rides carry no hours of their own: they run park hours (rope drop, closing, last call).
+  // parkHours marks those hours as final: once the park closes, a feed still saying OPERATING is lagging.
   const k = today.KBF;
   const rides = k
-    ? snapshot.rides.map((r) => (r.park === 'KBF' && r.open == null && !r.windows?.length ? { ...r, open: k.open, close: k.close, windows: [{ open: k.open, close: k.close }] } : r))
+    ? snapshot.rides.map((r) => (r.park === 'KBF' && r.open == null && !r.windows?.length ? { ...r, open: k.open, close: k.close, windows: [{ open: k.open, close: k.close }], parkHours: true } : r))
     : snapshot.rides;
   return { ...snapshot, parks, rides };
 }

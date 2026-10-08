@@ -801,7 +801,7 @@ function dueCards(c) {
 }
 
 function llDecisionBanner(c) {
-  if (c.llOn !== null || !c.tp.park) return '';
+  if (c.llOn !== null || !c.tp.park || c.tp.park === 'KBF') return '';
   const p = lanePlan(c.today, c.tp.park, c.snap);
   if (p && (p.lateToday || (p.rides.length && !p.bookings.length))) return '';
   const take = p ? ` Our take: <b>${VERDICT[p.verdict]}</b>${p.rides.length ? `, saves about ${esc(hmin(p.saved))} for $${esc(p.cost)}` : ''}.` : '';
@@ -1134,7 +1134,7 @@ function unavailableList(res, missing, c) {
       let alt = '';
       // Only for rides that are out (not ones that simply open later today).
       if (['down', 'closed', 'refurb', 'closes', 'unknown'].includes(x.why) && !/^opens|reopens/.test(x.detail ?? '') && (prio === 'must' || prio === 'high')) {
-        const subs = similarRides(x.ride.id, { info: S.rideinfo?.rides, rides: rideList, exclude: skipForSubs });
+        const subs = similarRides(x.ride.id, { info: S.rideinfo?.rides, rides: rideList, exclude: skipForSubs, now: c.ctx?.now ?? Date.now() });
         if (subs.length) alt = `<div class="sub subs"><b>Try instead:</b> ${subs.map((y) => `${esc(y.ride.name)}${Number.isFinite(y.ride.wait) ? ` (${y.ride.wait} min)` : ''}`).join(', ')}</div>`;
       }
       return `<li><div class="grow"><div class="name">${esc(x.ride.name)} ${prioChip(x.ride.id)}</div><div class="sub">${esc(x.detail)}</div>${alt}</div>${btn}</li>`;
@@ -1264,7 +1264,7 @@ function fastLaneCard(c) {
   const fl = S.catalog?.parks?.KBF?.fastLane;
   const now = c.ctx?.now ?? Date.now();
   const close = c.snap?.parks?.KBF?.close ?? null;
-  const left = (c.snap?.rides ?? []).filter((r) => r.park === 'KBF' && S.wanted.has(r.id) && !c.done?.has(r.id) && !c.short?.[r.id]);
+  const left = (c.snap?.rides ?? []).filter((r) => r.park === 'KBF' && S.wanted.has(r.id) && !c.done?.has(r.id));
   const covered = left.filter((r) => info(r.id)?.fastLane);
   const FL_WAIT = 10; // Knott's doesn't publish Fast Lane waits; about 10 minutes is typical
   const open = covered.filter((r) => r.status === 'OPERATING' && Number.isFinite(r.wait));
@@ -1274,7 +1274,8 @@ function fastLaneCard(c) {
   const party = partySize();
   const price = fl?.from ?? 75;
   let verdict;
-  if (!covered.length) verdict = '<b>Skip it.</b> Nothing left on your list is a Fast Lane ride.';
+  if (![...S.wanted].some((id) => catalogRide(id)?.park === 'KBF')) verdict = 'Pick your Knott\'s rides first (Next tab), then this says whether Fast Lane pays off.';
+  else if (!covered.length) verdict = '<b>Skip it.</b> Nothing left on your list is a Fast Lane ride.';
   else if (!open.length) verdict = 'No live waits for your Fast Lane rides yet. Check again once the park is open.';
   else if (hoursLeft != null && hoursLeft < 1.5) verdict = `<b>Probably not now.</b> The park closes at ${esc(fmtTime(close))}, too soon to get your money's worth.`;
   else if (saved >= 60) verdict = `<b>Probably worth it.</b> It would save about ${saved} minutes of standby right now.`;
@@ -1288,9 +1289,9 @@ function fastLaneCard(c) {
     .join('');
   return `<section class="card"><div class="eyebrow">⚡ Knott's Fast Lane</div><h2>Is Fast Lane worth it today?</h2>
     <p>${verdict}</p>
-    <p class="muted small">Fast Lane is a paid all-day wristband: from about $${price} each (about $${price * party} for ${party}), more on busy days. Fast Lane lines are usually around ${FL_WAIT} minutes.${open.length ? ` Your ${open.length} open Fast Lane rides add up to ${standby} minutes of standby right now.` : ''}</p>
+    <p class="muted small">Fast Lane is a paid all-day wristband, per person: from about $${price} each (about $${price * party} for ${party}), more on busy days. Buy it only for the riders who'll use it. A limited number sell each day. Single-Use Fast Lane (one ride, select rides and times) is in the Six Flags app if you only want to skip one or two lines. This assumes Fast Lane lines of about ${FL_WAIT} minutes; Knott's doesn't publish them.${open.length ? ` Your ${open.length} open Fast Lane rides add up to ${standby} minutes of standby right now.` : ''}</p>
     ${rows ? `<h3 class="section-title">Your Fast Lane rides</h3><ul class="list">${rows}</ul>` : ''}
-    <p class="muted small">${esc(fl?.how ?? '')} Not covered: Xcelerator, MonteZOOMa and most smaller rides. GhostRider sometimes has a single rider line on busy days; ask at the entrance.</p></section>`;
+    <p class="muted small">${esc(fl?.how ?? '')} Not covered: MonteZOOMa and the kids' rides. Look for the Fast Lane entrance sign at each ride.</p></section>`;
 }
 
 function renderLightning(now, c) {
